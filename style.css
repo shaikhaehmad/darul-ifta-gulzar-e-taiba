@@ -1,0 +1,154 @@
+/* ======================
+   DARUL IFTA - STYLESHEET
+   ====================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f4f7f6;
+    color: #333;
+    line-height: 1.6;
+    padding: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+header {
+    background: linear-gradient(135deg, #0b5329, #13753b);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+nav a {
+    color: #e8f5e9;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+section {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+h2 {
+    color: #0b5329;
+    font-size: 18px;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #e8f5e9;
+    padding-bottom: 5px;
+}
+
+p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+input[type="text"],
+input[type="tel"],
+textarea,
+input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.3s;
+}
+
+input:focus, textarea:focus {
+    border-color: #0b5329;
+}
+
+textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+button[type="submit"], .btn {
+    background-color: #0b5329;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+button[type="submit"]:hover, .btn:hover {
+    background-color: #094020;
+}
+
+.quick-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.quick-card {
+    background: #f9fbf9;
+    border: 1px solid #e2e8e2;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.quick-card .icon {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.quick-card h3 {
+    font-size: 15px;
+    color: #0b5329;
+    margin-bottom: 5px;
+}
+
+.quick-card p {
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+footer {
+    text-align: center;
+    padding: 15px;
+    font-size: 13px;
+    color: #777;
+}
