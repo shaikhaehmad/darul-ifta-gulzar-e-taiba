@@ -33,12 +33,13 @@
         .admin-link {
             background: #fff;
             color: #0b4d2c;
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 4px;
             text-decoration: none;
             font-size: 12px;
             font-weight: bold;
             display: inline-block;
+            margin-top: 5px;
         }
         .container {
             max-width: 600px;
@@ -121,7 +122,7 @@
         }
         .card-actions {
             display: flex;
-            gap: 6px;
+            gap: 5px;
             align-items: center;
         }
         .btn {
@@ -212,8 +213,8 @@
                     <option value="Video">Video</option>
                 </select>
 
-                <label>File / PDF Link (URL ya Path):</label>
-                <input type="text" id="itemLink" placeholder="File ka link ya URL dalein" required>
+                <label>Link (Instagram / YouTube / Facebook / PDF URL):</label>
+                <input type="text" id="itemLink" placeholder="Apna link yahan paste karein" required>
 
                 <button type="submit" class="btn btn-view" style="width: 100%; padding: 12px; margin-top: 5px;">Upload Karein</button>
                 <button type="button" class="btn" style="width: 100%; margin-top: 10px; background:#ccc; color:#000;" onclick="toggleAdminPanel(event)">Wapas Jayein</button>
@@ -223,9 +224,10 @@
     </div>
 
     <script>
+        // Tumhara data jo localStorage me save rahega
         let items = JSON.parse(localStorage.getItem('darul_ifta_items')) || [
-            { title: "Jarbe murtaja", cat: "Kitab", type: "PDF", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
-            { title: "Test video", cat: "Bayan", type: "Video", link: "https://www.youtube.com" }
+            { title: "Jarbe murtaja", cat: "Kitab", type: "PDF", link: "" },
+            { title: "Test video", cat: "Bayan", type: "Video", link: "https://www.instagram.com" }
         ];
 
         function saveData() {
@@ -247,9 +249,19 @@
             }
 
             filtered.forEach((item) => {
-                let downloadBtn = "";
+                let actionButtons = "";
+
                 if(item.type === "PDF") {
-                    downloadBtn = `<a href="${item.link}" download class="btn btn-download">Download</a>`;
+                    // Agar PDF hai toh 'Dekhein' aur 'Download' dono buttons ayenge
+                    actionButtons = `
+                        <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein</a>
+                        <a href="${item.link}" download class="btn btn-download">Download</a>
+                    `;
+                } else {
+                    // Agar Video (Instagram/Facebook/YouTube) hai toh sirf wahi link khulega jo tumne dala hai
+                    actionButtons = `
+                        <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein / Chalaein</a>
+                    `;
                 }
 
                 let cardHTML = `
@@ -262,8 +274,7 @@
                             </div>
                         </div>
                         <div class="card-actions">
-                            <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein</a>
-                            ${downloadBtn}
+                            ${actionButtons}
                         </div>
                     </div>
                 `;
@@ -272,7 +283,7 @@
         }
 
         function filterItems() {
-            const val = document.getElementById('filterSelect').value;
+            const val = document.getElementById('filterSelect',).value;
             renderItems(val);
         }
 
@@ -280,7 +291,7 @@
             e.preventDefault();
             const mainView = document.getElementById('main-view');
             const adminView = document.getElementById('admin-view');
-            if(adminview_active = adminView.style.display === "block") {
+            if(adminView.style.display === "block") {
                 adminView.style.display = "none";
                 mainView.style.display = "block";
             } else {
