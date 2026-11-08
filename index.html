@@ -125,9 +125,10 @@
             if (!listContainer) return;
             const filterVal = filterSelect ? filterSelect.value : 'ALL';
 
+            // Admin panel se jo files save hongi, wo yahan se load hongi
             let savedFiles = JSON.parse(localStorage.getItem('darul_ifta_files'));
 
-            if (!savedFiles) {
+            if (!savedFiles || savedFiles.length === 0) {
                 savedFiles = [
                     { title: "Jarbe murtaja", type: "PDF", url: "jarbe-murtaja.pdf" },
                     { title: "Kabar Par Fateha", type: "PDF", url: "कबर_पर_फातेहा_पढवानो_सही_तरीको.pdf" }
@@ -142,7 +143,7 @@
             });
 
             if (filtered.length === 0) {
-                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Koi file maujood nahi hai.</div>`;
+                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Koi file maujood nahi hai. Admin panel se upload karein.</div>`;
                 return;
             }
 
@@ -157,7 +158,7 @@
                         </div>
                         <div class="card-actions">
                             <a href="${item.url}" target="_blank" class="btn-view">Dekhein / Padhein</a>
-                            <a href="${item.url}" download class="btn-download">⬇️ Download</a>
+                            <a href="${item.url}" download="${item.title}" class="btn-download">⬇️ Download</a>
                         </div>
                     </div>
                 `;
