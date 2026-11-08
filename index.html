@@ -23,7 +23,6 @@
         
         .card-actions { display: flex; flex-direction: column; gap: 6px; }
         .btn-view { background-color: #0b5e2e; color: white; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: bold; text-align: center; white-space: nowrap; }
-        .btn-download { background-color: #2563eb; color: white; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; text-align: center; white-space: nowrap; }
 
         /* Sawaal Form Style */
         .sawaal-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
@@ -50,7 +49,7 @@
     <!-- Section 1: Kitabein & PDF -->
     <div id="section-kitabein" class="container">
         <div id="file-list" style="margin-top: 15px;">
-            <!-- Files yahan load hongi -->
+            <!-- Admin panel se add ki gayi files yahan aayengi -->
         </div>
     </div>
 
@@ -94,6 +93,7 @@
                 tabS.className = "nav-tab inactive";
                 secK.style.display = "block";
                 secS.style.display = "none";
+                loadWebsiteFiles();
             } else {
                 tabS.className = "nav-tab active";
                 tabK.className = "nav-tab inactive";
@@ -102,29 +102,20 @@
             }
         }
 
-        // ==========================================
-        // APNI KITABON KI LIST YAHAN ADD KAREIN:
-        // Title aap Urdu, Hindi, Gujarati ya English mein kuch bhi likhein!
-        // URL mein bas apni GitHub par upload ki gayi PDF ka file name likhein.
-        // ==========================================
-        const filesList = [
-            { title: "جرب مرتضیٰ (Urdu Title)", url: "jarbe-murtaja.pdf" },
-            { title: "कबर पर फातेहा का सही तरीका (Hindi Title)", url: "kabar-fateha.pdf" }
-        ];
-
-        function loadFiles() {
+        function loadWebsiteFiles() {
             const listContainer = document.getElementById('file-list');
             if (!listContainer) return;
 
+            let files = JSON.parse(localStorage.getItem('darul_ifta_files')) || [];
+
             listContainer.innerHTML = "";
 
-            if (filesList.length === 0) {
-                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Abhi koi kitab mojood nahi hai.</div>`;
+            if (files.length === 0) {
+                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Abhi koi kitab ya file mojood nahi hai. Admin Panel se upload karein.</div>`;
                 return;
             }
 
-            filesList.forEach(item => {
-                const encodedUrl = encodeURI(item.url);
+            files.slice().reverse().forEach((item) => {
                 listContainer.innerHTML += `
                     <div class="card">
                         <div class="card-info">
@@ -134,8 +125,7 @@
                             </div>
                         </div>
                         <div class="card-actions">
-                            <a href="${encodedUrl}" target="_blank" class="btn-view">📖 Padhein</a>
-                            <a href="${encodedUrl}" download class="btn-download">⬇️ Download</a>
+                            <a href="${item.url}" target="_blank" class="btn-view">📖 Padhein</a>
                         </div>
                     </div>
                 `;
@@ -161,7 +151,7 @@
             window.open(whatsappUrl, '_blank');
         }
 
-        window.onload = loadFiles;
+        window.onload = loadWebsiteFiles;
     </script>
 </body>
 </html>
