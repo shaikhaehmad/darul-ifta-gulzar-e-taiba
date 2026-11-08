@@ -9,8 +9,7 @@
         body { background-color: #f4f6f8; color: #333; }
         .header { background-color: #0b5e2e; color: white; padding: 20px; text-align: center; }
         .header h1 { font-size: 22px; margin-bottom: 5px; }
-        .header p { font-size: 13px; opacity: 0.9; margin-bottom: 12px; }
-        .admin-btn { background-color: #ffffff; color: #0b5e2e; padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; text-decoration: none; display: inline-block; }
+        .header p { font-size: 13px; opacity: 0.9; margin-bottom: 5px; }
         
         .nav-container { display: flex; gap: 10px; padding: 15px; max-width: 600px; margin: 0 auto; }
         .nav-tab { flex: 1; padding: 12px; text-align: center; border-radius: 8px; font-weight: bold; font-size: 14px; text-decoration: none; cursor: pointer; }
@@ -39,7 +38,7 @@
     <div class="header">
         <h1>📚 Darul Ifta Gulzar-e-Taiba</h1>
         <p>Tamam PDF Kitabein, Bayanat aur Fatwa Service</p>
-        <a href="admin.html" class="admin-btn">🔒 Admin Panel</a>
+        <!-- Yahan se Admin Panel ka poora button hta diya gaya hai -->
     </div>
 
     <!-- Navigation Tabs -->
@@ -51,7 +50,7 @@
     <!-- Section 1: Kitabein & PDF -->
     <div id="section-kitabein" class="container">
         <div id="file-list" style="margin-top: 15px;">
-            <!-- Admin panel se add ki gayi files yahan automatically aayengi -->
+            <!-- Files yahan automatically load hongi -->
         </div>
     </div>
 
@@ -113,11 +112,10 @@
             listContainer.innerHTML = "";
 
             if (files.length === 0) {
-                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Abhi koi kitab ya file mojood nahi hai. Admin Panel se upload karein.</div>`;
+                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Abhi koi kitab ya file mojood nahi hai.</div>`;
                 return;
             }
 
-            // Nayi files upar dikhengi, isiliye reverse() kiya hai
             files.slice().reverse().forEach((item) => {
                 listContainer.innerHTML += `
                     <div class="card">
