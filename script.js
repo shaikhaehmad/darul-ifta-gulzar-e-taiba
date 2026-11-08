@@ -37,7 +37,6 @@ if (fatwaForm) {
     fatwaForm.addEventListener("submit", async function (e) {
         e.preventDefault();
 
-        // Aapke HTML form ke IDs ke mutabiq fields utha rahe hain
         const name = document.getElementById("name").value.trim();
         const mobile = document.getElementById("mobile").value.trim();
         const address = document.getElementById("address").value.trim();
@@ -63,7 +62,7 @@ if (fatwaForm) {
                 submitButton.textContent = "Sending...";
             }
 
-            // 1. Firebase Firestore ke 'fatwas' collection mein data save hoga
+            // 1. Firebase Firestore mein data save karein
             await addDoc(collection(db, "fatwas"), {
                 name: name,
                 mobile: mobile,
@@ -74,25 +73,20 @@ if (fatwaForm) {
                 status: "pending"
             });
 
-            // 2. WhatsApp Message Format
+            // 2. WhatsApp Message Format (Using %0A for proper line breaks)
             const adminWhatsAppNumber = "918758647929"; 
 
             const whatsappMessage = 
-`*دارالافتاء گلزار طیبہ*
-*--- جدید سوال / مسئلہ ---*
+                "*دارالافتاء گلزار طیبہ*%0A" +
+                "*--- جدید سوال / مسئلہ ---*%0A%0A" +
+                "👤 *Naam:* " + encodeURIComponent(name) + "%0A" +
+                "📱 *Mobile:* " + encodeURIComponent(mobile) + "%0A" +
+                "🏠 *Address:* " + encodeURIComponent(address) + "%0A%0A" +
+                "❓ *Sawal / Masla:*%0A" + encodeURIComponent(question) + "%0A%0A" +
+                "📎 *Attachment:* " + encodeURIComponent(fileName) + "%0A" +
+                "*(Note: Agar koi photo/document hai, toh kripya is message ke sath ya alag se WhatsApp par bhej dein.)*";
 
-👤 *Naam:* ${name}
-📱 *Mobile:* ${mobile}
-🏠 *Address:* ${address}
-
-❓ *Sawal / Masla:*
-${question}
-
-📎 *Attachment:* ${fileName}
-*(Note: Agar koi photo/document hai, toh kripya is message ke sath ya alag se WhatsApp par bhej dein.)*`;
-
-            const encodedMessage = encodeURIComponent(whatsappMessage);
-            const whatsappURL = `https://api.whatsapp.com/send?phone=${adminWhatsAppNumber}&text=${encodedMessage}`;
+            const whatsappURL = `https://api.whatsapp.com/send?phone=${adminWhatsAppNumber}&text=${whatsappMessage}`;
 
             alert("Aapka sawal kamyabi se bhej diya gaya hai. Ab WhatsApp khul raha hai...");
             fatwaForm.reset();
