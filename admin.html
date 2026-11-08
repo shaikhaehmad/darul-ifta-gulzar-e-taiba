@@ -13,12 +13,12 @@
         .form-group { margin-bottom: 15px; text-align: left; }
         label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
         input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
-        .btn { background-color: #0b5e2e; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .btn { background-color: #0b5e2e; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 5px; }
         .btn:hover { background-color: #084823; }
         .file-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px; border-radius: 6px; margin-bottom: 8px; border: 1px solid #e2e8f0; }
         .btn-delete { background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
         .back-link { display: inline-block; margin-bottom: 15px; color: #0b5e2e; text-decoration: none; font-weight: bold; font-size: 14px; }
-        #status { margin-top: 15px; font-weight: bold; text-align: center; }
+        #status { margin-top: 15px; font-weight: bold; text-align: center; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -40,23 +40,38 @@
     <h2>🔐 Darul Ifta Admin Panel</h2>
     
     <div class="form-group">
-        <label>Kitab ka Naam (Urdu / Hindi / Gujarati / English):</label>
-        <input type="text" id="file-title" placeholder="Jaise: Namaz ka Tareeqa ya کبر پر فاتحہ">
+        <label>Item ka Type Chunein:</label>
+        <select id="item-type" onchange="toggleInputType()">
+            <option value="pdf">📖 PDF Kitab (File Upload)</option>
+            <option value="video">🎥 Video Bayan (YouTube/Insta/FB Link)</option>
+        </select>
     </div>
 
     <div class="form-group">
-        <label>PDF File Select Karein:</label>
-        <input type="file" id="file-input" accept="application/pdf">
+        <label>Title (Urdu / Hindi / Gujarati / English):</label>
+        <input type="text" id="item-title" placeholder="Jaise: Namaz ka Tareeqa ya Bayan Title">
     </div>
 
-    <button class="btn" onclick="uploadBook()">🚀 Kitab Add Karein</button>
+    <!-- PDF Upload Box -->
+    <div class="form-group" id="pdf-box">
+        <label>PDF File Select Karein:</label>
+        <input type="file" id="pdf-file-input" accept="application/pdf">
+    </div>
+
+    <!-- Video Link Box -->
+    <div class="form-group" id="video-box" style="display: none;">
+        <label>Video Link (YouTube / Instagram / Facebook):</label>
+        <input type="url" id="video-url-input" placeholder="https://youtube.com/... ya Instagram link">
+    </div>
+
+    <button class="btn" onclick="addNewItem()">🚀 Website par Jodein</button>
 
     <div id="status"></div>
 
     <hr style="margin: 20px 0;">
 
-    <h3>📁 Maujuda Kitabein (Yahan se hatayein)</h3>
-    <div id="admin-file-list" style="margin-top: 15px;">
+    <h3>📁 Maujuda List (Yahan se hatayein)</h3>
+    <div id="admin-item-list" style="margin-top: 15px;">
         <!-- List yahan aayegi -->
     </div>
 </div>
@@ -69,78 +84,115 @@
         if (enteredPass === SECRET_PIN) {
             document.getElementById('login-screen').style.display = "none";
             document.getElementById('admin-panel').style.display = "block";
-            loadAdminFiles();
+            loadAdminList();
         } else {
             alert("Galat PIN!");
             document.getElementById('admin-pass').value = "";
         }
     }
 
-    function loadAdminFiles() {
-        const adminList = document.getElementById('admin-file-list');
-        let files = JSON.parse(localStorage.getItem('darul_ifta_books')) || [];
+    function toggleInputType() {
+        const type = document.getElementById('item-type').value;
+        if (type === 'pdf') {
+            document.getElementById('pdf-box').style.display = "block";
+            document.getElementById('video-box').style.display = "none";
+        } else {
+            document.getElementById('pdf-box').style.display = "none";
+            document.getElementById('video-box').style.display = "block";
+        }
+    }
+
+    function loadAdminList() {
+        const adminList = document.getElementById('admin-item-list');
+        let items = JSON.parse(localStorage.getItem('darul_ifta_master_data')) || [];
         
         adminList.innerHTML = "";
-        if (files.length === 0) {
-            adminList.innerHTML = "<p style='color: #64748b; font-size: 14px;'>Abhi koi kitab nahi hai.</p>";
+        if (items.length === 0) {
+            adminList.innerHTML = "<p style='color: #64748b; font-size: 14px;'>Abhi koi item mojood nahi hai.</p>";
             return;
         }
 
-        files.slice().reverse().forEach((file, index) => {
-            const realIndex = files.length - 1 - index;
+        items.slice().reverse().forEach((item, index) => {
+            const realIndex = items.length - 1 - index;
+            let badgeText = item.type === 'video' ? '[Video Link]' : '[PDF File]';
             adminList.innerHTML += `
                 <div class="file-item">
                     <div>
-                        <strong>${file.title}</strong>
+                        <strong>${item.title}</strong> <small style="color:#666;">${badgeText}</small>
                     </div>
-                    <button class="btn-delete" onclick="deleteFile(${realIndex})">Hatayein</button>
+                    <button class="btn-delete" onclick="deleteItem(${realIndex})">Hatayein</button>
                 </div>
             `;
         });
     }
 
-    function uploadBook() {
-        const title = document.getElementById('file-title').value.trim();
-        const fileInput = document.getElementById('file-input').files[0];
+    function addNewItem() {
+        const type = document.getElementById('item-type').value;
+        const title = document.getElementById('item-title').value.trim();
         const statusEl = document.getElementById('status');
 
-        if (!title || !fileInput) {
-            alert("Kripya Kitab ka Naam aur PDF File dono select karein!");
+        if (!title) {
+            alert("Kripya Title zaroor likhein!");
             return;
         }
 
-        statusEl.style.color = "#2563eb";
-        statusEl.innerText = "Upload ho raha hai, kripya intezaar karein...";
+        let items = JSON.parse(localStorage.getItem('darul_ifta_master_data')) || [];
 
-        const reader = new FileReader();
-        reader.readAsDataURL(fileInput);
-        reader.onload = function () {
-            const fileUrl = reader.result; 
-            
-            let files = JSON.parse(localStorage.getItem('darul_ifta_books')) || [];
-            files.push({ title: title, url: fileUrl });
-            
-            try {
-                localStorage.setItem('darul_ifta_books', JSON.stringify(files));
-                statusEl.style.color = "#16a34a";
-                statusEl.innerText = "✅ Kitab safalta-purvak add ho gayi!";
-                
-                document.getElementById('file-title').value = "";
-                document.getElementById('file-input').value = "";
-                loadAdminFiles();
-            } catch (e) {
-                statusEl.style.color = "#dc2626";
-                statusEl.innerText = "❌ Error: Storage full ho rahi hai! Choti size ki PDF dalein.";
+        if (type === 'video') {
+            const videoUrl = document.getElementById('video-url-input').value.trim();
+            if (!videoUrl) {
+                alert("Kripya Video ka link daalein!");
+                return;
             }
-        };
+
+            items.push({ type: 'video', title: title, url: videoUrl });
+            localStorage.setItem('darul_ifta_master_data', JSON.stringify(items));
+            
+            statusEl.style.color = "#16a34a";
+            statusEl.innerText = "✅ Video safalta-purvak jadd gaya!";
+            document.getElementById('item-title').value = "";
+            document.getElementById('video-url-input').value = "";
+            loadAdminList();
+
+        } else {
+            const fileInput = document.getElementById('pdf-file-input').files[0];
+            if (!fileInput) {
+                alert("Kripya PDF File select karein!");
+                return;
+            }
+
+            statusEl.style.color = "#2563eb";
+            statusEl.innerText = "PDF process ho rahi hai, intezaar karein...";
+
+            const reader = new FileReader();
+            reader.readAsDataURL(fileInput);
+            reader.onload = function () {
+                const fileUrl = reader.result; 
+                
+                items.push({ type: 'pdf', title: title, url: fileUrl });
+                
+                try {
+                    localStorage.setItem('darul_ifta_master_data', JSON.stringify(items));
+                    statusEl.style.color = "#16a34a";
+                    statusEl.innerText = "✅ PDF Kitab safalta-purvak add ho gayi!";
+                    
+                    document.getElementById('item-title').value = "";
+                    document.getElementById('pdf-file-input').value = "";
+                    loadAdminList();
+                } catch (e) {
+                    statusEl.style.color = "#dc2626";
+                    statusEl.innerText = "❌ Error: Storage full ho rahi hai! Choti size ki PDF dalein ya purani files hatayein.";
+                }
+            };
+        }
     }
 
-    function deleteFile(index) {
-        if (confirm("Kya aap is kitab ko hatana chahte hain?")) {
-            let files = JSON.parse(localStorage.getItem('darul_ifta_books')) || [];
-            files.splice(index, 1);
-            localStorage.setItem('darul_ifta_books', JSON.stringify(files));
-            loadAdminFiles();
+    function deleteItem(index) {
+        if (confirm("Kya aap is item ko hatana chahte hain?")) {
+            let items = JSON.parse(localStorage.getItem('darul_ifta_master_data')) || [];
+            items.splice(index, 1);
+            localStorage.setItem('darul_ifta_master_data', JSON.stringify(items));
+            loadAdminList();
         }
     }
 </script>
