@@ -1,68 +1,5 @@
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-
-import {
-    getFirestore,
-    collection,
-    addDoc,
-    serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-
-
-// ======================
-// FIREBASE CONFIGURATION
-// ======================
-
-const firebaseConfig = {
-    apiKey: "AIzaSyCHn1wyyuJCqIV2BH6MoMt7oCjfl_15-9s",
-    authDomain: "darul-ifta-gulzar-e-taiba.firebaseapp.com",
-    projectId: "darul-ifta-gulzar-e-taiba",
-    storageBucket: "darul-ifta-gulzar-e-taiba.firebasestorage.app",
-    messagingSenderId: "129078877979",
-    appId: "1:129078877979:web:d47d60a74123c828ccfdbe"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-
-// ======================
-// IMAGE SLIDER
-// ======================
-
-const slides = document.querySelectorAll(".slide");
-
-let slideIndex = 0;
-
-if (slides.length > 0) {
-
-    setInterval(() => {
-
-        slides[slideIndex].classList.remove("active");
-
-        slideIndex = (slideIndex + 1) % slides.length;
-
-        slides[slideIndex].classList.add("active");
-
-    }, 3000);
-
-}
-
-
-// ======================
-// SEARCH DATA
-// ======================
-
-const data = [
-
-    {
-        title: "गैर बिरादरी में निकाह का हुक्म",
-        keywords: "nikah gair biradri shaadi marriage hukam",
-        type: "PDF",
-        file: "pdf/gair-biradri-me-nikah-ka-hukam.pdf"
+        file: "kabr_par_fateha_padhvano_sahi_tariko.pdf"
     }
-
 ];
 
 
@@ -74,53 +11,40 @@ const search = document.getElementById("search");
 const results = document.getElementById("search-results");
 
 if (search && results) {
-
     search.addEventListener("input", function () {
-
         const value = this.value.toLowerCase().trim();
-
         results.innerHTML = "";
 
         if (!value) return;
 
-        const filteredData = data.filter(item =>
-
+        const filteredData = masterData.filter(item =>
             item.title.toLowerCase().includes(value) ||
             item.keywords.toLowerCase().includes(value)
-
         );
 
         if (filteredData.length === 0) {
-
             results.textContent = "Koi result nahi mila.";
-
             return;
-
         }
 
         filteredData.forEach(item => {
-
             const card = document.createElement("div");
             card.className = "result";
 
             const heading = document.createElement("h3");
-            heading.textContent = item.title;
+            heading.textContent = item.title + " (" + item.type + ")";
 
             const link = document.createElement("a");
             link.href = item.file;
             link.target = "_blank";
             link.rel = "noopener noreferrer";
-            link.textContent = "📄 PDF Kholen";
+            link.textContent = "📖 Kholen";
 
             card.appendChild(heading);
             card.appendChild(link);
-
             results.appendChild(card);
-
         });
-
     });
-
 }
 
 
@@ -131,9 +55,7 @@ if (search && results) {
 const fatwaForm = document.getElementById("fatwaForm");
 
 if (fatwaForm) {
-
     fatwaForm.addEventListener("submit", async function (e) {
-
         e.preventDefault();
 
         const name = document.getElementById("name").value.trim();
@@ -141,7 +63,6 @@ if (fatwaForm) {
         const address = document.getElementById("address").value.trim();
         const question = document.getElementById("question").value.trim();
         
-        // File input check (agar html mein file input hai)
         const fileInput = document.getElementById("fileInput"); 
         let fileName = "Koi file select nahi ki gayi";
         
@@ -150,27 +71,20 @@ if (fatwaForm) {
         }
 
         if (!name || !mobile || !address || !question) {
-
             alert("Sabhi details (Naam, Mobile, Address aur Sawal) bharein.");
-
             return;
-
         }
 
-        const submitButton = fatwaForm.querySelector(
-            'button[type="submit"]'
-        );
+        const submitButton = fatwaForm.querySelector('button[type="submit"]');
 
         try {
-
             if (submitButton) {
                 submitButton.disabled = true;
                 submitButton.textContent = "Sending...";
             }
 
-            // 1. Firebase mein data save hoga
+            // 1. Firebase mein data save karein
             await addDoc(collection(db, "fatwas"), {
-
                 name: name,
                 mobile: mobile,
                 address: address,
@@ -178,11 +92,9 @@ if (fatwaForm) {
                 file: fileName,
                 date: serverTimestamp(),
                 status: "pending"
-
             });
 
-            // 2. WhatsApp message format taiyar karna
-            // Yahan apna WhatsApp Number daal dein (Country code ke sath, jaise 91XXXXXXXXXX)
+            // 2. WhatsApp Message Format
             const adminWhatsAppNumber = "918758647929"; 
 
             const whatsappMessage = 
@@ -203,35 +115,22 @@ ${question}
             const whatsappURL = `https://api.whatsapp.com/send?phone=${adminWhatsAppNumber}&text=${encodedMessage}`;
 
             alert("Aapka sawal kamyabi se bhej diya gaya hai. Ab WhatsApp khul raha hai...");
-
             fatwaForm.reset();
 
-            // 3. WhatsApp par redirect karna
+            // 3. WhatsApp redirect
             window.open(whatsappURL, "_blank");
-
         }
-
         catch (error) {
-
             console.error("Firebase Error:", error);
-
             alert("Kuch problem aayi. Dobara koshish karein.");
-
         }
-
         finally {
-
             if (submitButton) {
-
                 submitButton.disabled = false;
                 submitButton.textContent = "📨 Fatwa Puchhe";
-
             }
-
         }
-
     });
-
 }
 
 
@@ -242,69 +141,46 @@ ${question}
 const themeToggle = document.getElementById("themeToggle");
 
 if (themeToggle) {
-
     themeToggle.addEventListener("click", function () {
-
         document.body.classList.toggle("dark");
-
         if (document.body.classList.contains("dark")) {
-
             themeToggle.textContent = "☀️ Light Mode";
-
         } else {
-
             themeToggle.textContent = "🌙 Dark Mode";
-
         }
-
     });
-
 }
 
 
 // ======================
-// PDF LIBRARY
+// PDF LIBRARY & CATEGORY FILTER
 // ======================
-
-const pdfData = [
-
-    {
-        title: "गैर बिरादरी में निकाह का हुक्म",
-        category: "Nikah",
-        file: "pdf/gair-biradri-me-nikah-ka-hukam.pdf"
-    }
-
-];
 
 const pdfList = document.getElementById("pdfList");
 const searchInput = document.getElementById("searchInput");
 
-function loadPDFs(filter = "") {
-
+function loadPDFs(filterCategory = "") {
     if (!pdfList) return;
 
     pdfList.innerHTML = "";
 
-    const filteredPDFs = pdfData.filter(pdf =>
-
-        pdf.title.toLowerCase().includes(filter.toLowerCase()) ||
-
-        pdf.category.toLowerCase().includes(filter.toLowerCase())
-
-    );
+    const filteredPDFs = masterData.filter(item => {
+        if (!filterCategory || filterCategory === "All") return true;
+        return item.category.toLowerCase() === filterCategory.toLowerCase();
+    });
 
     if (filteredPDFs.length === 0) {
-
-        pdfList.textContent = "Koi PDF nahi mili.";
-
+        pdfList.textContent = "Is category mein koi PDF nahi mili.";
         return;
-
     }
 
     filteredPDFs.forEach(pdf => {
-
         const card = document.createElement("div");
-        card.className = "pdf-card";
+        card.className = "quick-card";
+
+        const icon = document.createElement("div");
+        icon.className = "icon";
+        icon.textContent = "📄";
 
         const heading = document.createElement("h3");
         heading.textContent = pdf.title;
@@ -316,27 +192,27 @@ function loadPDFs(filter = "") {
         link.href = pdf.file;
         link.target = "_blank";
         link.rel = "noopener noreferrer";
-        link.textContent = "📖 Read PDF";
+        link.className = "btn";
+        link.textContent = "📥 Download / Read";
 
+        card.appendChild(icon);
         card.appendChild(heading);
         card.appendChild(category);
         card.appendChild(link);
 
         pdfList.appendChild(card);
-
     });
-
 }
 
-if (searchInput) {
-
-    searchInput.addEventListener("input", function () {
-
-        loadPDFs(this.value);
-
+// PDF Section ke Category Buttons ke liye click events
+const pdfCategoryButtons = document.querySelectorAll("#pdf .hero-buttons .btn");
+pdfCategoryButtons.forEach(btn => {
+    btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        const categoryName = this.textContent.trim().replace("📄 ", "").replace("📚 ", "").replace("🕌 ", "").replace("📖 ", "");
+        loadPDFs(categoryName === "Fatwa" ? "Nikah" : categoryName); // Category mapping
     });
-
-}
+});
 
 loadPDFs();
 
@@ -345,4 +221,4 @@ loadPDFs();
 // SCRIPT LOADED
 // ======================
 
-console.log("Darul Ifta Gulzar-e-Taiba Website Loaded Successfully!");
+console.log("Darul Ifta Gulzar-e-Taiba Fully Functional Script Loaded!");
