@@ -41,9 +41,10 @@
     
     <div class="form-group">
         <label>Item ka Type Chunein:</label>
-        <select id="item-type" onchange="toggleInputType()">
-            <option value="pdf">📖 PDF Kitab (File Upload)</option>
-            <option value="video">🎥 Video Bayan (YouTube/Insta/FB Link)</option>
+        <select id="item-type">
+            <option value="pdf">📖 Google Drive PDF Kitab Link</option>
+            <option value="telegram">✈️ Telegram Channel / Kitab Link</option>
+            <option value="video">🎥 YouTube / Insta / FB Video Link</option>
         </select>
     </div>
 
@@ -52,16 +53,9 @@
         <input type="text" id="item-title" placeholder="Jaise: Namaz ka Tareeqa ya Bayan Title">
     </div>
 
-    <!-- PDF Upload Box -->
-    <div class="form-group" id="pdf-box">
-        <label>PDF File Select Karein:</label>
-        <input type="file" id="pdf-file-input" accept="application/pdf">
-    </div>
-
-    <!-- Video Link Box -->
-    <div class="form-group" id="video-box" style="display: none;">
-        <label>Video Link (YouTube / Instagram / Facebook):</label>
-        <input type="url" id="video-url-input" placeholder="https://youtube.com/... ya Instagram link">
+    <div class="form-group">
+        <label>Direct Link Paste Karein (Drive / Telegram / Video URL):</label>
+        <input type="url" id="item-url-input" placeholder="https://... link yahan paste karein">
     </div>
 
     <button class="btn" onclick="addNewItem()">🚀 Website par Jodein</button>
@@ -91,17 +85,6 @@
         }
     }
 
-    function toggleInputType() {
-        const type = document.getElementById('item-type').value;
-        if (type === 'pdf') {
-            document.getElementById('pdf-box').style.display = "block";
-            document.getElementById('video-box').style.display = "none";
-        } else {
-            document.getElementById('pdf-box').style.display = "none";
-            document.getElementById('video-box').style.display = "block";
-        }
-    }
-
     function loadAdminList() {
         const adminList = document.getElementById('admin-item-list');
         let items = JSON.parse(localStorage.getItem('darul_ifta_master_data')) || [];
@@ -114,7 +97,11 @@
 
         items.slice().reverse().forEach((item, index) => {
             const realIndex = items.length - 1 - index;
-            let badgeText = item.type === 'video' ? '[Video Link]' : '[PDF File]';
+            let badgeText = '[Link]';
+            if(item.type === 'pdf') badgeText = '[Google Drive]';
+            if(item.type === 'telegram') badgeText = '[Telegram]';
+            if(item.type === 'video') badgeText = '[Video]';
+
             adminList.innerHTML += `
                 <div class="file-item">
                     <div>
@@ -129,62 +116,25 @@
     function addNewItem() {
         const type = document.getElementById('item-type').value;
         const title = document.getElementById('item-title').value.trim();
+        const url = document.getElementById('item-url-input').value.trim();
         const statusEl = document.getElementById('status');
 
-        if (!title) {
-            alert("Kripya Title zaroor likhein!");
+        if (!title || !url) {
+            alert("Kripya Title aur Link dono zaroor bharein!");
             return;
         }
 
         let items = JSON.parse(localStorage.getItem('darul_ifta_master_data')) || [];
 
-        if (type === 'video') {
-            const videoUrl = document.getElementById('video-url-input').value.trim();
-            if (!videoUrl) {
-                alert("Kripya Video ka link daalein!");
-                return;
-            }
-
-            items.push({ type: 'video', title: title, url: videoUrl });
-            localStorage.setItem('darul_ifta_master_data', JSON.stringify(items));
-            
-            statusEl.style.color = "#16a34a";
-            statusEl.innerText = "✅ Video safalta-purvak jadd gaya!";
-            document.getElementById('item-title').value = "";
-            document.getElementById('video-url-input').value = "";
-            loadAdminList();
-
-        } else {
-            const fileInput = document.getElementById('pdf-file-input').files[0];
-            if (!fileInput) {
-                alert("Kripya PDF File select karein!");
-                return;
-            }
-
-            statusEl.style.color = "#2563eb";
-            statusEl.innerText = "PDF process ho rahi hai, intezaar karein...";
-
-            const reader = new FileReader();
-            reader.readAsDataURL(fileInput);
-            reader.onload = function () {
-                const fileUrl = reader.result; 
-                
-                items.push({ type: 'pdf', title: title, url: fileUrl });
-                
-                try {
-                    localStorage.setItem('darul_ifta_master_data', JSON.stringify(items));
-                    statusEl.style.color = "#16a34a";
-                    statusEl.innerText = "✅ PDF Kitab safalta-purvak add ho gayi!";
-                    
-                    document.getElementById('item-title').value = "";
-                    document.getElementById('pdf-file-input').value = "";
-                    loadAdminList();
-                } catch (e) {
-                    statusEl.style.color = "#dc2626";
-                    statusEl.innerText = "❌ Error: Storage full ho rahi hai! Choti size ki PDF dalein ya purani files hatayein.";
-                }
-            };
-        }
+        items.push({ type: type, title: title, url: url });
+        localStorage.setItem('darul_ifta_master_data', JSON.stringify(items));
+        
+        statusEl.style.color = "#16a34a";
+        statusEl.innerText = "✅ Item safalta-purvak jud gaya!";
+        
+        document.getElementById('item-title').value = "";
+        document.getElementById('item-url-input').value = "";
+        loadAdminList();
     }
 
     function deleteItem(index) {
