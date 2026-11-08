@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darul Ifta - Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-container {
+            max-width: 500px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .admin-container h2 {
+            color: #0b5329;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🔐 Darul Ifta Admin Panel</h1>
+    <nav>
+        <a href="index.html">🌐 Website Dekhein</a>
+    </nav>
+</header>
+
+<div class="admin-container">
+    <h2>Naya Content Upload Karein</h2>
+    <form id="adminUploadForm">
+        <div class="form-group">
+            <label for="contentType">Content Type:</label>
+            <select id="contentType" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+                <option value="pdf">📚 PDF / Kitab</option>
+                <option value="bayan">🎤 Islamic Bayan (Video)</option>
+                <option value="fatwa">📄 Fatwa Collection</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="itemTitle">Title / Naam:</label>
+            <input type="text" id="itemTitle" placeholder="Jaise: Namaz ka Tareeqa PDF" required>
+        </div>
+
+        <div class="form-group">
+            <label for="itemDesc">Chhota Description:</label>
+            <input type="text" id="itemDesc" placeholder="Jaise: Mufti M.J. Akbari ki kitab" required>
+        </div>
+
+        <div class="form-group">
+            <label for="itemLink">File Link / PDF URL / YouTube Link:</label>
+            <input type="text" id="itemLink" placeholder="Yahan link paste karein" required>
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%; background-color: #0b5329; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+            🚀 Website Par Publish Karein
+        </button>
+    </form>
+    <p id="uploadStatus" style="text-align: center; margin-top: 15px; font-weight: bold;"></p>
+</div>
+
+</body>
+</html>
