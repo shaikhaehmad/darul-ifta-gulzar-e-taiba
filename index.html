@@ -13,7 +13,7 @@
         .admin-btn { background-color: #ffffff; color: #0b5e2e; padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; text-decoration: none; display: inline-block; }
         
         .nav-container { display: flex; gap: 10px; padding: 15px; max-width: 600px; margin: 0 auto; }
-        .nav-tab { flex: 1; padding: 12px; text-align: center; border-radius: 8px; font-weight: bold; font-size: 14px; text-decoration: none; }
+        .nav-tab { flex: 1; padding: 12px; text-align: center; border-radius: 8px; font-weight: bold; font-size: 14px; text-decoration: none; cursor: pointer; }
         .nav-tab.active { background-color: #0b5e2e; color: white; }
         .nav-tab.inactive { background-color: #e2e8f0; color: #4a5568; }
 
@@ -24,13 +24,19 @@
         .card { background-color: white; border-radius: 10px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
         .card-info h3 { font-size: 16px; margin-bottom: 6px; color: #1e293b; }
         .badges { display: flex; gap: 6px; }
-        .badge { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: bold; }
-        .badge-type { background-color: #e0f2fe; color: #0369a1; }
+        .badge { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: bold; background-color: #e0f2fe; color: #0369a1; }
         
         .card-actions { display: flex; flex-direction: column; gap: 6px; }
         .btn-view { background-color: #0b5e2e; color: white; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: bold; text-align: center; white-space: nowrap; }
         .btn-download { background-color: #2563eb; color: white; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; text-align: center; white-space: nowrap; }
-        .no-data { text-align: center; color: #64748b; margin-top: 30px; font-size: 15px; }
+
+        /* Sawaal Form Style */
+        .sawaal-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .sawaal-box h3 { color: #0b5e2e; margin-bottom: 15px; font-size: 18px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+        .btn-submit { background-color: #0b5e2e; color: white; border: none; padding: 10px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 15px; }
     </style>
 </head>
 <body>
@@ -41,37 +47,87 @@
         <a href="admin.html" class="admin-btn">🔒 Admin Panel (Upload Karein)</a>
     </div>
 
+    <!-- Navigation Tabs -->
     <div class="nav-container">
-        <a href="#" class="nav-tab active">📖 Kitabein & Bayanat</a>
-        <a href="#" class="nav-tab inactive">❓ Sawaal / Fatwa Puchhein</a>
+        <div id="tab-kitabein" class="nav-tab active" onclick="switchTab('kitabein')">📖 Kitabein & Bayanat</div>
+        <div id="tab-sawaal" class="nav-tab inactive" onclick="switchTab('sawaal')">❓ Sawaal / Fatwa Puchhein</div>
     </div>
 
-    <div class="filter-section">
-        <span>🔍 Dekhein:</span>
-        <select id="filter-select" class="filter-select" onchange="loadFiles()">
-            <option value="ALL">📁 Sabhi Files (PDF + Videos)</option>
-            <option value="PDF">PDF Kitabein</option>
-            <option value="Video">Video Bayanat</option>
-        </select>
+    <!-- Section 1: Kitabein & Bayanat -->
+    <div id="section-kitabein">
+        <div class="filter-section">
+            <span>🔍 Dekhein:</span>
+            <select id="filter-select" class="filter-select" onchange="loadFiles()">
+                <option value="ALL">📁 Sabhi Files (PDF + Videos)</option>
+                <option value="PDF">PDF Kitabein</option>
+                <option value="Video">Video Bayanat</option>
+            </select>
+        </div>
+
+        <div class="container" id="file-list">
+            <!-- Dynamic files yahan aayengi -->
+        </div>
     </div>
 
-    <div class="container" id="file-list">
-        <!-- Dynamic content yahan aayega -->
+    <!-- Section 2: Sawaal / Fatwa Form -->
+    <div id="section-sawaal" class="container" style="display: none;">
+        <div class="sawaal-box">
+            <h3>Apna Sawaal Darul Ifta Ko Bhejein</h3>
+            <div class="form-group">
+                <label>Aapka Naam:</label>
+                <input type="text" id="s-name" placeholder="Apna pura naam likhein">
+            </div>
+            <div class="form-group">
+                <label>Mobile Number:</label>
+                <input type="tel" id="s-phone" placeholder="WhatsApp number">
+            </div>
+            <div class="form-group">
+                <label>Sawaal / Masla:</label>
+                <textarea id="s-text" rows="4" placeholder="Apna sawaal tafseel se likhein..."></textarea>
+            </div>
+            <button class="btn-submit" onclick="sendWhatsAppSawaal()">📲 WhatsApp par Sawaal Bhejein</button>
+        </div>
     </div>
 
     <script>
+        // Tab switching logic
+        function switchTab(tabName) {
+            const tabK = document.getElementById('tab-kitabein');
+            const tabS = document.getElementById('tab-sawaal');
+            const secK = document.getElementById('section-kitabein');
+            const secS = document.getElementById('section-sawaal');
+
+            if (tabName === 'kitabein') {
+                tabK.className = "nav-tab active";
+                tabS.className = "nav-tab inactive";
+                secK.style.display = "block";
+                secS.style.display = "none";
+                loadFiles();
+            } else {
+                tabS.className = "nav-tab active";
+                tabK.className = "nav-tab inactive";
+                secS.style.display = "block";
+                secK.style.display = "none";
+            }
+        }
+
+        // Load files logic
         function loadFiles() {
             const listContainer = document.getElementById('file-list');
-            const filterVal = document.getElementById('filter-select').value;
+            const filterSelect = document.getElementById('filter-select');
             
-            // Default sample items agar local storage khali ho
-            let defaultFiles = [
-                { title: "Jarbe murtaja", type: "PDF", url: "#" },
-                { title: "Test video", type: "Video", url: "#" }
-            ];
+            if (!listContainer) return;
+            const filterVal = filterSelect ? filterSelect.value : 'ALL';
 
-            let savedFiles = JSON.parse(localStorage.getItem('darul_ifta_files')) || defaultFiles;
-            
+            let savedFiles = JSON.parse(localStorage.getItem('darul_ifta_files'));
+
+            if (!savedFiles) {
+                savedFiles = [
+                    { title: "Jarbe murtaja", type: "PDF", url: "jarbe-murtaja.pdf" },
+                    { title: "Kabar Par Fateha", type: "PDF", url: "कबर_पर_फातेहा_पढवानो_सही_तरीको.pdf" }
+                ];
+            }
+
             listContainer.innerHTML = "";
 
             let filtered = savedFiles.filter(item => {
@@ -80,17 +136,17 @@
             });
 
             if (filtered.length === 0) {
-                listContainer.innerHTML = `<div class="no-data">Koi file maujood nahi hai. Admin panel se upload karein.</div>`;
+                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Koi file maujood nahi hai.</div>`;
                 return;
             }
 
-            filtered.forEach((item, index) => {
+            filtered.forEach(item => {
                 listContainer.innerHTML += `
                     <div class="card">
                         <div class="card-info">
                             <h3>${item.title}</h3>
                             <div class="badges">
-                                <span class="badge badge-type">${item.type}</span>
+                                <span class="badge">${item.type}</span>
                             </div>
                         </div>
                         <div class="card-actions">
@@ -100,6 +156,26 @@
                     </div>
                 `;
             });
+        }
+
+        // WhatsApp Sawaal Sender (Aapka asli number yahan lag gaya hai)
+        function sendWhatsAppSawaal() {
+            const name = document.getElementById('s-name').value.trim();
+            const phone = document.getElementById('s-phone').value.trim();
+            const text = document.getElementById('s-text').value.trim();
+
+            if (!name || !text) {
+                alert("Kripya apna naam aur sawaal zaroor likhein!");
+                return;
+            }
+
+            // Aapka naya aur sahi WhatsApp number
+            const muftiWhatsAppNumber = "918758647929"; 
+
+            const message = `*Naya Sawaal - Darul Ifta*%0A%0A*Naam:* ${name}%0A*Phone:* ${phone}%0A*Sawaal:* ${text}`;
+            const whatsappUrl = `https://wa.me/${muftiWhatsAppNumber}?text=${message}`;
+
+            window.open(whatsappUrl, '_blank');
         }
 
         window.onload = loadFiles;
