@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <style>
         .admin-container {
-            max-width: 500px;
+            max-width: 600px;
             margin: 30px auto;
             background: white;
             padding: 20px;
@@ -36,6 +36,33 @@
             border: 1px solid #ccc;
             box-sizing: border-box;
         }
+        .manage-section {
+            margin-top: 30px;
+            border-top: 2px dashed #ddd;
+            padding-top: 20px;
+        }
+        .manage-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+        .btn-delete {
+            background-color: #d9534f;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-delete:hover {
+            background-color: #c9302c;
+        }
     </style>
 </head>
 <body>
@@ -50,11 +77,11 @@
 <div class="admin-container">
     <h2>Nayi PDF ya Video Upload Karein</h2>
     <form id="adminUploadForm">
-        <!-- GitHub Token Setting (Sirf pehli baar dalna hoga) -->
+        <!-- GitHub Token Setting -->
         <div class="form-group" style="background: #f4fbf7; padding: 12px; border-radius: 8px; border: 1px dashed #0b5329;">
-            <label for="ghToken" style="color: #0b5329;">🔑 GitHub Token (Sirf pehli baar yahan daalein):</label>
+            <label for="ghToken" style="color: #0b5329;">🔑 GitHub Token:</label>
             <input type="password" id="ghToken" placeholder="ghp_..." required>
-            <small style="color: #555; display: block; margin-top: 5px;">Yeh token aapke browser mein safe rahega, baar-baar nahi dalna padega.</small>
+            <small style="color: #555; display: block; margin-top: 5px;">Token browser mein safe rahega.</small>
         </div>
 
         <div class="form-group">
@@ -87,14 +114,29 @@
         </button>
     </form>
     <p id="uploadStatus" style="text-align: center; margin-top: 15px; font-weight: bold;"></p>
+
+    <!-- Uploaded Files Management / Delete Section -->
+    <div class="manage-section">
+        <h3>🗑️ Upload ki gayi Files Manage Karein</h3>
+        <div id="manageList">
+            <p style="color: #666; text-align: center;">Files load ho rahi hain...</p>
+        </div>
+    </div>
 </div>
 
 <script>
-    // Page load hone par agar token pehle se saved hai toh field mein apne aap aa jayega
+    const user = "shaikhaehmad"; 
+    const repo = "darul-ifta-gulzar-e-taiba"; 
+
+    function utoa(str) {
+        return window.btoa(unescape(encodeURIComponent(str)));
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
         const savedToken = localStorage.getItem('darul_github_token');
         if (savedToken) {
             document.getElementById('ghToken').value = savedToken;
+            loadManageList();
         }
     });
 
@@ -112,14 +154,113 @@
         }
     });
 
+    // Admin panel ke andar upload ki gayi files ki list dikhana aur delete karna
+    async function loadManageList() {
+        const token = document.getElementById('ghToken').value.trim();
+        const manageListEl = document.getElementById('manageList');
+
+        if (!token) {
+            manageListEl.innerHTML = '<p style="color: #777; text-align: center;">Files dekhne ke liye upar token daalein.</p>';
+            return;
+        }
+
+        try {
+            const res = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/data.json`, {
+                headers: { 'Authorization': `token ${token}` }
+            });
+
+            if (!res.ok) {
+                manageListEl.innerHTML = '<p style="color: #777; text-align: center;">Abhi tak koi file upload nahi ki gayi hai.</p>';
+                return;
+            }
+
+            const fileData = await res.json();
+            const items = JSON.parse(decodeURIComponent(escape(window.atob(fileData.content))));
+
+            if (items.length === 0) {
+                manageListEl.innerHTML = '<p style="color: #777; text-align: center;">Koi file available nahi hai.</p>';
+                return;
+            }
+
+            let html = '';
+            items.forEach((item, index) => {
+                html += `
+                    <div class="manage-item">
+                        <div>
+                            <strong>${item.title}</strong> <span style="font-size: 11px; color: #555;">(${item.type === 'pdf' ? 'PDF' : 'Video'})</span>
+                        </div>
+                        <button class="btn-delete" onclick="deleteItem(${index})">Hataein</button>
+                    </div>
+                `;
+            });
+
+            manageListEl.innerHTML = html;
+
+        } catch (err) {
+            manageListEl.innerHTML = '<p style="color: red; text-align: center;">List load karne mein error aayi.</p>';
+        }
+    }
+
+    // Token change hone par bhi list load ho jaye
+    document.getElementById('ghToken').addEventListener('input', function() {
+        localStorage.setItem('darul_github_token', this.value.trim());
+        loadManageList();
+    });
+
+    // Item delete karne ka function
+    window.deleteItem = async function(index) {
+        if (!confirm("Kya aap waqayi is file ko delete karna chahte hain?")) return;
+
+        const token = document.getElementById('ghToken').value.trim();
+        if (!token) {
+            alert("Pehle GitHub Token daalein!");
+            return;
+        }
+
+        try {
+            const dataPath = `data.json`;
+            const getRes = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${dataPath}`, {
+                headers: { 'Authorization': `token ${token}` }
+            });
+
+            if (!getRes.ok) throw new Error("Data fetch nahi ho paya");
+
+            const fileData = await getRes.json();
+            let items = JSON.parse(decodeURIComponent(escape(window.atob(fileData.content))));
+            const sha = fileData.sha;
+
+            // Selected index wali item ko hata dena
+            items.splice(index, 1);
+
+            // GitHub par updated data.json save karna
+            const updateRes = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${dataPath}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: `Delete item from admin panel`,
+                    content: utoa(JSON.stringify(items)),
+                    sha: sha
+                })
+            });
+
+            if (!updateRes.ok) throw new Error("Delete nahi ho paya");
+
+            alert("✅ File successfully delete ho gayi hai!");
+            loadManageList(); // List refresh karein
+
+        } catch (err) {
+            alert("❌ Error: " + err.message);
+        }
+    };
+
+    // Upload Form Submit Handler
     document.getElementById('adminUploadForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        const user = "shaikhaehmad"; 
-        const repo = "darul-ifta-gulzar-e-taiba"; 
         const token = document.getElementById('ghToken').value.trim();
-
-        // Token ko browser mein secure save kar lo taaki agli baar na dalna pade
         localStorage.setItem('darul_github_token', token);
 
         const type = typeSelect.value;
@@ -142,14 +283,12 @@
                 }
                 fileName = file.name;
                 
-                // File ko base64 mein convert karna
                 const base64Content = await new Promise((resolve) => {
                     const reader = new FileReader();
                     reader.onload = (e) => resolve(e.target.result.split(',')[1]);
                     reader.readAsDataURL(file);
                 });
 
-                // GitHub ke `pdf/` folder mein file upload karna
                 const path = `pdf/${Date.now()}_${fileName}`;
                 const res = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${path}`, {
                     method: 'PUT',
@@ -163,14 +302,13 @@
                     })
                 });
 
-                if (!res.ok) throw new Error("GitHub par PDF upload nahi ho payi. Token ya Repo name check karein.");
+                if (!res.ok) throw new Error("GitHub par PDF upload nahi ho payi. Token check karein.");
                 fileUrl = path;
             } else {
                 fileUrl = document.getElementById('itemLink').value.trim();
                 fileName = "Online Video Link";
             }
 
-            // `data.json` file ko update karna taaki website par naya item dikhe
             const dataPath = `data.json`;
             let existingItems = [];
             let sha = "";
@@ -182,7 +320,7 @@
             if (getRes.ok) {
                 const fileData = await getRes.json();
                 sha = fileData.sha;
-                existingItems = JSON.parse(atob(fileData.content));
+                existingItems = JSON.parse(decodeURIComponent(escape(window.atob(fileData.content))));
             }
 
             existingItems.push({ type, title, url: fileUrl, fileName });
@@ -195,17 +333,17 @@
                 },
                 body: JSON.stringify({
                     message: `Update data.json with ${title}`,
-                    content: btoa(JSON.stringify(existingItems)),
+                    content: utoa(JSON.stringify(existingItems)),
                     sha: sha ? sha : undefined
                 })
             });
 
             statusEl.style.color = "green";
-            statusEl.innerText = "✅ Mubarak ho! File successfully website par publish ho gayi hai.";
+            statusEl.innerText = "✅ Mubarak ho! File successfully publish ho gayi hai.";
             
-            // Form reset karein lekin token ko wapas box mein bhr dein
             document.getElementById('adminUploadForm').reset();
             document.getElementById('ghToken').value = token;
+            loadManageList(); // Nayi list turant load ho jayegi
 
         } catch (err) {
             statusEl.style.color = "red";
