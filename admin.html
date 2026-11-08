@@ -112,7 +112,8 @@
     }
 
     function deleteFile(index) {
-        if (confirmkri("Kya aap is file ko hatana chahte hain?")) {
+        // Yahan 'confirmkri' ko theek karke standard 'confirm' kar diya hai
+        if (confirm("Kya aap is file ko hatana chahte hain?")) {
             let files = JSON.parse(localStorage.getItem('darul_ifta_files')) || [];
             files.splice(index, 1);
             localStorage.setItem('darul_ifta_files', JSON.stringify(files));
