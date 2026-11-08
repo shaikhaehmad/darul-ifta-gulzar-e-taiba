@@ -12,311 +12,213 @@
             font-family: Arial, sans-serif;
         }
         body {
-            background-color: #f4f4f4;
+            background-color: #f4f6f8;
             color: #333;
         }
-        header {
-            background-color: #0b4d2c;
+        /* Header Section */
+        .header {
+            background-color: #0b5e2e;
             color: white;
+            padding: 20px;
             text-align: center;
-            padding: 20px 10px;
         }
-        header h1 {
-            font-size: 20px;
+        .header h1 {
+            font-size: 22px;
             margin-bottom: 5px;
         }
-        header p {
-            font-size: 12px;
-            color: #d1e7dd;
-            margin-bottom: 10px;
+        .header p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 12px;
         }
-        .admin-link {
-            background: #fff;
-            color: #0b4d2c;
+        .admin-btn {
+            background-color: #ffffff;
+            color: #0b5e2e;
             padding: 6px 12px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 12px;
+            border-radius: 20px;
+            font-size: 13px;
             font-weight: bold;
+            text-decoration: none;
             display: inline-block;
-            margin-top: 5px;
         }
-        .container {
-            max-width: 600px;
-            margin: 15px auto;
-            padding: 0 10px;
-        }
-        .nav-tabs {
+
+        /* Navigation Bar / Tabs */
+        .nav-container {
             display: flex;
             gap: 10px;
-            margin-bottom: 15px;
+            padding: 15px;
+            max-width: 600px;
+            margin: 0 auto;
         }
-        .tab-btn {
+        .nav-tab {
             flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
+            padding: 12px;
             text-align: center;
-            font-size: 13px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            text-decoration: none;
         }
-        .tab-btn.active-green {
-            background-color: #0b4d2c;
+        .nav-tab.active {
+            background-color: #0b5e2e;
             color: white;
         }
-        .tab-btn.active-gray {
+        .nav-tab.inactive {
             background-color: #e2e8f0;
-            color: #333;
+            color: #4a5568;
         }
-        .filter-box {
-            background: white;
-            padding: 10px 15px;
-            border-radius: 6px;
+
+        /* Filter Section */
+        .filter-section {
+            max-width: 600px;
+            margin: 0 auto 15px auto;
+            padding: 0 15px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            gap: 10px;
+        }
+        .filter-section span {
+            font-weight: bold;
             font-size: 14px;
         }
-        .filter-box select {
-            padding: 6px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-        .card {
-            background: white;
-            padding: 12px 15px;
+        .filter-select {
+            flex: 1;
+            padding: 10px;
             border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            background-color: white;
+            font-size: 14px;
+        }
+
+        /* Main Content Container */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 15px 30px 15px;
+        }
+
+        /* Item Card Style */
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            align-items: center;
         }
         .card-info h3 {
-            font-size: 15px;
-            margin-bottom: 5px;
-            color: #111;
+            font-size: 16px;
+            margin-bottom: 6px;
+            color: #1e293b;
         }
         .badges {
             display: flex;
-            gap: 5px;
+            gap: 6px;
+        }
+        .badge {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
         }
         .badge-type {
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            background: #e2e8f0;
-            color: #444;
-            font-weight: bold;
+            background-color: #e0f2fe;
+            color: #0369a1;
         }
         .badge-cat {
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            background: #d1e7dd;
-            color: #0b4d2c;
-            font-weight: bold;
+            background-color: #f1f5f9;
+            color: #475569;
         }
+
+        /* Buttons Group inside Card */
         .card-actions {
             display: flex;
-            gap: 5px;
-            align-items: center;
+            flex-direction: column;
+            gap: 6px;
         }
-        .btn {
-            padding: 8px 12px;
+        .btn-view {
+            background-color: #0b5e2e;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .btn-download {
+            background-color: #2563eb;
+            color: white;
+            padding: 6px 14px;
             border-radius: 6px;
             text-decoration: none;
             font-size: 12px;
             font-weight: bold;
-            cursor: pointer;
-            border: none;
             text-align: center;
             white-space: nowrap;
-        }
-        .btn-view {
-            background-color: #0b4d2c;
-            color: white;
-        }
-        .btn-download {
-            background-color: #28a745;
-            color: white;
-        }
-        /* Admin Form Styling */
-        .admin-form {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            display: none;
-        }
-        .admin-form input, .admin-form select {
-            width: 100%;
-            padding: 10px;
-            margin: 6px 0 12px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .admin-form label {
-            font-weight: bold;
-            font-size: 13px;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>📖 Darul Ifta Gulzar-e-Taiba</h1>
+    <!-- Header -->
+    <div class="header">
+        <h1>📚 Darul Ifta Gulzar-e-Taiba</h1>
         <p>Tamam PDF Kitabein, Bayanat aur Fatwa Service</p>
-        <a href="#" class="admin-link" onclick="toggleAdminPanel(event)">🔒 Admin Panel (Upload Karein)</a>
-    </header>
-
-    <div class="container">
-        
-        <!-- Main Website View -->
-        <div id="main-view">
-            <div class="nav-tabs">
-                <button class="tab-btn active-green">📚 Kitabein & Bayanat</button>
-                <button class="tab-btn active-gray" onclick="window.location.href='sawaal.html'">? Sawaal / Fatwa Puchhein</button>
-            </div>
-
-            <div class="filter-box">
-                <span>🔍 Dekhein:</span>
-                <select id="filterSelect" onchange="filterItems()">
-                    <option value="All">Sabhi Files (PDF + Videos)</option>
-                    <option value="PDF">Sirf PDF Kitabein</option>
-                    <option value="Video">Sirf Videos</option>
-                </select>
-            </div>
-
-            <!-- List of items container -->
-            <div id="itemsList">
-                <!-- Items dynamically yahan load honge -->
-            </div>
-        </div>
-
-        <!-- Admin Panel View -->
-        <div id="admin-view" class="admin-form">
-            <h3>⚙️ Naya Item Upload Karein</h3>
-            <form id="uploadForm" onsubmit="handleUpload(event)">
-                <label>Title (Naam):</label>
-                <input type="text" id="itemTitle" placeholder="Jaise: Jarbe murtaja" required>
-
-                <label>Category:</label>
-                <input type="text" id="itemCat" placeholder="Jaise: Kitab ya Bayan" required>
-
-                <label>File Type:</label>
-                <select id="itemType">
-                    <option value="PDF">PDF</option>
-                    <option value="Video">Video</option>
-                </select>
-
-                <label>Link (Instagram / Facebook / YouTube / PDF URL):</label>
-                <input type="text" id="itemLink" placeholder="Apna link yahan dalein" required>
-
-                <button type="submit" class="btn btn-view" style="width: 100%; padding: 12px; margin-top: 5px;">Upload Karein</button>
-                <button type="button" class="btn" style="width: 100%; margin-top: 10px; background:#ccc; color:#000;" onclick="toggleAdminPanel(event)">Wapas Jayein</button>
-            </form>
-        </div>
-
+        <a href="#" class="admin-btn">🔒 Admin Panel (Upload Karein)</a>
     </div>
 
-    <script>
-        // Tumhara original data setup
-        let items = JSON.parse(localStorage.getItem('darul_ifta_items')) || [
-            { title: "Jarbe murtaja", cat: "Kitab", type: "PDF", link: "" },
-            { title: "Test video", cat: "Bayan", type: "Video", link: "" }
-        ];
+    <!-- Navigation Tabs -->
+    <div class="nav-container">
+        <a href="#" class="nav-tab active">📖 Kitabein & Bayanat</a>
+        <a href="#" class="nav-tab inactive">❓ Sawaal / Fatwa Puchhein</a>
+    </div>
 
-        function saveData() {
-            localStorage.setItem('darul_ifta_items', JSON.stringify(items));
-        }
+    <!-- Filter Bar -->
+    <div class="filter-section">
+        <span>🔍 Dekhein:</span>
+        <select class="filter-select">
+            <option>📁 Sabhi Files (PDF + Videos)</option>
+            <option>PDF Kitabein</option>
+            <option>Video Bayanat</option>
+        </select>
+    </div>
 
-        function renderItems(filter = "All") {
-            const listContainer = document.getElementById('itemsList');
-            listContainer.innerHTML = "";
+    <!-- Cards List Section -->
+    <div class="container" id="file-list">
+        <!-- Sample Item 1 (PDF) -->
+        <div class="card">
+            <div class="card-info">
+                <h3>Jarbe murtaja</h3>
+                <div class="badges">
+                    <span class="badge badge-type">PDF</span>
+                    <span class="badge badge-cat">Kitab</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <a href="sample.pdf" target="_blank" class="btn-view">Dekhein / Padhein</a>
+                <a href="sample.pdf" download class="btn-download">⬇️ Download</a>
+            </div>
+        </div>
 
-            let filtered = items.filter(item => {
-                if(filter === "All") return true;
-                return item.type === filter;
-            });
+        <!-- Sample Item 2 (Video) -->
+        <div class="card">
+            <div class="card-info">
+                <h3>Test video</h3>
+                <div class="badges">
+                    <span class="badge badge-type">Video</span>
+                    <span class="badge badge-cat">Bayan</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <a href="sample.mp4" target="_blank" class="btn-view">Dekhein / Padhein</a>
+                <a href="sample.mp4" download class="btn-download">⬇️ Download</a>
+            </div>
+        </div>
+    </div>
 
-            if(filtered.length === 0) {
-                listContainer.innerHTML = "<p style='text-align:center; color:#777; padding:20px;'>Koi file available nahi hai.</p>";
-                return;
-            }
-
-            filtered.forEach((item) => {
-                let actionButtons = "";
-
-                if(item.type === "PDF") {
-                    // PDF ke liye 'Dekhein' aur sath me 'Download' button
-                    actionButtons = `
-                        <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein</a>
-                        <a href="${item.link}" download class="btn btn-download">Download</a>
-                    `;
-                } else {
-                    // Video ke liye sirf 'Dekhein' jo tumhara exact link kholega
-                    actionButtons = `
-                        <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein</a>
-                    `;
-                }
-
-                let cardHTML = `
-                    <div class="card">
-                        <div class="card-info">
-                            <h3>${item.title}</h3>
-                            <div class="badges">
-                                <span class="badge-type">${item.type}</span>
-                                <span class="badge-cat">${item.cat}</span>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            ${actionButtons}
-                        </div>
-                    </div>
-                `;
-                listContainer.innerHTML += cardHTML;
-            });
-        }
-
-        function filterItems() {
-            const val = document.getElementById('filterSelect').value;
-            renderItems(val);
-        }
-
-        function toggleAdminPanel(e) {
-            e.preventDefault();
-            const mainView = document.getElementById('main-view');
-            const adminView = document.getElementById('admin-view');
-            if(adminView.style.display === "block") {
-                adminView.style.display = "none";
-                mainView.style.display = "block";
-            } else {
-                adminView.style.display = "block";
-                mainView.style.display = "none";
-            }
-        }
-
-        function handleUpload(e) {
-            e.preventDefault();
-            const title = document.getElementById('itemTitle').value;
-            const cat = document.getElementById('itemCat').value;
-            const type = document.getElementById('itemType').value;
-            const link = document.getElementById('itemLink').value;
-
-            items.push({ title, cat, type, link });
-            saveData();
-            renderItems();
-
-            document.getElementById('uploadForm').reset();
-            alert('Successfully Upload Ho Gaya!');
-            toggleAdminPanel(e);
-        }
-
-        renderItems();
-    </script>
 </body>
 </html>
