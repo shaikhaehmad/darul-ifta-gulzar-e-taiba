@@ -150,7 +150,6 @@
             background-color: #28a745;
             color: white;
         }
-        /* Admin Form Styling */
         .admin-form {
             background: white;
             padding: 20px;
@@ -181,7 +180,6 @@
 
     <div class="container">
         
-        <!-- Main Website View -->
         <div id="main-view">
             <div class="nav-tabs">
                 <button class="tab-btn active-green">📚 Kitabein & Bayanat</button>
@@ -197,13 +195,9 @@
                 </select>
             </div>
 
-            <!-- List of items container -->
-            <div id="itemsList">
-                <!-- Items dynamically yahan load honge -->
-            </div>
+            <div id="itemsList"></div>
         </div>
 
-        <!-- Admin Panel View -->
         <div id="admin-view" class="admin-form">
             <h3>⚙️ Naya Item Upload Karein</h3>
             <form id="uploadForm" onsubmit="handleUpload(event)">
@@ -219,8 +213,8 @@
                     <option value="Video">Video</option>
                 </select>
 
-                <label>Link (Instagram / Facebook / YouTube / PDF URL):</label>
-                <input type="text" id="itemLink" placeholder="Apna link yahan dalein" required>
+                <label>Link (https:// se shuru hone wala URL dalein):</label>
+                <input type="text" id="itemLink" placeholder="https://..." required>
 
                 <button type="submit" class="btn btn-view" style="width: 100%; padding: 12px; margin-top: 5px;">Upload Karein</button>
                 <button type="button" class="btn" style="width: 100%; margin-top: 10px; background:#ccc; color:#000;" onclick="toggleAdminPanel(event)">Wapas Jayein</button>
@@ -230,7 +224,6 @@
     </div>
 
     <script>
-        // LocalStorage Data Setup
         let items = JSON.parse(localStorage.getItem('darul_ifta_items')) || [
             { title: "Jarbe murtaja", cat: "Kitab", type: "PDF", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
             { title: "Test video", cat: "Bayan", type: "Video", link: "https://www.instagram.com" }
@@ -258,13 +251,11 @@
                 let actionButtons = "";
 
                 if(item.type === "PDF") {
-                    // PDF ke liye 'Dekhein' aur 'Download' dono buttons
                     actionButtons = `
                         <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein</a>
                         <a href="${item.link}" download target="_blank" class="btn btn-download">Download</a>
                     `;
                 } else {
-                    // Video ke liye sirf wahi link khulega jo aapne dala hai (Instagram/FB/YouTube)
                     actionButtons = `
                         <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein</a>
                     `;
