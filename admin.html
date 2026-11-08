@@ -27,21 +27,13 @@
     <h2>🔐 Darul Ifta Admin Panel</h2>
     
     <div class="form-group">
-        <label>Content Type:</label>
-        <select id="content-type">
-            <option value="PDF">PDF Kitab</option>
-            <option value="Video">Video Bayan</option>
-        </select>
+        <label>Kitab ka Naam (Urdu / Hindi / Gujarati / English):</label>
+        <input type="text" id="file-title" placeholder="Jaise: کبر پر فاتحہ ya Namaz ka Tareeqa">
     </div>
 
     <div class="form-group">
-        <label>Title / Naam:</label>
-        <input type="text" id="file-title" placeholder="Jaise: Namaz ka Tareeqa">
-    </div>
-
-    <div class="form-group">
-        <label>File Select Karein (PDF / Video):</label>
-        <input type="file" id="file-input">
+        <label>PDF File Select Karein:</label>
+        <input type="file" id="file-input" accept="application/pdf">
     </div>
 
     <button class="btn" onclick="uploadFileLocally()">🚀 Website par Upload Karein</button>
@@ -50,7 +42,7 @@
 
     <hr style="margin: 20px 0;">
 
-    <h3>📁 Maujuda Files (Hatayein)</h3>
+    <h3>📁 Maujuda Files (Yahan se hatayein)</h3>
     <div id="admin-file-list" style="margin-top: 15px;">
         <!-- List yahan aayegi -->
     </div>
@@ -63,17 +55,19 @@
         
         adminList.innerHTML = "";
         if (files.length === 0) {
-            adminList.innerHTML = "<p style='color: #64748b; font-size: 14px;'>Koi file nahi hai.</p>";
+            adminList.innerHTML = "<p style='color: #64748b; font-size: 14px;'>Abhi koi file nahi hai.</p>";
             return;
         }
 
-        files.forEach((file, index) => {
+        files.slice().reverse().forEach((file, index) => {
+            // Sahi index nikalne ke liye reverse list me index adjust karein
+            const realIndex = files.length - 1 - index;
             adminList.innerHTML += `
                 <div class="file-item">
                     <div>
-                        <strong>${file.title}</strong> (${file.type})
+                        <strong>${file.title}</strong>
                     </div>
-                    <button class="btn-delete" onclick="deleteFile(${index})">Hatain</button>
+                    <button class="btn-delete" onclick="deleteFile(${realIndex})">Hatayein</button>
                 </div>
             `;
         });
@@ -81,12 +75,11 @@
 
     function uploadFileLocally() {
         const title = document.getElementById('file-title').value.trim();
-        const type = document.getElementById('content-type').value;
         const fileInput = document.getElementById('file-input').files[0];
         const statusEl = document.getElementById('status');
 
         if (!title || !fileInput) {
-            alert("Kripya Title aur File dono select karein!");
+            alert("Kripya Kitab ka Naam aur PDF File dono select karein!");
             return;
         }
 
@@ -99,11 +92,11 @@
             const fileUrl = reader.result; 
             
             let files = JSON.parse(localStorage.getItem('darul_ifta_files')) || [];
-            files.push({ title: title, type: type, url: fileUrl });
+            files.push({ title: title, url: fileUrl });
             localStorage.setItem('darul_ifta_files', JSON.stringify(files));
 
             statusEl.style.color = "#16a34a";
-            statusEl.innerText = "✅ File safalta-purvak add ho gayi! Ab aap website par dekh sakte hain.";
+            statusEl.innerText = "✅ Kitab safalta-purvak add ho gayi! Ab aap website par dekh sakte hain.";
             
             document.getElementById('file-title').value = "";
             document.getElementById('file-input').value = "";
@@ -112,8 +105,7 @@
     }
 
     function deleteFile(index) {
-        // Yahan 'confirmkri' ko theek karke standard 'confirm' kar diya hai
-        if (confirm("Kya aap is file ko hatana chahte hain?")) {
+        if (confirm("Kya aap is kitab ko hatana chahte hain?")) {
             let files = JSON.parse(localStorage.getItem('darul_ifta_files')) || [];
             files.splice(index, 1);
             localStorage.setItem('darul_ifta_files', JSON.stringify(files));
