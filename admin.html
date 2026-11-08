@@ -29,19 +29,19 @@
     <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Kripya Secret Password Darj Karein</p>
     <div class="form-group">
         <label>Password:</label>
-        <input type="password" id="admin-pass" placeholder="Password daalein">
+        <input type="password" id="admin-pass" placeholder="Password daalein (786)">
     </div>
     <button class="btn" onclick="checkPassword()">Login Karein</button>
 </div>
 
-<!-- Main Admin Panel (Hidden until correct password) -->
+<!-- Main Admin Panel -->
 <div id="admin-panel" class="container">
     <a href="index.html" class="back-link">⬅️ Website par Wapas Jayein</a>
     <h2>🔐 Darul Ifta Admin Panel</h2>
     
     <div class="form-group">
         <label>Kitab ka Naam (Urdu / Hindi / Gujarati / English):</label>
-        <input type="text" id="file-title" placeholder="Jaise: Namaz ka Tareeqa">
+        <input type="text" id="file-title" placeholder="Jaise: کبر پر فاتحہ ya Namaz ka Tareeqa">
     </div>
 
     <div class="form-group">
@@ -62,7 +62,6 @@
 </div>
 
 <script>
-    // Yahan aap apna pasandeeda password badal sakte hain (Abhi password '313' set hai)
     const SECRET_PIN = "313";
 
     function checkPassword() {
@@ -120,14 +119,19 @@
             
             let files = JSON.parse(localStorage.getItem('darul_ifta_files')) || [];
             files.push({ title: title, url: fileUrl });
-            localStorage.setItem('darul_ifta_files', JSON.stringify(files));
-
-            statusEl.style.color = "#16a34a";
-            statusEl.innerText = "✅ Kitab safalta-purvak add ho gayi! Ab aap website par dekh sakte hain.";
             
-            document.getElementById('file-title').value = "";
-            document.getElementById('file-input').value = "";
-            loadAdminFiles();
+            try {
+                localStorage.setItem('darul_ifta_files', JSON.stringify(files));
+                statusEl.style.color = "#16a34a";
+                statusEl.innerText = "✅ Kitab safalta-purvak add ho gayi! Ab aap website par dekh sakte hain.";
+                
+                document.getElementById('file-title').value = "";
+                document.getElementById('file-input').value = "";
+                loadAdminFiles();
+            } catch (e) {
+                statusEl.style.color = "#dc2626";
+                statusEl.innerText = "❌ Error: Storage full ho rahi hai! Choti size ki PDF dalein.";
+            }
         };
     }
 
