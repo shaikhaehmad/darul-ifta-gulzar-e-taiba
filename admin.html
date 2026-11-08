@@ -41,38 +41,65 @@
 </header>
 
 <div class="admin-container">
-    <h2>Naya Content Upload Karein</h2>
+    <h2>Nayi PDF ya Video Upload Karein</h2>
     <form id="adminUploadForm">
         <div class="form-group">
             <label for="contentType">Content Type:</label>
             <select id="contentType" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
-                <option value="pdf">📚 PDF / Kitab</option>
+                <option value="pdf">📚 PDF Kitab</option>
                 <option value="bayan">🎤 Islamic Bayan (Video)</option>
-                <option value="fatwa">📄 Fatwa Collection</option>
             </select>
         </div>
 
         <div class="form-group">
             <label for="itemTitle">Title / Naam:</label>
-            <input type="text" id="itemTitle" placeholder="Jaise: Namaz ka Tareeqa PDF" required>
+            <input type="text" id="itemTitle" placeholder="Jaise: Namaz ka Tareeqa" required>
         </div>
 
         <div class="form-group">
-            <label for="itemDesc">Chhota Description:</label>
-            <input type="text" id="itemDesc" placeholder="Jaise: Mufti M.J. Akbari ki kitab" required>
-        </div>
-
-        <div class="form-group">
-            <label for="itemLink">File Link / PDF URL / YouTube Link:</label>
-            <input type="text" id="itemLink" placeholder="Yahan link paste karein" required>
+            <label for="itemFile">Apni File ya Video Select Karein:</label>
+            <input type="file" id="itemFile" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 8px;" required>
         </div>
 
         <button type="submit" class="btn" style="width: 100%; background-color: #0b5329; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-            🚀 Website Par Publish Karein
+            🚀 Upload & Publish Karein
         </button>
     </form>
-    <p id="uploadStatus" style="text-align: center; margin-top: 15px; font-weight: bold;"></p>
+    <p id="uploadStatus" style="text-align: center; margin-top: 15px; font-weight: bold; color: green;"></p>
 </div>
+
+<script>
+    document.getElementById('adminUploadForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const type = document.getElementById('contentType').value;
+        const title = document.getElementById('itemTitle').value;
+        const fileInput = document.getElementById('itemFile');
+        const file = fileInput.files[0];
+
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const fileData = {
+                type: type,
+                title: title,
+                url: event.target.result,
+                fileName: file.name
+            };
+
+            // Purana data nikalein aur naya jodein
+            let items = JSON.parse(localStorage.getItem('darulIftaItems')) || [];
+            items.push(fileData);
+            localStorage.setItem('darulIftaItems', JSON.stringify(items));
+
+            document.getElementById('uploadStatus').innerText = "✅ Aapki file successfully upload ho gayi hai!";
+            document.getElementById('adminUploadForm').reset();
+        };
+
+        reader.readAsDataURL(file);
+    });
+</script>
 
 </body>
 </html>
