@@ -4,323 +4,300 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Darul Ifta Gulzar-e-Taiba</title>
-    <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f4f4f4;
             color: #333;
         }
         header {
-            background-color: #0b5329;
+            background-color: #0b4d2c;
             color: white;
-            padding: 20px;
             text-align: center;
+            padding: 20px 10px;
         }
-        header nav a {
-            color: #ffeb3b;
+        header h1 {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+        header p {
+            font-size: 13px;
+            color: #d1e7dd;
+            margin-bottom: 10px;
+        }
+        .admin-link {
+            background: #fff;
+            color: #0b4d2c;
+            padding: 6px 12px;
+            border-radius: 4px;
             text-decoration: none;
+            font-size: 13px;
             font-weight: bold;
-            margin-top: 10px;
             display: inline-block;
+            margin-top: 5px;
         }
         .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 15px;
+            max-width: 600px;
+            margin: 15px auto;
+            padding: 0 10px;
         }
-        .tab-buttons {
+        .nav-tabs {
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 10px;
+            margin-bottom: 15px;
         }
         .tab-btn {
-            background: #ddd;
+            flex: 1;
+            padding: 12px;
             border: none;
-            padding: 10px 20px;
-            font-size: 16px;
+            border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
-            border-radius: 6px;
+            text-align: center;
         }
-        .tab-btn.active {
-            background: #0b5329;
+        .tab-btn.active-green {
+            background-color: #0b4d2c;
             color: white;
         }
-        .section-box {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
+        .tab-btn.active-gray {
+            background-color: #e2e8f0;
+            color: #333;
         }
         .filter-box {
             background: white;
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 10px 15px;
+            border-radius: 6px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         .filter-box select {
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .card {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .card-info h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        .badge-type {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: #e2e8f0;
+            margin-right: 5px;
+        }
+        .badge-cat {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: #d1e7dd;
+            color: #0b4d2c;
+        }
+        .card-actions {
+            display: flex;
+            gap: 5px;
+        }
+        .btn {
             padding: 8px 12px;
             border-radius: 6px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-            outline: none;
-        }
-        .item-card {
-            background: white;
-            padding: 15px 20px;
-            margin-bottom: 12px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .item-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #0b5329;
-        }
-        .item-type {
+            text-decoration: none;
             font-size: 12px;
-            background: #e0f2f1;
-            color: #00695c;
-            padding: 4px 8px;
-            border-radius: 4px;
-            margin-left: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            text-align: center;
         }
         .btn-view {
-            background-color: #0b5329;
+            background-color: #0b4d2c;
             color: white;
-            padding: 8px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
         }
-        .btn-view:hover {
-            background-color: #083d1e;
+        .btn-download {
+            background-color: #28a745;
+            color: white;
         }
-        .form-group {
-            margin-bottom: 15px;
+        /* Admin Form Styling */
+        .admin-form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: none;
         }
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #0b5329;
-        }
-        .form-group input, .form-group textarea {
+        .admin-form input, .admin-form select {
             width: 100%;
             padding: 10px;
+            margin: 8px 0 15px 0;
             border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 14px;
-            box-sizing: border-box;
+            border-radius: 4px;
         }
-        .btn-submit {
-            background-color: #25d366;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
+        .admin-form label {
             font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
-        }
-        .btn-submit:hover {
-            background-color: #1ebe5d;
-        }
-        .no-data {
-            text-align: center;
-            color: #777;
-            margin-top: 40px;
-        }
-        .hidden {
-            display: none;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>📚 Darul Ifta Gulzar-e-Taiba</h1>
-    <p>Tamam PDF Kitabein, Bayanat aur Fatwa Service</p>
-    <nav>
-        <a href="admin.html">🔐 Admin Panel (Upload Karein)</a>
-    </nav>
-</header>
+    <header>
+        <h1>📖 Darul Ifta Gulzar-e-Taiba</h1>
+        <p>Tamam PDF Kitabein, Bayanat aur Fatwa Service</p>
+        <a href="#" class="admin-link" onclick="toggleAdminPanel(event)">🔒 Admin Panel (Upload Karein)</a>
+    </header>
 
-<div class="container">
-    <!-- Tab Navigation Buttons -->
-    <div class="tab-buttons">
-        <button class="tab-btn active" onclick="switchTab('library')">📚 Kitabein & Bayanat</button>
-        <button class="tab-btn" onclick="switchTab('fatwa')">❓ Sawaal / Fatwa Puchhein</button>
-    </div>
-
-    <!-- Section 1: Library (PDFs & Videos) -->
-    <div id="librarySection">
-        <div class="filter-box">
-            <label for="categoryFilter" style="font-weight: bold; color: #0b5329;">🔍 Dekhein:</label>
-            <select id="categoryFilter" onchange="filterContent()">
-                <option value="all">📁 Sabhi Files (PDF + Videos)</option>
-                <option value="pdf">📚 Sirf PDF Kitabein</option>
-                <option value="bayan">🎤 Sirf Video Bayanat</option>
-            </select>
-        </div>
-
-        <div id="itemList">
-            <p class="no-data">Loading ho raha hai...</p>
-        </div>
-    </div>
-
-    <!-- Section 2: Fatwa / Question Form -->
-    <div id="fatwaSection" class="section-box hidden">
-        <h2 style="color: #0b5329; text-align: center; margin-top: 0;">Darul Ifta Gulzar-e-Taiba</h2>
-        <p style="text-align: center; color: #555; font-weight: bold;">--- Naya Sawaal / Masla ---</p>
+    <div class="container">
         
-        <div class="form-group">
-            <label>👤 Naam:</label>
-            <input type="text" id="userName" placeholder="Apna pura naam likhein">
+        <!-- Main Website View -->
+        <div id="main-view">
+            <div class="nav-tabs">
+                <button class="tab-btn active-green">📚 Kitabein & Bayanat</button>
+                <button class="tab-btn active-gray" onclick="alert('Sawaal/Fatwa page yahan jodein')">? Sawaal / Fatwa Puchhein</button>
+            </div>
+
+            <div class="filter-box">
+                <span>🔍 Dekhein:</span>
+                <select id="filterSelect" onchange="filterItems()">
+                    <option value="All">Sabhi Files (PDF + Videos)</option>
+                    <option value="PDF">Sirf PDF Kitabein</option>
+                    <option value="Video">Sirf Videos</option>
+                </select>
+            </div>
+
+            <!-- List of items container -->
+            <div id="itemsList">
+                <!-- Items dynamically yahan load honge -->
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>📱 Mobile Number:</label>
-            <input type="tel" id="userMobile" placeholder="Apna mobile number likhein">
+        <!-- Admin Panel View -->
+        <div id="admin-view" class="admin-form">
+            <h3>⚙️ Naya Item Upload Karein</h3>
+            <form id="uploadForm" onsubmit="handleUpload(event)">
+                <label>Title (Naam):</label>
+                <input type="text" id="itemTitle" placeholder="Jaise: Jarbe murtaja" required>
+
+                <label>Category:</label>
+                <input type="text" id="itemCat" placeholder="Jaise: Kitab ya Bayan" required>
+
+                <label>File Type:</label>
+                <select id="itemType">
+                    <option value="PDF">PDF</option>
+                    <option value="Video">Video</option>
+                </select>
+
+                <label>File / PDF Link (URL ya Path):</label>
+                <input type="text" id="itemLink" placeholder="File ka link ya URL dalein" required>
+
+                <button type="submit" class="btn btn-view" style="width: 100%; padding: 12px;">Upload Karein</button>
+                <button type="button" class="btn" style="width: 100%; margin-top: 10px; background:#ccc;" onclick="toggleAdminPanel(event)">Wapas Jayein</button>
+            </form>
         </div>
 
-        <div class="form-group">
-            <label>🏠 Address:</label>
-            <input type="text" id="userAddress" placeholder="Apna shehar ya gaon likhein">
-        </div>
-
-        <div class="form-group">
-            <label>❓ Sawal / Masla:</label>
-            <textarea id="userQuestion" rows="5" placeholder="Apna masla tafseel se likhein..."></textarea>
-        </div>
-
-        <button class="btn-submit" onclick="sendToWhatsApp()">💬 WhatsApp par Sawaal Bhejein</button>
     </div>
-</div>
 
-<script>
-    let allItems = [];
-    const user = "shaikhaehmad";
-    const repo = "darul-ifta-gulzar-e-taiba";
-    const muftiWhatsAppNumber = "918758647929"; 
+    <script>
+        // Default Sample Data agar localStorage khali ho
+        let items = JSON.parse(localStorage.getItem('darul_ifta_items')) || [
+            { title: "Jarbe murtaja", cat: "Kitab", type: "PDF", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+            { title: "Test video", cat: "Bayan", type: "Video", link: "https://www.youtube.com" }
+        ];
 
-    function switchTab(tabName) {
-        const libSec = document.getElementById('librarySection');
-        const fatSec = document.getElementById('fatwaSection');
-        const btns = document.querySelectorAll('.tab-btn');
-
-        btns.forEach(b => b.classList.remove('active'));
-
-        if (tabName === 'library') {
-            libSec.classList.remove('hidden');
-            fatSec.classList.add('hidden');
-            event.target.classList.add('active');
-        } else {
-            libSec.classList.add('hidden');
-            fatSec.classList.remove('hidden');
-            event.target.classList.add('active');
-        }
-    }
-
-    async function loadContent() {
-        const listContainer = document.getElementById('itemList');
-
-        try {
-            const res = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/data.json`);
-            if (!res.ok) throw new Error("Data nahi mila");
-
-            const fileData = await res.json();
-            const jsonString = decodeURIComponent(escape(window.atob(fileData.content)));
-            allItems = JSON.parse(jsonString);
-
-            displayItems(allItems);
-
-        } catch (err) {
-            listContainer.innerHTML = '<p class="no-data">Abhi tak koi data available nahi hai ya file load nahi ho payi.</p>';
-        }
-    }
-
-    function displayItems(items) {
-        const listContainer = document.getElementById('itemList');
-
-        if (items.length === 0) {
-            listContainer.innerHTML = '<p class="no-data">Is category mein koi file nahi hai.</p>';
-            return;
+        function saveData() {
+            localStorage.setItem('darul_ifta_items', JSON.stringify(items));
         }
 
-        let html = '';
-        [...items].reverse().forEach(item => {
-            let badgeText = item.type === 'pdf' ? 'PDF Kitab' : 'Video Bayan';
-            // PDF ke liye Google Docs Viewer ka use kiya hai taaki text/code ki tarah na dikhe
-            let rawFileLink = `https://raw.githubusercontent.com/${user}/${repo}/main/${item.url}`;
-            let fileLink = item.type === 'pdf' ? `https://docs.google.com/gview?url=${encodeURIComponent(rawFileLink)}&embedded=true` : item.url;
-            
-            html += `
-                <div class="item-card">
-                    <div>
-                        <span class="item-title">${item.title}</span>
-                        <span class="item-type">${badgeText}</span>
+        function renderItems(filter = "All") {
+            const listContainer = document.getElementById('itemsList');
+            listContainer.innerHTML = "";
+
+            let filtered = items.filter(item => {
+                if(filter === "All") return true;
+                return item.type === filter;
+            });
+
+            if(filtered.length === 0) {
+                listContainer.innerHTML = "<p style='text-align:center; color:#777; padding:20px;'>Koi file available nahi hai.</p>";
+                return;
+            }
+
+            filtered.forEach((item, index) => {
+                let downloadBtn = "";
+                if(item.type === "PDF") {
+                    downloadBtn = `<a href="${item.link}" download class="btn btn-download">Download</a>`;
+                }
+
+                let cardHTML = `
+                    <div class="card">
+                        <div class="card-info">
+                            <h3>${item.title}</h3>
+                            <div>
+                                <span class="badge-type">${item.type}</span>
+                                <span class="badge-cat">${item.cat}</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein</a>
+                            ${downloadBtn}
+                        </div>
                     </div>
-                    <a href="${fileLink}" target="_blank" class="btn-view">Dekhein / Padhein</a>
-                </div>
-            `;
-        });
-
-        listContainer.innerHTML = html;
-    }
-
-    function filterContent() {
-        const selectedValue = document.getElementById('categoryFilter').value;
-        if (selectedValue === 'all') {
-            displayItems(allItems);
-        } else {
-            const filtered = allItems.filter(item => item.type === selectedValue);
-            displayItems(filtered);
-        }
-    }
-
-    function sendToWhatsApp() {
-        const name = document.getElementById('userName').value.trim();
-        const mobile = document.getElementById('userMobile').value.trim();
-        const address = document.getElementById('userAddress').value.trim();
-        const question = document.getElementById('userQuestion').value.trim();
-
-        if (!name || !mobile || !question) {
-            alert('Kripya Naam, Mobile Number aur Sawal zaroor bharein!');
-            return;
+                `;
+                listContainer.innerHTML += cardHTML;
+            });
         }
 
-        const message = `*دارالافتاء گلزار طیبہ*\n*--- جدید سوال / مسئلہ ---\n\n👤 *Naam:* ${name}\n📱 *Mobile:* ${mobile}\n🏠 *Address:* ${address || 'N/A'}\n\n❓ *Sawal / Masla:* \n${question}\n\n📎 *(Note: Agar koi photo/document hai, toh kripya is message ke sath ya alag se WhatsApp par bhej dein.)*`;
+        function filterItems() {
+            const val = document.getElementById('filterSelect').value;
+            renderItems(val);
+        }
 
-        const encodedMessage = encodeURIComponent(message);
-        
-        // Universal web link aur secure click method jo mobile browser error nahi dega
-        const url = `https://api.whatsapp.com/send?phone=${muftiWhatsAppNumber}&text=${encodedMessage}`;
-        
-        var ancher = document.createElement('a');
-        ancher.href = url;
-        ancher.target = '_blank';
-        document.body.appendChild(ancher);
-        ancher.click();
-        document.body.removeChild(ancher);
-    }
+        function toggleAdminPanel(e) {
+            e.preventDefault();
+            const mainView = document.getElementById('main-view');
+            const adminView = document.getElementById('admin-view');
+            if(adminView.style.display === "block") {
+                adminView.style.display = "none";
+                mainView.style.display = "block";
+            } else {
+                adminView.style.display = "block";
+                mainView.style.display = "none";
+            }
+        }
 
-    loadContent();
-</script>
+        function handleUpload(e) {
+            e.preventDefault();
+            const title = document.getElementById('itemTitle').value;
+            const cat = document.getElementById('itemCat').value;
+            const type = document.getElementById('itemType').value;
+            const link = document.getElementById('itemLink').value;
 
+            items.push({ title, cat, type, link });
+            saveData();
+            renderItems();
+
+            document.getElementById('uploadForm').reset();
+            alert('Successfully Upload Ho Gaya!');
+            toggleAdminPanel(e);
+        }
+
+        // Initial Load
+        renderItems();
+    </script>
 </body>
 </html>
