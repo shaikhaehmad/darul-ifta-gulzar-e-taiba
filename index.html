@@ -19,7 +19,9 @@
         .container { max-width: 600px; margin: 0 auto; padding: 0 15px 30px 15px; }
         .card { background-color: white; border-radius: 10px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
         .card-info h3 { font-size: 16px; margin-bottom: 6px; color: #1e293b; }
-        .badge { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: bold; background-color: #e0f2fe; color: #0369a1; }
+        
+        .badge-pdf { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: bold; background-color: #e0f2fe; color: #0369a1; }
+        .badge-video { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: bold; background-color: #fee2e2; color: #991b1b; }
         
         .card-actions { display: flex; flex-direction: column; gap: 6px; }
         .btn-view { background-color: #0b5e2e; color: white; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: bold; text-align: center; white-space: nowrap; }
@@ -42,14 +44,14 @@
 
     <!-- Navigation Tabs -->
     <div class="nav-container">
-        <div id="tab-kitabein" class="nav-tab active" onclick="switchTab('kitabein')">📖 Kitabein & PDF</div>
+        <div id="tab-kitabein" class="nav-tab active" onclick="switchTab('kitabein')">📖 Kitabein & Video</div>
         <div id="tab-sawaal" class="nav-tab inactive" onclick="switchTab('sawaal')">❓ Sawaal / Fatwa Puchhein</div>
     </div>
 
-    <!-- Section 1: Kitabein & PDF -->
+    <!-- Section 1: Kitabein & Videos -->
     <div id="section-kitabein" class="container">
         <div id="file-list" style="margin-top: 15px;">
-            <!-- Files yahan load hongi -->
+            <!-- Content yahan load hoga -->
         </div>
     </div>
 
@@ -93,7 +95,7 @@
                 tabS.className = "nav-tab inactive";
                 secK.style.display = "block";
                 secS.style.display = "none";
-                loadFiles();
+                loadWebsiteContent();
             } else {
                 tabS.className = "nav-tab active";
                 tabK.className = "nav-tab inactive";
@@ -102,31 +104,33 @@
             }
         }
 
-        function loadFiles() {
+        function loadWebsiteContent() {
             const listContainer = document.getElementById('file-list');
             if (!listContainer) return;
 
-            // LocalStorage se files load hongi
-            let files = JSON.parse(localStorage.getItem('darul_ifta_books')) || [];
+            let items = JSON.parse(localStorage.getItem('darul_ifta_master_data')) || [];
 
             listContainer.innerHTML = "";
 
-            if (files.length === 0) {
-                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Abhi koi kitab mojood nahi hai. Admin Panel se add karein.</div>`;
+            if (items.length === 0) {
+                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Abhi koi kitab ya video mojood nahi hai. Admin Panel se add karein.</div>`;
                 return;
             }
 
-            files.slice().reverse().forEach(item => {
+            items.slice().reverse().forEach(item => {
+                let badgeHTML = item.type === 'video' ? '<span class="badge-video">🎥 Video Bayan</span>' : '<span class="badge-pdf">📖 PDF Kitab</span>';
+                let btnText = item.type === 'video' ? '▶️ Video Dekhein' : '📖 Padhein';
+
                 listContainer.innerHTML += `
                     <div class="card">
                         <div class="card-info">
                             <h3>${item.title}</h3>
-                            <div class="badges" style="margin-top: 4px;">
-                                <span class="badge">PDF Kitab</span>
+                            <div style="margin-top: 4px;">
+                                ${badgeHTML}
                             </div>
                         </div>
                         <div class="card-actions">
-                            <a href="${item.url}" target="_blank" class="btn-view">📖 Padhein</a>
+                            <a href="${item.url}" target="_blank" class="btn-view">${btnText}</a>
                         </div>
                     </div>
                 `;
@@ -152,7 +156,7 @@
             window.open(whatsappUrl, '_blank');
         }
 
-        window.onload = loadFiles;
+        window.onload = loadWebsiteContent;
     </script>
 </body>
 </html>
