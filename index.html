@@ -72,25 +72,32 @@
     <!-- Section 2: Sawaal / Fatwa Form -->
     <div id="section-sawaal" class="container" style="display: none;">
         <div class="sawaal-box">
-            <h3>Apna Sawaal Darul Ifta Ko Bhejein</h3>
+            <h3>*دارالافتاء گلزار طیبہ*</h3>
+            <p style="font-size: 14px; color: #555; margin-bottom: 15px; font-weight: bold;">--- جدید سوال / مسئلہ ---</p>
+            
             <div class="form-group">
-                <label>Aapka Naam:</label>
-                <input type="text" id="s-name" placeholder="Apna pura naam likhein">
+                <label>👤 Naam:</label>
+                <input type="text" id="s-name" placeholder="Apna naam likhein">
             </div>
             <div class="form-group">
-                <label>Mobile Number:</label>
-                <input type="tel" id="s-phone" placeholder="WhatsApp number">
+                <label>📱 Mobile:</label>
+                <input type="tel" id="s-phone" placeholder="Mobile number">
             </div>
             <div class="form-group">
-                <label>Sawaal / Masla:</label>
+                <label>🏠 Address:</label>
+                <input type="text" id="s-address" placeholder="Apna address likhein (jaise: Malvan)">
+            </div>
+            <div class="form-group">
+                <label>❓ Sawal / Masla:</label>
                 <textarea id="s-text" rows="4" placeholder="Apna sawaal tafseel se likhein..."></textarea>
             </div>
+            <p style="font-size: 11px; color: #666; margin-bottom: 12px; font-style: italic;">📎 (Note: Agar koi photo/document hai, toh kripya is message ke sath ya alag se WhatsApp par bhej dein.)</p>
+            
             <button class="btn-submit" onclick="sendWhatsAppSawaal()">📲 WhatsApp par Sawaal Bhejein</button>
         </div>
     </div>
 
     <script>
-        // Tab switching logic
         function switchTab(tabName) {
             const tabK = document.getElementById('tab-kitabein');
             const tabS = document.getElementById('tab-sawaal');
@@ -111,7 +118,6 @@
             }
         }
 
-        // Load files logic
         function loadFiles() {
             const listContainer = document.getElementById('file-list');
             const filterSelect = document.getElementById('filter-select');
@@ -158,10 +164,10 @@
             });
         }
 
-        // WhatsApp Sawaal Sender (Aapka asli number yahan lag gaya hai)
         function sendWhatsAppSawaal() {
             const name = document.getElementById('s-name').value.trim();
             const phone = document.getElementById('s-phone').value.trim();
+            const address = document.getElementById('s-address').value.trim();
             const text = document.getElementById('s-text').value.trim();
 
             if (!name || !text) {
@@ -169,10 +175,9 @@
                 return;
             }
 
-            // Aapka naya aur sahi WhatsApp number
             const muftiWhatsAppNumber = "918758647929"; 
 
-            const message = `*Naya Sawaal - Darul Ifta*%0A%0A*Naam:* ${name}%0A*Phone:* ${phone}%0A*Sawaal:* ${text}`;
+            const message = `*دارالافتاء گلزار طیبہ*%0A*--- جدید سوال / مسئلہ ---*%0A%0A👤 *Naam:* ${name}%0A📱 *Mobile:* ${phone}%0A🏠 *Address:* ${address}%0A%0A❓ *Sawal / Masla:*%0A${text}%0A%0A📎 *(Note: Agar koi photo/document hai, toh kripya is message ke sath ya alag se WhatsApp par bhej dein.)*`;
             const whatsappUrl = `https://wa.me/${muftiWhatsAppNumber}?text=${message}`;
 
             window.open(whatsappUrl, '_blank');
