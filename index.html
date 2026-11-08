@@ -21,6 +21,7 @@
         .card-info h3 { font-size: 16px; margin-bottom: 6px; color: #1e293b; }
         
         .badge-pdf { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: bold; background-color: #e0f2fe; color: #0369a1; }
+        .badge-tele { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: bold; background-color: #fef08a; color: #854d0e; }
         .badge-video { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: bold; background-color: #fee2e2; color: #991b1b; }
         
         .card-actions { display: flex; flex-direction: column; gap: 6px; }
@@ -39,16 +40,16 @@
 
     <div class="header">
         <h1>📚 Darul Ifta Gulzar-e-Taiba</h1>
-        <p>Tamam PDF Kitabein, Bayanat aur Fatwa Service</p>
+        <p>Tamam Kitabein, Telegram Links, Video Bayanat aur Fatwa Service</p>
     </div>
 
     <!-- Navigation Tabs -->
     <div class="nav-container">
-        <div id="tab-kitabein" class="nav-tab active" onclick="switchTab('kitabein')">📖 Kitabein & Video</div>
+        <div id="tab-kitabein" class="nav-tab active" onclick="switchTab('kitabein')">📖 Kitabein & Media</div>
         <div id="tab-sawaal" class="nav-tab inactive" onclick="switchTab('sawaal')">❓ Sawaal / Fatwa Puchhein</div>
     </div>
 
-    <!-- Section 1: Kitabein & Videos -->
+    <!-- Section 1: Kitabein & Media List -->
     <div id="section-kitabein" class="container">
         <div id="file-list" style="margin-top: 15px;">
             <!-- Content yahan load hoga -->
@@ -113,13 +114,24 @@
             listContainer.innerHTML = "";
 
             if (items.length === 0) {
-                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Abhi koi kitab ya video mojood nahi hai. Admin Panel se add karein.</div>`;
+                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Abhi koi item mojood nahi hai. Admin Panel se add karein.</div>`;
                 return;
             }
 
             items.slice().reverse().forEach(item => {
-                let badgeHTML = item.type === 'video' ? '<span class="badge-video">🎥 Video Bayan</span>' : '<span class="badge-pdf">📖 PDF Kitab</span>';
-                let btnText = item.type === 'video' ? '▶️ Video Dekhein' : '📖 Padhein';
+                let badgeHTML = '';
+                let btnText = '📖 Dekhein';
+
+                if (item.type === 'pdf') {
+                    badgeHTML = '<span class="badge-pdf">📖 Google Drive PDF</span>';
+                    btnText = '📖 PDF Padhein';
+                } else if (item.type === 'telegram') {
+                    badgeHTML = '<span class="badge-tele">📢 Telegram Kitab/Channel</span>';
+                    btnText = '✈️ Telegram par Kholein';
+                } else {
+                    badgeHTML = '<span class="badge-video">🎥 Social Video (YT/Insta/FB)</span>';
+                    btnText = '▶️ Video Dekhein';
+                }
 
                 listContainer.innerHTML += `
                     <div class="card">
