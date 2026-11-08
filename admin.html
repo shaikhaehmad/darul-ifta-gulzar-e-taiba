@@ -9,7 +9,7 @@
         body { background-color: #f4f6f8; color: #333; padding: 20px; }
         .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: none; }
         .login-box { max-width: 400px; margin: 80px auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
-        h2 { color: #0b5e2e; margin-bottom: 15px; }
+        h2, h3 { color: #0b5e2e; margin-bottom: 12px; }
         .form-group { margin-bottom: 15px; text-align: left; }
         label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
         input, select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
@@ -18,6 +18,7 @@
         .file-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px; border-radius: 6px; margin-bottom: 8px; border: 1px solid #e2e8f0; }
         .btn-delete { background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
         .back-link { display: inline-block; margin-bottom: 15px; color: #0b5e2e; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .section-box { background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
         #status { margin-top: 15px; font-weight: bold; text-align: center; font-size: 14px; }
     </style>
 </head>
@@ -37,26 +38,41 @@
     <a href="index.html" class="back-link">⬅️ Website par Wapas Jayein</a>
     <h2>🔐 Darul Ifta Admin Panel</h2>
     
-    <div class="form-group">
-        <label>Item ka Type Chunein:</label>
-        <select id="item-type">
-            <option value="pdf">📖 Google Drive PDF Kitab Link</option>
-            <option value="telegram">✈️ Telegram Channel / Kitab Link</option>
-            <option value="video">🎥 YouTube / Insta / FB Video Link</option>
-        </select>
+    <!-- 1. Single Item Add Box -->
+    <div class="section-box">
+        <h3>➕ Ek-Ek Karke Jodein (Single Add)</h3>
+        <div class="form-group">
+            <label>Item ka Type Chunein:</label>
+            <select id="item-type">
+                <option value="pdf">📖 Google Drive PDF Kitab Link</option>
+                <option value="telegram">✈️ Telegram Channel / Kitab Link</option>
+                <option value="video">🎥 YouTube / Insta / FB Video Link</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Title:</label>
+            <input type="text" id="item-title" placeholder="Jaise: Namaz ka Tareeqa">
+        </div>
+
+        <div class="form-group">
+            <label>Direct Link URL:</label>
+            <input type="url" id="item-url-input" placeholder="https://... link yahan dalein">
+        </div>
+
+        <button class="btn" onclick="addNewItem()">🚀 Item Jodein</button>
     </div>
 
-    <div class="form-group">
-        <label>Title (Urdu / Hindi / Gujarati / English):</label>
-        <input type="text" id="item-title" placeholder="Jaise: Namaz ka Tareeqa ya Bayan Title">
+    <!-- 2. Bulk Add Box (Ek Saath Kai Saare) -->
+    <div class="section-box" style="background-color: #f0fdf4; border-color: #bbf7d0;">
+        <h3 style="color: #166534;">📦 Bulk Add (Ek Saath Kai Saare Jodein)</h3>
+        <p style="font-size: 12px; color: #555; margin-bottom: 10px;">Har line mein is format mein likhein: <b>Type, Title, URL</b><br>Misal ke taur par:<br><code>pdf, Namaz Kitab, https://drive.google.com/...</code><br><code>video, Bayan Title, https://youtube.com/...</code></p>
+        
+        <div class="form-group">
+            <textarea id="bulk-textarea" rows="4" placeholder="Yahan ek se zyada lines paste kar sakte hain..."></textarea>
+        </div>
+        <button class="btn" style="background-color: #16a34a;" onclick="addBulkItems()">📥 Sabhi Ek Saath Jodein</button>
     </div>
-
-    <div class="form-group">
-        <label>Direct Link Paste Karein (Drive / Telegram / Video URL):</label>
-        <input type="url" id="item-url-input" placeholder="https://... link yahan paste karein">
-    </div>
-
-    <button class="btn" onclick="addNewItem()">🚀 Item Jodein</button>
 
     <div id="status"></div>
 
@@ -162,6 +178,44 @@
         
         document.getElementById('item-title').value = "";
         document.getElementById('item-url-input').value = "";
+    }
+
+    function addBulkItems() {
+        const bulkText = document.getElementById('bulk-textarea').value.trim();
+        const statusEl = document.getElementById('status');
+
+        if (!bulkText) {
+            alert("Kripya bulk box mein data paste karein!");
+            return;
+        }
+
+        let items = getItems();
+        let lines = bulkText.split('\n');
+        let addedCount = 0;
+
+        lines.forEach(line => {
+            let parts = line.split(',');
+            if (parts.length >= 3) {
+                let type = parts[0].trim().toLowerCase();
+                let title = parts[1].trim();
+                let url = parts.slice(2).join(',').trim(); // taki URL ke andar agar comma ho toh kharab na ho
+
+                if(['pdf', 'telegram', 'video'].includes(type) && title && url) {
+                    items.push({ type: type, title: title, url: url });
+                    addedCount++;
+                }
+            }
+        });
+
+        if (addedCount > 0) {
+            saveItems(items);
+            loadAdminList();
+            statusEl.style.color = "#16a34a";
+            statusEl.innerText = `✅ ${addedCount} items safalta-purvak jud gaye! Naya code copy karein.`;
+            document.getElementById('bulk-textarea').value = "";
+        } else {
+            alert("Format galat hai! Kripya check karein: type, title, url");
+        }
     }
 
     function deleteItem(index) {
