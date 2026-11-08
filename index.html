@@ -27,7 +27,7 @@
         .card-actions { display: flex; flex-direction: column; gap: 6px; }
         .btn-view { background-color: #0b5e2e; color: white; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: bold; text-align: center; white-space: nowrap; }
 
-        .sawaal-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .sawaal-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-top: 15px; }
         .sawaal-box h3 { color: #0b5e2e; margin-bottom: 15px; font-size: 18px; }
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; }
@@ -39,9 +39,10 @@
 
     <div class="header">
         <h1>📚 Darul Ifta Gulzar-e-Taiba</h1>
-        <p>Tamam PDF Kitabein, Telegram & Video Bayanat</p>
+        <p>Tamam Google Drive PDF, Telegram & Video Bayanat</p>
     </div>
 
+    <!-- Navigation Tabs -->
     <div class="nav-container">
         <div id="tab-pdf" class="nav-tab active" onclick="switchSection('pdf')">📖 PDF Kitabein</div>
         <div id="tab-telegram" class="nav-tab inactive" onclick="switchSection('telegram')">✈️ Telegram</div>
@@ -50,10 +51,12 @@
     </div>
 
     <div class="container">
-        <div id="content-list">
-            <div style="text-align: center; color: #64748b; margin-top: 40px;">Load ho raha hai...</div>
+        <!-- Content List -->
+        <div id="content-list" style="margin-top: 15px;">
+            <!-- Items yahan load honge -->
         </div>
 
+        <!-- Sawaal / Fatwa Section -->
         <div id="section-sawaal" style="display: none;">
             <div class="sawaal-box">
                 <h3>*دارالافتاء گلزار طیبہ*</h3>
@@ -83,6 +86,14 @@
     </div>
 
     <script>
+        // =========================================================================
+        // YAHAN AAPKA DATA LIVE REHTA HAI (Admin Panel se copy karke yahan paste karein)
+        // =========================================================================
+        const GLOBAL_DATA = [
+            // Example: { type: 'pdf', title: 'Kitab Naam', url: 'https://...' }
+        ];
+        // =========================================================================
+
         function switchSection(sectionName) {
             ['pdf', 'telegram', 'video', 'sawaal'].forEach(sec => {
                 const tabEl = document.getElementById('tab-' + sec);
@@ -100,7 +111,7 @@
                 contentList.style.display = 'none';
                 sawaalSec.style.display = 'block';
             } else {
-                sawaalSec.style.display = 'block';
+                sawaalSec.style.display = 'none';
                 contentList.style.display = 'block';
                 loadFilteredContent(sectionName);
             }
@@ -108,14 +119,12 @@
 
         function loadFilteredContent(typeFilter) {
             const listContainer = document.getElementById('content-list');
-            let items = JSON.parse(localStorage.getItem('darul_ifta_cloud_data')) || [];
-
-            const filtered = items.filter(item => item.type === typeFilter);
+            const filtered = GLOBAL_DATA.filter(item => item.type === typeFilter);
 
             listContainer.innerHTML = "";
 
             if (filtered.length === 0) {
-                let msgName = typeFilter === 'pdf' ? 'PDF Kitabein' : (typeFilter === 'telegram' ? 'Telegram Links' : 'Video Bayanat');
+                let msgName = typeFilter === 'pdf' ? 'Google Drive PDF Kitabein' : (typeFilter === 'telegram' ? 'Telegram Links' : 'Video Bayanat');
                 listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 40px;">Yahan abhi koi ${msgName} mojood nahi hai. Admin Panel se jodein.</div>`;
                 return;
             }
@@ -170,7 +179,6 @@
         }
 
         window.onload = function() {
-            // Auto sync check from shared browser storage
             switchSection('pdf');
         };
     </script>
