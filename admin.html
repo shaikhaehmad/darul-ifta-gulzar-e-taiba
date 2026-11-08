@@ -3,45 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Darul Ifta - Secure Admin Panel</title>
+    <title>Darul Ifta - GitHub Admin Panel</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
         body { background-color: #f4f6f8; color: #333; padding: 20px; }
         .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: none; }
-        .login-box { max-width: 400px; margin: 80px auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+        .login-box { max-width: 400px; margin: 60px auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
         h2 { color: #0b5e2e; margin-bottom: 15px; }
         .form-group { margin-bottom: 15px; text-align: left; }
         label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
         input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
-        .btn { background-color: #0b5e2e; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .btn { background-color: #0b5e2e; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 5px; }
         .btn:hover { background-color: #084823; }
-        .file-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px; border-radius: 6px; margin-bottom: 8px; border: 1px solid #e2e8f0; }
-        .btn-delete { background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
         .back-link { display: inline-block; margin-bottom: 15px; color: #0b5e2e; text-decoration: none; font-weight: bold; font-size: 14px; }
-        #status { margin-top: 15px; font-weight: bold; text-align: center; }
+        #status { margin-top: 15px; font-weight: bold; text-align: center; font-size: 14px; }
     </style>
 </head>
 <body>
 
-<!-- Password Protection Box -->
+<!-- Login & GitHub Token Screen -->
 <div id="login-screen" class="login-box">
-    <h2>🔐 Admin Login</h2>
-    <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Kripya Secret Password Darj Karein</p>
+    <h2>🔐 Secure Admin Login</h2>
+    <p style="font-size: 13px; color: #666; margin-bottom: 15px;">PIN aur GitHub Token Darj Karein</p>
+    
     <div class="form-group">
-        <label>Password:</label>
-        <input type="password" id="admin-pass" placeholder="Password daalein (786)">
+        <label>Secret PIN (313):</label>
+        <input type="password" id="admin-pass" placeholder="PIN daalein">
     </div>
-    <button class="btn" onclick="checkPassword()">Login Karein</button>
+    
+    <div class="form-group">
+        <label>GitHub Personal Access Token:</label>
+        <input type="password" id="github-token" placeholder="GitHub Token yahan paste karein">
+        <small style="color: #666; font-size: 11px;">(Token sirf pehli baar maanga jayega)</small>
+    </div>
+
+    <button class="btn" onclick="verifyAndLogin()">Login Karein</button>
 </div>
 
 <!-- Main Admin Panel -->
 <div id="admin-panel" class="container">
     <a href="index.html" class="back-link">⬅️ Website par Wapas Jayein</a>
-    <h2>🔐 Darul Ifta Admin Panel</h2>
+    <h2>🚀 GitHub Direct Upload Panel</h2>
     
     <div class="form-group">
         <label>Kitab ka Naam (Urdu / Hindi / Gujarati / English):</label>
-        <input type="text" id="file-title" placeholder="Jaise: کبر پر فاتحہ ya Namaz ka Tareeqa">
+        <input type="text" id="file-title" placeholder="Jaise: Namaz ka Tareeqa ya کبر پر فاتحہ">
     </div>
 
     <div class="form-group">
@@ -49,60 +55,50 @@
         <input type="file" id="file-input" accept="application/pdf">
     </div>
 
-    <button class="btn" onclick="uploadFileLocally()">🚀 Website par Upload Karein</button>
+    <button class="btn" onclick="uploadToGitHub()">☁️ GitHub par Direct Upload Karein</button>
 
     <div id="status"></div>
-
-    <hr style="margin: 20px 0;">
-
-    <h3>📁 Maujuda Files (Yahan se hatayein)</h3>
-    <div id="admin-file-list" style="margin-top: 15px;">
-        <!-- List yahan aayegi -->
-    </div>
 </div>
 
 <script>
-    const SECRET_PIN = "313";
+    const SECRET_PIN htm "313";
+    const GITHUB_USERNAME = "shaikhaehmad"; // Aapka GitHub Username
+    const REPO_NAME = "darul-ifta-gulzar-e-taiba"; // Aapki Repository ka Naam
+    const BRANCH = "main"; // Branch name (agar main na ho toh master karein)
 
-    function checkPassword() {
-        const enteredPass = document.getElementById('admin-pass').value.trim();
-        if (enteredPass === SECRET_PIN) {
-            document.getElementById('login-screen').style.display = "none";
-            document.getElementById('admin-panel').style.display = "block";
-            loadAdminFiles();
-        } else {
-            alert("Galat Password! Kripya sahi password dalein.");
-            document.getElementById('admin-pass').value = "";
+    // Check karein kya pehle se token save hai
+    window.onload = function() {
+        const savedToken = localStorage.getItem('gh_token_darul');
+        if (savedToken) {
+            document.getElementById('github-token').value = savedToken;
         }
-    }
+    };
 
-    function loadAdminFiles() {
-        const adminList = document.getElementById('admin-file-list');
-        let files = JSON.parse(localStorage.getItem('darul_ifta_files')) || [];
-        
-        adminList.innerHTML = "";
-        if (files.length === 0) {
-            adminList.innerHTML = "<p style='color: #64748b; font-size: 14px;'>Abhi koi file nahi hai.</p>";
+    function verifyAndLogin() {
+        const enteredPass = document.getElementById('admin-pass').value.trim();
+        const tokenInput = document.getElementById('github-token').value.trim();
+
+        if (enteredPass !== SECRET_PIN) {
+            alert("Galat PIN Code!");
+            return;
+        }
+        if (!tokenInput) {
+            alert("Kripya GitHub Token darj karein!");
             return;
         }
 
-        files.slice().reverse().forEach((file, index) => {
-            const realIndex = files.length - 1 - index;
-            adminList.innerHTML += `
-                <div class="file-item">
-                    <div>
-                        <strong>${file.title}</strong>
-                    </div>
-                    <button class="btn-delete" onclick="deleteFile(${realIndex})">Hatayein</button>
-                </div>
-            `;
-        });
+        // Token save kar lein taaki baar-baar na dalna pade
+        localStorage.setItem('gh_token_darul', tokenInput);
+
+        document.getElementById('login-screen').style.display = "none";
+        document.getElementById('admin-panel').style.display = "block";
     }
 
-    function uploadFileLocally() {
+    function uploadToGitHub() {
         const title = document.getElementById('file-title').value.trim();
         const fileInput = document.getElementById('file-input').files[0];
         const statusEl = document.getElementById('status');
+        const token = localStorage.getItem('gh_token_darul');
 
         if (!title || !fileInput) {
             alert("Kripya Kitab ka Naam aur PDF File dono select karein!");
@@ -110,38 +106,54 @@
         }
 
         statusEl.style.color = "#2563eb";
-        statusEl.innerText = "Upload ho raha hai, thoda intezaar karein...";
+        statusEl.innerText = "⏳ GitHub par file upload ho rahi hai, kripya intezaar karein...";
+
+        // File name ko clean karna (Spaces ko dashes me badalna taaki URL me error na aaye)
+        let cleanFileName = fileInput.name.replace(/[^a-zA-Z0-9-_.]/g, '_');
+        let filePath = "pdfs/" + Date.now() + "_" + cleanFileName; // pdfs folder ke andar save hoga
 
         const reader = new FileReader();
         reader.readAsDataURL(fileInput);
         reader.onload = function () {
-            const fileUrl = reader.result; 
-            
-            let files = JSON.parse(localStorage.getItem('darul_ifta_files')) || [];
-            files.push({ title: title, url: fileUrl });
-            
-            try {
-                localStorage.setItem('darul_ifta_files', JSON.stringify(files));
+            // Base64 data se header (data:application/pdf;base64,) hatana zaroori hai GitHub API ke liye
+            let base64Content = reader.result.split(',')[1];
+
+            let apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${filePath}`;
+
+            let data = {
+                message: "Add new PDF book via Admin Panel: " + title,
+                content: base64Content,
+                branch: BRANCH
+            };
+
+            fetch(apiUrl, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'token ' + token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("GitHub Upload Failed! Token ya permissions check karein.");
+                }
+            })
+            .then(data => {
                 statusEl.style.color = "#16a34a";
-                statusEl.innerText = "✅ Kitab safalta-purvak add ho gayi! Ab aap website par dekh sakte hain.";
+                statusEl.innerText = "✅ Kitab safalta-purvak GitHub par upload ho gayi!";
                 
+                // Note: Iske baad hum index.html me is file ka link save karne ka system bhi jod lenge
                 document.getElementById('file-title').value = "";
                 document.getElementById('file-input').value = "";
-                loadAdminFiles();
-            } catch (e) {
+            })
+            .catch(error => {
                 statusEl.style.color = "#dc2626";
-                statusEl.innerText = "❌ Error: Storage full ho rahi hai! Choti size ki PDF dalein.";
-            }
+                statusEl.innerText = "❌ Error: " + error.message;
+            });
         };
-    }
-
-    function deleteFile(index) {
-        if (confirm("Kya aap is kitab ko hatana chahte hain?")) {
-            let files = JSON.parse(localStorage.getItem('darul_ifta_files')) || [];
-            files.splice(index, 1);
-            localStorage.setItem('darul_ifta_files', JSON.stringify(files));
-            loadAdminFiles();
-        }
     }
 </script>
 
