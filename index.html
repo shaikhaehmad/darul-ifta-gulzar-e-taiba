@@ -213,7 +213,7 @@
                     <option value="Video">Video</option>
                 </select>
 
-                <label>Link (https:// se shuru hone wala URL dalein):</label>
+                <label>Link (Poora URL dalein):</label>
                 <input type="text" id="itemLink" placeholder="https://..." required>
 
                 <button type="submit" class="btn btn-view" style="width: 100%; padding: 12px; margin-top: 5px;">Upload Karein</button>
@@ -231,6 +231,11 @@
 
         function saveData() {
             localStorage.setItem('darul_ifta_items', JSON.stringify(items));
+        }
+
+        function openLink(url) {
+            // Yeh function direct naye tab me link kholega bina kisi rukawat ke
+            window.open(url, '_blank');
         }
 
         function renderItems(filter = "All") {
@@ -251,13 +256,14 @@
                 let actionButtons = "";
 
                 if(item.type === "PDF") {
+                    // JavaScript function ke zariye open aur download button
                     actionButtons = `
-                        <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein</a>
+                        <button onclick="openLink('${item.link}')" class="btn btn-view">Dekhein</button>
                         <a href="${item.link}" download target="_blank" class="btn btn-download">Download</a>
                     `;
                 } else {
                     actionButtons = `
-                        <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein</a>
+                        <button onclick="openLink('${item.link}')" class="btn btn-view">Dekhein</button>
                     `;
                 }
 
@@ -300,7 +306,7 @@
         function handleUpload(e) {
             e.preventDefault();
             const title = document.getElementById('itemTitle').value;
-            const cat = document.getElementById('itemCat').value;
+            const cat = document.getElementById('itemCat'].value;
             const type = document.getElementById('itemType').value;
             const link = document.getElementById('itemLink').value;
 
