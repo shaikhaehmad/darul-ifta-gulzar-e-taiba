@@ -23,6 +23,7 @@
         
         .card-actions { display: flex; flex-direction: column; gap: 6px; }
         .btn-view { background-color: #0b5e2e; color: white; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: bold; text-align: center; white-space: nowrap; }
+        .btn-download { background-color: #2563eb; color: white; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; text-align: center; white-space: nowrap; }
 
         /* Sawaal Form Style */
         .sawaal-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
@@ -38,7 +39,6 @@
     <div class="header">
         <h1>📚 Darul Ifta Gulzar-e-Taiba</h1>
         <p>Tamam PDF Kitabein, Bayanat aur Fatwa Service</p>
-        <!-- Yahan se Admin Panel ka poora button hta diya gaya hai -->
     </div>
 
     <!-- Navigation Tabs -->
@@ -50,7 +50,7 @@
     <!-- Section 1: Kitabein & PDF -->
     <div id="section-kitabein" class="container">
         <div id="file-list" style="margin-top: 15px;">
-            <!-- Files yahan automatically load hongi -->
+            <!-- Files yahan load hongi -->
         </div>
     </div>
 
@@ -94,7 +94,6 @@
                 tabS.className = "nav-tab inactive";
                 secK.style.display = "block";
                 secS.style.display = "none";
-                loadWebsiteFiles();
             } else {
                 tabS.className = "nav-tab active";
                 tabK.className = "nav-tab inactive";
@@ -103,20 +102,29 @@
             }
         }
 
-        function loadWebsiteFiles() {
+        // ==========================================
+        // APNI KITABON KI LIST YAHAN ADD KAREIN:
+        // Title aap Urdu, Hindi, Gujarati ya English mein kuch bhi likhein!
+        // URL mein bas apni GitHub par upload ki gayi PDF ka file name likhein.
+        // ==========================================
+        const filesList = [
+            { title: "جرب مرتضیٰ (Urdu Title)", url: "jarbe-murtaja.pdf" },
+            { title: "कबर पर फातेहा का सही तरीका (Hindi Title)", url: "kabar-fateha.pdf" }
+        ];
+
+        function loadFiles() {
             const listContainer = document.getElementById('file-list');
             if (!listContainer) return;
 
-            let files = JSON.parse(localStorage.getItem('darul_ifta_files')) || [];
-
             listContainer.innerHTML = "";
 
-            if (files.length === 0) {
-                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Abhi koi kitab ya file mojood nahi hai.</div>`;
+            if (filesList.length === 0) {
+                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Abhi koi kitab mojood nahi hai.</div>`;
                 return;
             }
 
-            files.slice().reverse().forEach((item) => {
+            filesList.forEach(item => {
+                const encodedUrl = encodeURI(item.url);
                 listContainer.innerHTML += `
                     <div class="card">
                         <div class="card-info">
@@ -126,7 +134,8 @@
                             </div>
                         </div>
                         <div class="card-actions">
-                            <a href="${item.url}" target="_blank" class="btn-view">📖 Padhein / Dekhein</a>
+                            <a href="${encodedUrl}" target="_blank" class="btn-view">📖 Padhein</a>
+                            <a href="${encodedUrl}" download class="btn-download">⬇️ Download</a>
                         </div>
                     </div>
                 `;
@@ -152,7 +161,7 @@
             window.open(whatsappUrl, '_blank');
         }
 
-        window.onload = loadWebsiteFiles;
+        window.onload = loadFiles;
     </script>
 </body>
 </html>
