@@ -31,6 +31,23 @@
             margin: 20px auto;
             padding: 15px;
         }
+        .filter-box {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .filter-box select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            outline: none;
+        }
         .item-card {
             background: white;
             padding: 15px 20px;
@@ -84,16 +101,27 @@
 </header>
 
 <div class="container">
-    <h2>Sabhi Upload ki gayi Files</h2>
+    <!-- Category / Filter Dropdown Option -->
+    <div class="filter-box">
+        <label for="categoryFilter" style="font-weight: bold; color: #0b5329;">🔍 Dekhein:</label>
+        <select id="categoryFilter" onchange="filterContent()">
+            <option value="all">📁 Sabhi Files (PDF + Videos)</option>
+            <option value="pdf">📚 Sirf PDF Kitabein</option>
+            <option value="bayan">🎤 Sirf Video Bayanat</option>
+        </select>
+    </div>
+
     <div id="itemList">
         <p class="no-data">Loading ho raha hai...</p>
     </div>
 </div>
 
 <script>
+    let allItems = [];
+    const user = "shaikhaehmad";
+    const repo = "darul-ifta-gulzar-e-taiba";
+
     async function loadContent() {
-        const user = "shaikhaehmad";
-        const repo = "darul-ifta-gulzar-e-taiba";
         const listContainer = document.getElementById('itemList');
 
         try {
@@ -101,36 +129,51 @@
             if (!res.ok) throw new Error("Data nahi mila");
 
             const fileData = await res.json();
-            // UTF-8 safe decoding taaki Hindi/Urdu text theek se dikhe
             const jsonString = decodeURIComponent(escape(window.atob(fileData.content)));
-            const items = JSON.parse(jsonString);
+            allItems = JSON.parse(jsonString);
 
-            if (items.length === 0) {
-                listContainer.innerHTML = '<p class="no-data">Abhi koi file upload nahi ki gayi hai.</p>';
-                return;
-            }
-
-            let html = '';
-            // Nayi upload ki gayi file sabse upar dikhegi (reverse order)
-            items.reverse().forEach(item => {
-                let badgeText = item.type === 'pdf' ? 'PDF Kitab' : 'Video Bayan';
-                let fileLink = item.type === 'pdf' ? `https://raw.githubusercontent.com/${user}/${repo}/main/${item.url}` : item.url;
-                
-                html += `
-                    <div class="item-card">
-                        <div>
-                            <span class="item-title">${item.title}</span>
-                            <span class="item-type">${badgeText}</span>
-                        </div>
-                        <a href="${fileLink}" target="_blank" class="btn-view">Dekhein / Padhein</a>
-                    </div>
-                `;
-            });
-
-            listContainer.innerHTML = html;
+            displayItems(allItems);
 
         } catch (err) {
             listContainer.innerHTML = '<p class="no-data">Abhi tak koi data available nahi hai ya file load nahi ho payi.</p>';
+        }
+    }
+
+    function displayItems(items) {
+        const listContainer = document.getElementById('itemList');
+
+        if (items.length === 0) {
+            listContainer.innerHTML = '<p class="no-data">Is category mein koi file nahi hai.</p>';
+            return;
+        }
+
+        let html = '';
+        // Nayi upload ki gayi file sabse upar dikhegi
+        [...items].reverse().forEach(item => {
+            let badgeText = item.type === 'pdf' ? 'PDF Kitab' : 'Video Bayan';
+            let fileLink = item.type === 'pdf' ? `https://raw.githubusercontent.com/${user}/${repo}/main/${item.url}` : item.url;
+            
+            html += `
+                <div class="item-card">
+                    <div>
+                        <span class="item-title">${item.title}</span>
+                        <span class="item-type">${badgeText}</span>
+                    </div>
+                    <a href="${fileLink}" target="_blank" class="btn-view">Dekhein / Padhein</a>
+                </div>
+            `;
+        });
+
+        listContainer.innerHTML = html;
+    }
+
+    function filterContent() {
+        const selectedValue = document.getElementById('categoryFilter').value;
+        if (selectedValue === 'all') {
+            displayItems(allItems);
+        } else {
+            const filtered = allItems.filter(item => item.type === selectedValue);
+            displayItems(filtered);
         }
     }
 
