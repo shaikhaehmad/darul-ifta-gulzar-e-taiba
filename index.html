@@ -95,11 +95,6 @@
             margin-bottom: 10px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        .card-info {
-            flex: 1;
-            min-width: 0;
-            margin-right: 10px;
-        }
         .card-info h3 {
             font-size: 15px;
             margin-bottom: 5px;
@@ -129,7 +124,6 @@
             display: flex;
             gap: 5px;
             align-items: center;
-            flex-shrink: 0;
         }
         .btn {
             padding: 8px 12px;
@@ -150,6 +144,7 @@
             background-color: #28a745;
             color: white;
         }
+        /* Admin Form Styling */
         .admin-form {
             background: white;
             padding: 20px;
@@ -180,10 +175,11 @@
 
     <div class="container">
         
+        <!-- Main Website View -->
         <div id="main-view">
             <div class="nav-tabs">
                 <button class="tab-btn active-green">📚 Kitabein & Bayanat</button>
-                <button class="tab-btn active-gray" onclick="alert('Sawaal/Fatwa page yahan jodein')">? Sawaal / Fatwa Puchhein</button>
+                <button class="tab-btn active-gray" onclick="window.location.href='sawaal.html'">? Sawaal / Fatwa Puchhein</button>
             </div>
 
             <div class="filter-box">
@@ -195,9 +191,13 @@
                 </select>
             </div>
 
-            <div id="itemsList"></div>
+            <!-- List of items container -->
+            <div id="itemsList">
+                <!-- Items dynamically yahan load honge -->
+            </div>
         </div>
 
+        <!-- Admin Panel View -->
         <div id="admin-view" class="admin-form">
             <h3>⚙️ Naya Item Upload Karein</h3>
             <form id="uploadForm" onsubmit="handleUpload(event)">
@@ -213,8 +213,8 @@
                     <option value="Video">Video</option>
                 </select>
 
-                <label>Link (Poora URL dalein):</label>
-                <input type="text" id="itemLink" placeholder="https://..." required>
+                <label>Link (Instagram / Facebook / YouTube / PDF URL):</label>
+                <input type="text" id="itemLink" placeholder="Apna link yahan dalein" required>
 
                 <button type="submit" class="btn btn-view" style="width: 100%; padding: 12px; margin-top: 5px;">Upload Karein</button>
                 <button type="button" class="btn" style="width: 100%; margin-top: 10px; background:#ccc; color:#000;" onclick="toggleAdminPanel(event)">Wapas Jayein</button>
@@ -224,18 +224,14 @@
     </div>
 
     <script>
+        // Tumhara original data setup
         let items = JSON.parse(localStorage.getItem('darul_ifta_items')) || [
-            { title: "Jarbe murtaja", cat: "Kitab", type: "PDF", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
-            { title: "Test video", cat: "Bayan", type: "Video", link: "https://www.instagram.com" }
+            { title: "Jarbe murtaja", cat: "Kitab", type: "PDF", link: "" },
+            { title: "Test video", cat: "Bayan", type: "Video", link: "" }
         ];
 
         function saveData() {
             localStorage.setItem('darul_ifta_items', JSON.stringify(items));
-        }
-
-        function openLink(url) {
-            // Yeh function direct naye tab me link kholega bina kisi rukawat ke
-            window.open(url, '_blank');
         }
 
         function renderItems(filter = "All") {
@@ -256,14 +252,15 @@
                 let actionButtons = "";
 
                 if(item.type === "PDF") {
-                    // JavaScript function ke zariye open aur download button
+                    // PDF ke liye 'Dekhein' aur sath me 'Download' button
                     actionButtons = `
-                        <button onclick="openLink('${item.link}')" class="btn btn-view">Dekhein</button>
-                        <a href="${item.link}" download target="_blank" class="btn btn-download">Download</a>
+                        <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein</a>
+                        <a href="${item.link}" download class="btn btn-download">Download</a>
                     `;
                 } else {
+                    // Video ke liye sirf 'Dekhein' jo tumhara exact link kholega
                     actionButtons = `
-                        <button onclick="openLink('${item.link}')" class="btn btn-view">Dekhein</button>
+                        <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein</a>
                     `;
                 }
 
@@ -306,7 +303,7 @@
         function handleUpload(e) {
             e.preventDefault();
             const title = document.getElementById('itemTitle').value;
-            const cat = document.getElementById('itemCat'].value;
+            const cat = document.getElementById('itemCat').value;
             const type = document.getElementById('itemType').value;
             const link = document.getElementById('itemLink').value;
 
