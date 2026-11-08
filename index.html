@@ -10,6 +10,7 @@
         .header { background-color: #0b5e2e; color: white; padding: 20px; text-align: center; }
         .header h1 { font-size: 22px; margin-bottom: 5px; }
         .header p { font-size: 13px; opacity: 0.9; margin-bottom: 12px; }
+        .admin-btn { background-color: #ffffff; color: #0b5e2e; padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; text-decoration: none; display: inline-block; }
         
         .nav-container { display: flex; gap: 10px; padding: 15px; max-width: 600px; margin: 0 auto; }
         .nav-tab { flex: 1; padding: 12px; text-align: center; border-radius: 8px; font-weight: bold; font-size: 14px; text-decoration: none; cursor: pointer; }
@@ -23,7 +24,6 @@
         
         .card-actions { display: flex; flex-direction: column; gap: 6px; }
         .btn-view { background-color: #0b5e2e; color: white; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: bold; text-align: center; white-space: nowrap; }
-        .btn-download { background-color: #2563eb; color: white; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; text-align: center; white-space: nowrap; }
 
         /* Sawaal Form Style */
         .sawaal-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
@@ -39,18 +39,19 @@
     <div class="header">
         <h1>📚 Darul Ifta Gulzar-e-Taiba</h1>
         <p>Tamam PDF Kitabein, Bayanat aur Fatwa Service</p>
+        <a href="admin.html" class="admin-btn">🔒 Admin Panel</a>
     </div>
 
     <!-- Navigation Tabs -->
     <div class="nav-container">
-        <div id="tab-kitabein" class="nav-tab active" onclick="switchTab('kitabein')">📖 Kitabein & Bayanat</div>
+        <div id="tab-kitabein" class="nav-tab active" onclick="switchTab('kitabein')">📖 Kitabein & PDF</div>
         <div id="tab-sawaal" class="nav-tab inactive" onclick="switchTab('sawaal')">❓ Sawaal / Fatwa Puchhein</div>
     </div>
 
-    <!-- Section 1: Kitabein & Bayanat -->
+    <!-- Section 1: Kitabein & PDF -->
     <div id="section-kitabein" class="container">
-        <div id="file-list">
-            <!-- Files yahan load hongi -->
+        <div id="file-list" style="margin-top: 15px;">
+            <!-- Admin panel se add ki gayi files yahan automatically aayengi -->
         </div>
     </div>
 
@@ -94,6 +95,7 @@
                 tabS.className = "nav-tab inactive";
                 secK.style.display = "block";
                 secS.style.display = "none";
+                loadWebsiteFiles();
             } else {
                 tabS.className = "nav-tab active";
                 tabK.className = "nav-tab inactive";
@@ -102,33 +104,31 @@
             }
         }
 
-        // Files list (Aap yahan direkt apni files ke naam add kar sakte hain)
-        const filesList = [
-            { title: "Jarbe murtaja", type: "PDF", url: "jarbe-murtaja.pdf" },
-            { title: "Kabar Par Fateha", type: "PDF", url: "कबर_पर_फातेहा_पढवानो_सही_तरीको.pdf" }
-        ];
-
-        function loadFiles() {
+        function loadWebsiteFiles() {
             const listContainer = document.getElementById('file-list');
             if (!listContainer) return;
 
+            let files = JSON.parse(localStorage.getItem('darul_ifta_files')) || [];
+
             listContainer.innerHTML = "";
 
-            filesList.forEach(item => {
-                // Encode URL to properly handle special/Hindi characters without 404 error
-                const encodedUrl = encodeURI(item.url);
+            if (files.length === 0) {
+                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Abhi koi kitab ya file mojood nahi hai. Admin Panel se upload karein.</div>`;
+                return;
+            }
 
+            // Nayi files upar dikhengi, isiliye reverse() kiya hai
+            files.slice().reverse().forEach((item) => {
                 listContainer.innerHTML += `
                     <div class="card">
                         <div class="card-info">
                             <h3>${item.title}</h3>
                             <div class="badges" style="margin-top: 4px;">
-                                <span class="badge">${item.type}</span>
+                                <span class="badge">PDF Kitab</span>
                             </div>
                         </div>
                         <div class="card-actions">
-                            <a href="${encodedUrl}" target="_blank" class="btn-view">Dekhein / Padhein</a>
-                            <a href="${encodedUrl}" download class="btn-download">⬇️ Download</a>
+                            <a href="${item.url}" target="_blank" class="btn-view">📖 Padhein / Dekhein</a>
                         </div>
                     </div>
                 `;
@@ -149,14 +149,12 @@
             const muftiWhatsAppNumber = "918758647929"; 
 
             const message = `*دارالافتاء گلزار طیبہ*%0A*--- جدید سوال / مسئلہ ---*%0A%0A👤 *Naam:* ${name}%0A📱 *Mobile:* ${phone}%0A🏠 *Address:* ${address}%0A%0A❓ *Sawal / Masla:*%0A${text}%0A%0A📎 *(Note: Agar koi photo/document hai, toh kripya is message ke sath ya alag se WhatsApp par bhej dein.)*`;
-            
-            // Fixed variable name to point directly to your correct number
             const whatsappUrl = `https://wa.me/${muftiWhatsAppNumber}?text=${message}`;
 
             window.open(whatsappUrl, '_blank');
         }
 
-        window.onload = loadFiles;
+        window.onload = loadWebsiteFiles;
     </script>
 </body>
 </html>
