@@ -22,24 +22,23 @@
             padding: 20px 10px;
         }
         header h1 {
-            font-size: 22px;
+            font-size: 20px;
             margin-bottom: 5px;
         }
         header p {
-            font-size: 13px;
+            font-size: 12px;
             color: #d1e7dd;
             margin-bottom: 10px;
         }
         .admin-link {
             background: #fff;
             color: #0b4d2c;
-            padding: 6px 12px;
+            padding: 5px 10px;
             border-radius: 4px;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
             display: inline-block;
-            margin-top: 5px;
         }
         .container {
             max-width: 600px;
@@ -53,12 +52,13 @@
         }
         .tab-btn {
             flex: 1;
-            padding: 12px;
+            padding: 10px;
             border: none;
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
             text-align: center;
+            font-size: 13px;
         }
         .tab-btn.active-green {
             background-color: #0b4d2c;
@@ -77,6 +77,7 @@
             justify-content: space-between;
             margin-bottom: 15px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            font-size: 14px;
         }
         .filter-box select {
             padding: 6px;
@@ -94,26 +95,34 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         .card-info h3 {
-            font-size: 16px;
-            margin-bottom: 4px;
+            font-size: 15px;
+            margin-bottom: 5px;
+            color: #111;
+        }
+        .badges {
+            display: flex;
+            gap: 5px;
         }
         .badge-type {
-            font-size: 11px;
+            font-size: 10px;
             padding: 2px 6px;
             border-radius: 4px;
             background: #e2e8f0;
-            margin-right: 5px;
+            color: #444;
+            font-weight: bold;
         }
         .badge-cat {
-            font-size: 11px;
+            font-size: 10px;
             padding: 2px 6px;
             border-radius: 4px;
             background: #d1e7dd;
             color: #0b4d2c;
+            font-weight: bold;
         }
         .card-actions {
             display: flex;
-            gap: 5px;
+            gap: 6px;
+            align-items: center;
         }
         .btn {
             padding: 8px 12px;
@@ -124,6 +133,7 @@
             cursor: pointer;
             border: none;
             text-align: center;
+            white-space: nowrap;
         }
         .btn-view {
             background-color: #0b4d2c;
@@ -144,13 +154,13 @@
         .admin-form input, .admin-form select {
             width: 100%;
             padding: 10px;
-            margin: 8px 0 15px 0;
+            margin: 6px 0 12px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
         .admin-form label {
             font-weight: bold;
-            font-size: 14px;
+            font-size: 13px;
         }
     </style>
 </head>
@@ -205,15 +215,14 @@
                 <label>File / PDF Link (URL ya Path):</label>
                 <input type="text" id="itemLink" placeholder="File ka link ya URL dalein" required>
 
-                <button type="submit" class="btn btn-view" style="width: 100%; padding: 12px;">Upload Karein</button>
-                <button type="button" class="btn" style="width: 100%; margin-top: 10px; background:#ccc;" onclick="toggleAdminPanel(event)">Wapas Jayein</button>
+                <button type="submit" class="btn btn-view" style="width: 100%; padding: 12px; margin-top: 5px;">Upload Karein</button>
+                <button type="button" class="btn" style="width: 100%; margin-top: 10px; background:#ccc; color:#000;" onclick="toggleAdminPanel(event)">Wapas Jayein</button>
             </form>
         </div>
 
     </div>
 
     <script>
-        // Default Sample Data agar localStorage khali ho
         let items = JSON.parse(localStorage.getItem('darul_ifta_items')) || [
             { title: "Jarbe murtaja", cat: "Kitab", type: "PDF", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
             { title: "Test video", cat: "Bayan", type: "Video", link: "https://www.youtube.com" }
@@ -237,7 +246,7 @@
                 return;
             }
 
-            filtered.forEach((item, index) => {
+            filtered.forEach((item) => {
                 let downloadBtn = "";
                 if(item.type === "PDF") {
                     downloadBtn = `<a href="${item.link}" download class="btn btn-download">Download</a>`;
@@ -247,7 +256,7 @@
                     <div class="card">
                         <div class="card-info">
                             <h3>${item.title}</h3>
-                            <div>
+                            <div class="badges">
                                 <span class="badge-type">${item.type}</span>
                                 <span class="badge-cat">${item.cat}</span>
                             </div>
@@ -271,7 +280,7 @@
             e.preventDefault();
             const mainView = document.getElementById('main-view');
             const adminView = document.getElementById('admin-view');
-            if(adminView.style.display === "block") {
+            if(adminview_active = adminView.style.display === "block") {
                 adminView.style.display = "none";
                 mainView.style.display = "block";
             } else {
@@ -296,7 +305,6 @@
             toggleAdminPanel(e);
         }
 
-        // Initial Load
         renderItems();
     </script>
 </body>
