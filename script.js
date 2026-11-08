@@ -1,51 +1,30 @@
-        file: "kabr_par_fateha_padhvano_sahi_tariko.pdf"
-    }
-];
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
 // ======================
-// SEARCH SYSTEM
+// FIREBASE CONFIGURATION
 // ======================
 
-const search = document.getElementById("search");
-const results = document.getElementById("search-results");
+const firebaseConfig = {
+    apiKey: "AIzaSyCHn1wyyuJCqIV2BH6MoMt7oCjfl_15-9s",
+    authDomain: "darul-ifta-gulzar-e-taiba.firebaseapp.com",
+    projectId: "darul-ifta-gulzar-e-taiba",
+    storageBucket: "darul-ifta-gulzar-e-taiba.firebasestorage.app",
+    messagingSenderId: "129078877979",
+    appId: "1:129078877979:web:d47d60a74123c828ccfdbe"
+};
 
-if (search && results) {
-    search.addEventListener("input", function () {
-        const value = this.value.toLowerCase().trim();
-        results.innerHTML = "";
-
-        if (!value) return;
-
-        const filteredData = masterData.filter(item =>
-            item.title.toLowerCase().includes(value) ||
-            item.keywords.toLowerCase().includes(value)
-        );
-
-        if (filteredData.length === 0) {
-            results.textContent = "Koi result nahi mila.";
-            return;
-        }
-
-        filteredData.forEach(item => {
-            const card = document.createElement("div");
-            card.className = "result";
-
-            const heading = document.createElement("h3");
-            heading.textContent = item.title + " (" + item.type + ")";
-
-            const link = document.createElement("a");
-            link.href = item.file;
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-            link.textContent = "📖 Kholen";
-
-            card.appendChild(heading);
-            card.appendChild(link);
-            results.appendChild(card);
-        });
-    });
-}
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 
 // ======================
@@ -58,6 +37,7 @@ if (fatwaForm) {
     fatwaForm.addEventListener("submit", async function (e) {
         e.preventDefault();
 
+        // Aapke HTML form ke IDs ke mutabiq fields utha rahe hain
         const name = document.getElementById("name").value.trim();
         const mobile = document.getElementById("mobile").value.trim();
         const address = document.getElementById("address").value.trim();
@@ -71,7 +51,7 @@ if (fatwaForm) {
         }
 
         if (!name || !mobile || !address || !question) {
-            alert("Sabhi details (Naam, Mobile, Address aur Sawal) bharein.");
+            alert("Kripya sabhi details (Naam, Mobile, Address aur Sawal) bharein.");
             return;
         }
 
@@ -83,7 +63,7 @@ if (fatwaForm) {
                 submitButton.textContent = "Sending...";
             }
 
-            // 1. Firebase mein data save karein
+            // 1. Firebase Firestore ke 'fatwas' collection mein data save hoga
             await addDoc(collection(db, "fatwas"), {
                 name: name,
                 mobile: mobile,
@@ -117,108 +97,20 @@ ${question}
             alert("Aapka sawal kamyabi se bhej diya gaya hai. Ab WhatsApp khul raha hai...");
             fatwaForm.reset();
 
-            // 3. WhatsApp redirect
+            // 3. WhatsApp par redirect karega
             window.open(whatsappURL, "_blank");
         }
         catch (error) {
             console.error("Firebase Error:", error);
-            alert("Kuch problem aayi. Dobara koshish karein.");
+            alert("Kuch technical problem aayi. Dobara koshish karein.");
         }
         finally {
             if (submitButton) {
                 submitButton.disabled = false;
-                submitButton.textContent = "📨 Fatwa Puchhe";
+                submitButton.textContent = "WhatsApp par Sawal Bhejein";
             }
         }
     });
 }
 
-
-// ======================
-// DARK MODE
-// ======================
-
-const themeToggle = document.getElementById("themeToggle");
-
-if (themeToggle) {
-    themeToggle.addEventListener("click", function () {
-        document.body.classList.toggle("dark");
-        if (document.body.classList.contains("dark")) {
-            themeToggle.textContent = "☀️ Light Mode";
-        } else {
-            themeToggle.textContent = "🌙 Dark Mode";
-        }
-    });
-}
-
-
-// ======================
-// PDF LIBRARY & CATEGORY FILTER
-// ======================
-
-const pdfList = document.getElementById("pdfList");
-const searchInput = document.getElementById("searchInput");
-
-function loadPDFs(filterCategory = "") {
-    if (!pdfList) return;
-
-    pdfList.innerHTML = "";
-
-    const filteredPDFs = masterData.filter(item => {
-        if (!filterCategory || filterCategory === "All") return true;
-        return item.category.toLowerCase() === filterCategory.toLowerCase();
-    });
-
-    if (filteredPDFs.length === 0) {
-        pdfList.textContent = "Is category mein koi PDF nahi mili.";
-        return;
-    }
-
-    filteredPDFs.forEach(pdf => {
-        const card = document.createElement("div");
-        card.className = "quick-card";
-
-        const icon = document.createElement("div");
-        icon.className = "icon";
-        icon.textContent = "📄";
-
-        const heading = document.createElement("h3");
-        heading.textContent = pdf.title;
-
-        const category = document.createElement("p");
-        category.textContent = "Category: " + pdf.category;
-
-        const link = document.createElement("a");
-        link.href = pdf.file;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.className = "btn";
-        link.textContent = "📥 Download / Read";
-
-        card.appendChild(icon);
-        card.appendChild(heading);
-        card.appendChild(category);
-        card.appendChild(link);
-
-        pdfList.appendChild(card);
-    });
-}
-
-// PDF Section ke Category Buttons ke liye click events
-const pdfCategoryButtons = document.querySelectorAll("#pdf .hero-buttons .btn");
-pdfCategoryButtons.forEach(btn => {
-    btn.addEventListener("click", function (e) {
-        e.preventDefault();
-        const categoryName = this.textContent.trim().replace("📄 ", "").replace("📚 ", "").replace("🕌 ", "").replace("📖 ", "");
-        loadPDFs(categoryName === "Fatwa" ? "Nikah" : categoryName); // Category mapping
-    });
-});
-
-loadPDFs();
-
-
-// ======================
-// SCRIPT LOADED
-// ======================
-
-console.log("Darul Ifta Gulzar-e-Taiba Fully Functional Script Loaded!");
+console.log("Darul Ifta Form Script Loaded Successfully!");
