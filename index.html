@@ -104,9 +104,6 @@
             font-size: 15px;
             margin-bottom: 5px;
             color: #111;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
         .badges {
             display: flex;
@@ -135,10 +132,10 @@
             flex-shrink: 0;
         }
         .btn {
-            padding: 7px 10px;
+            padding: 8px 12px;
             border-radius: 6px;
             text-decoration: none;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: bold;
             cursor: pointer;
             border: none;
@@ -222,8 +219,8 @@
                     <option value="Video">Video</option>
                 </select>
 
-                <label>Link (Instagram / YouTube / Facebook / PDF URL):</label>
-                <input type="text" id="itemLink" placeholder="Apna link yahan paste karein" required>
+                <label>Link (Instagram / Facebook / YouTube / PDF URL):</label>
+                <input type="text" id="itemLink" placeholder="Apna link yahan dalein" required>
 
                 <button type="submit" class="btn btn-view" style="width: 100%; padding: 12px; margin-top: 5px;">Upload Karein</button>
                 <button type="button" class="btn" style="width: 100%; margin-top: 10px; background:#ccc; color:#000;" onclick="toggleAdminPanel(event)">Wapas Jayein</button>
@@ -233,7 +230,7 @@
     </div>
 
     <script>
-        // LocalStorage se data load karna
+        // LocalStorage Data Setup
         let items = JSON.parse(localStorage.getItem('darul_ifta_items')) || [
             { title: "Jarbe murtaja", cat: "Kitab", type: "PDF", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
             { title: "Test video", cat: "Bayan", type: "Video", link: "https://www.instagram.com" }
@@ -261,13 +258,13 @@
                 let actionButtons = "";
 
                 if(item.type === "PDF") {
-                    // PDF ke liye Dekhein aur Download dono buttons
+                    // PDF ke liye 'Dekhein' aur 'Download' dono buttons
                     actionButtons = `
                         <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein</a>
-                        <a href="${item.link}" download class="btn btn-download">Download</a>
+                        <a href="${item.link}" download target="_blank" class="btn btn-download">Download</a>
                     `;
                 } else {
-                    // Video ke liye sirf Dekhein button jo exact wahi link kholega jo aapne dala hai
+                    // Video ke liye sirf wahi link khulega jo aapne dala hai (Instagram/FB/YouTube)
                     actionButtons = `
                         <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein</a>
                     `;
