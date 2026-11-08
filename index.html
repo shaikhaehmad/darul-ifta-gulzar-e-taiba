@@ -265,7 +265,9 @@
         let html = '';
         [...items].reverse().forEach(item => {
             let badgeText = item.type === 'pdf' ? 'PDF Kitab' : 'Video Bayan';
-            let fileLink = item.type === 'pdf' ? `https://raw.githubusercontent.com/${user}/${repo}/main/${item.url}` : item.url;
+            // PDF ke liye Google Docs Viewer ka use kiya hai taaki text/code ki tarah na dikhe
+            let rawFileLink = `https://raw.githubusercontent.com/${user}/${repo}/main/${item.url}`;
+            let fileLink = item.type === 'pdf' ? `https://docs.google.com/gview?url=${encodeURIComponent(rawFileLink)}&embedded=true` : item.url;
             
             html += `
                 <div class="item-card">
@@ -306,8 +308,15 @@
 
         const encodedMessage = encodeURIComponent(message);
         
-        // Mobile URL scheme error ko hatane ke liye direct redirection
-        window.location.href = `https://wa.me/${muftiWhatsAppNumber}?text=${encodedMessage}`;
+        // Universal web link aur secure click method jo mobile browser error nahi dega
+        const url = `https://api.whatsapp.com/send?phone=${muftiWhatsAppNumber}&text=${encodedMessage}`;
+        
+        var ancher = document.createElement('a');
+        ancher.href = url;
+        ancher.target = '_blank';
+        document.body.appendChild(ancher);
+        ancher.click();
+        document.body.removeChild(ancher);
     }
 
     loadContent();
