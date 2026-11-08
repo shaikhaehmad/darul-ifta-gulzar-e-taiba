@@ -12,7 +12,7 @@
         h2 { color: #0b5e2e; margin-bottom: 15px; }
         .form-group { margin-bottom: 15px; text-align: left; }
         label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
         .btn { background-color: #0b5e2e; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 5px; }
         .btn:hover { background-color: #084823; }
         .file-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px; border-radius: 6px; margin-bottom: 8px; border: 1px solid #e2e8f0; }
@@ -40,7 +40,7 @@
     <div class="form-group">
         <label>Item ka Type Chunein:</label>
         <select id="item-type">
-            <option value="pdf">📖 Google Drive PDF Kitab</option>
+            <option value="pdf">📖 Google Drive PDF Kitab Link</option>
             <option value="telegram">✈️ Telegram Channel / Kitab Link</option>
             <option value="video">🎥 YouTube / Insta / FB Video Link</option>
         </select>
@@ -56,20 +56,28 @@
         <input type="url" id="item-url-input" placeholder="https://... link yahan paste karein">
     </div>
 
-    <button class="btn" onclick="addNewItem()">🚀 Website par Jodein</button>
+    <button class="btn" onclick="addNewItem()">🚀 Item Jodein</button>
 
     <div id="status"></div>
 
     <hr style="margin: 20px 0;">
 
-    <h3>📁 Maujuda List (Yahan se hatayein)</h3>
+    <h3>📋 Website ke liye Code (Ise Copy karke index.html mein dalein)</h3>
+    <div class="form-group" style="margin-top: 10px;">
+        <textarea id="export-code-box" rows="4" readonly placeholder="Yahan code apne aap ban jayega..." onclick="this.select()"></textarea>
+    </div>
+    <button class="btn" style="background-color: #2563eb;" onclick="copyCode()">📋 Code Copy Karein</button>
+
+    <hr style="margin: 20px 0;">
+
+    <h3>📁 Maujuda List (Yahan se hatayein / Delete karein)</h3>
     <div id="admin-item-list" style="margin-top: 15px;">
         <!-- List yahan aayegi -->
     </div>
 </div>
 
 <script>
-    const SECRET_PIN = "2013";
+    const SECRET_PIN htm "2013";
 
     function checkPassword() {
         const enteredPass = document.getElementById('admin-pass').value.trim();
@@ -83,13 +91,32 @@
         }
     }
 
+    function getItems() {
+        return JSON.parse(localStorage.getItem('darul_ifta_permanent_data')) || [];
+    }
+
+    function saveItems(items) {
+        localStorage.setItem('darul_ifta_permanent_data', JSON.stringify(items));
+        updateExportBox(items);
+    }
+
+    function updateExportBox(items) {
+        let codeStr = "const GLOBAL_DATA = [\n";
+        items.forEach(item => {
+            codeStr += `    { type: '${item.type}', title: '${item.title.replace(/'/g, "\\'")}', url: '${item.url}' },\n`;
+        });
+        codeStr += "];";
+        document.getElementById('export-code-box').value = codeStr;
+    }
+
     function loadAdminList() {
         const adminList = document.getElementById('admin-item-list');
-        let items = JSON.parse(localStorage.getItem('darul_ifta_cloud_data')) || [];
+        let items = getItems();
         
         adminList.innerHTML = "";
         if (items.length === 0) {
             adminList.innerHTML = "<p style='color: #64748b; font-size: 14px;'>Abhi koi item mojood nahi hai.</p>";
+            updateExportBox(items);
             return;
         }
 
@@ -110,6 +137,8 @@
                 </div>
             `;
         });
+
+        updateExportBox(items);
     }
 
     function addNewItem() {
@@ -123,26 +152,34 @@
             return;
         }
 
-        let items = JSON.parse(localStorage.getItem('darul_ifta_cloud_data')) || [];
-
+        let items = getItems();
         items.push({ type: type, title: title, url: url });
-        localStorage.setItem('darul_ifta_cloud_data', JSON.stringify(items));
+        saveItems(items);
+        loadAdminList();
         
         statusEl.style.color = "#16a34a";
-        statusEl.innerText = "✅ Item safalta-purvak jud gaya!";
+        statusEl.innerText = "✅ Item jud gaya! Neeche code copy karke index.html mein update karein.";
         
         document.getElementById('item-title').value = "";
         document.getElementById('item-url-input').value = "";
-        loadAdminList();
     }
 
     function deleteItem(index) {
         if (confirm("Kya aap is item ko hatana chahte hain?")) {
-            let items = JSON.parse(localStorage.getItem('darul_ifta_cloud_data')) || [];
+            let items = getItems();
             items.splice(index, 1);
-            localStorage.setItem('darul_ifta_cloud_data', JSON.stringify(items));
+            saveItems(items);
             loadAdminList();
+            alert("Item hata diya gaya hai! Naya code copy karke index.html mein update karein.");
         }
+    }
+
+    function copyCode() {
+        const copyText = document.getElementById("export-code-box");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); 
+        navigator.clipboard.writeText(copyText.value);
+        alert("✅ Code copy ho gaya! Ise apni index.html ke GLOBAL_DATA mein paste kar dein.");
     }
 </script>
 
