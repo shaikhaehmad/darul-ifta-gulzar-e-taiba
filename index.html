@@ -1,67 +1,426 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="hi">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Darul Ifta Gulzar-e-Taiba</title>
-<meta name="description" content="Darul Ifta Gulzar-e-Taiba - Fatwa, Islamic PDFs and Videos">
-<style>
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f5fbf6;color:#17351f;font-family:Arial,sans-serif}
-header{background:linear-gradient(160deg,#075c20,#0b8d37);color:white;text-align:center;padding:25px 15px;border-radius:0 0 25px 25px}
-header h1{font-size:23px;margin:6px 0}header p{font-size:13px;margin:5px 0 18px}.btn{display:inline-block;background:white;color:#08752c;text-decoration:none;font-weight:bold;border-radius:25px;padding:11px 20px}
-main{max-width:760px;margin:auto}.banner{margin:14px;border-radius:16px;background:linear-gradient(145deg,#173b19,#0a8a35);color:#fff;text-align:center;padding:35px 10px;box-shadow:0 4px 12px #0002}.arabic{font-size:27px;margin-bottom:8px}
-section{padding:10px 14px}h2{text-align:center;color:#08742c;font-size:19px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.card{background:white;border:1px solid #d9eadc;border-radius:14px;padding:18px 8px;text-align:center;text-decoration:none;color:#135f2a;box-shadow:0 3px 10px #0001}.card b,.card small{display:block}.card b{margin-top:7px}.card small{font-size:11px;color:#66756a;margin-top:4px}
-form{background:white;border:1px solid #d9eadc;border-radius:16px;padding:15px}label{display:block;font-weight:bold;font-size:13px;margin:12px 0}input,textarea{display:block;width:100%;margin-top:6px;padding:11px;border:1px solid #cbdccc;border-radius:10px;font:inherit}textarea{min-height:90px}button{width:100%;border:0;border-radius:25px;padding:12px;background:#07852f;color:#fff;font-weight:bold;font-size:15px}.msg{text-align:center;color:#08742c;font-size:13px}.box{background:white;border:1px dashed #9cc9a5;border-radius:14px;padding:28px;text-align:center;color:#66756a}.social{text-align:center}.social a{display:inline-block;background:#087d2e;color:white;padding:9px 14px;border-radius:20px;text-decoration:none;margin:3px;font-size:13px}footer{background:#075c20;color:white;text-align:center;padding:22px;margin-top:20px;font-size:12px}
-@media(min-width:650px){.grid{grid-template-columns:repeat(4,1fr)}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Darul Ifta Gulzar-e-Taiba</title>
+
+    <meta name="description"
+        content="Official Website of Darul Ifta Gulzar-e-Taiba. Online Fatwa, Islamic Bayan, PDF Library.">
+
+    <meta name="keywords"
+        content="Darul Ifta, Fatwa, Mufti M.J. Akbari, Islamic Bayan, PDF">
+
+    <meta name="author" content="Darul Ifta Gulzar-e-Taiba">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.png">
+
 </head>
+
 <body>
-<header>
-<div style="font-size:28px;font-weight:bold">دارالافتاء</div>
-<h1>Darul Ifta Gulzar-e-Taiba</h1>
-<p>Research &amp; Islamic Guidance Center</p>
-<a class="btn" href="#fatwa">🟢 Fatwa / Sawal Bhejein</a>
+
+<header id="top">
+
+    <h1>🕌 Darul Ifta Gulzar-e-Taiba</h1>
+
+    <nav>
+        <a href="#top">Home</a>
+        <a href="#fatwa">Fatwa</a>
+        <a href="#pdf">PDF</a>
+        <a href="#bayan">Bayan</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <button id="themeToggle" class="btn" type="button">
+        🌙 Dark Mode
+    </button>
+
 </header>
+
 <main>
-<div class="banner"><div class="arabic">دارالافتاء گلزارِ طیبہ</div><b>Darul Ifta Gulzar-e-Taiba</b><br><small>Research Center</small></div>
 
-<section><h2>📚 Quick Access</h2><div class="grid">
-<a class="card" href="#fatwa">❓<b>Fatwa / Sawal</b><small>Apna sawal bhejein</small></a>
-<a class="card" href="#pdf">📄<b>PDF</b><small>Kitabein aur risale</small></a>
-<a class="card" href="#video">🎥<b>Videos</b><small>Deeni bayanat</small></a>
-<a class="card" href="#about">ℹ️<b>Hamare Baare Mein</b><small>Research center</small></a>
-</div></section>
+<!-- Hero Section -->
 
-<section id="fatwa"><h2>📝 Fatwa / Sawal Bhejein</h2>
-<form id="fatwaForm">
-<label>Naam<input id="name" required placeholder="Apna naam likhein"></label>
-<label>Mobile / WhatsApp Number<input id="phone" type="tel" required placeholder="Mobile number"></label>
-<label>Address<textarea id="address" required placeholder="Gaon / Shehar, District, State"></textarea></label>
-<label>Sawal / Masla<textarea id="question" required placeholder="Apna sawal tafseel se likhein"></textarea></label>
-<label>Photo / File (optional)<input id="file" type="file" accept="image/*,.pdf"></label>
-<button type="submit">📤 WhatsApp par Sawal Bhejein</button>
-<p class="msg" id="msg"></p>
-</form></section>
+<section class="hero">
 
-<section id="pdf"><h2>📄 Publications / PDF</h2><div class="box">Yahan baad mein aapki PDF books aur risale add honge.</div></section>
-<section id="video"><h2>🎥 Videos</h2><div class="box">Yahan baad mein YouTube videos aur bayanat add honge.</div></section>
-<section id="about"><h2>ℹ️ Darul Ifta Gulzar-e-Taiba</h2><div class="box">Deeni masail aur Islamic research se mutalliq maloomat ke liye rabta karein.</div><div class="social">
-<a href="https://www.instagram.com/shaikh_aehmad__786/" target="_blank">Instagram</a>
-<a href="https://www.youtube.com/" target="_blank">YouTube</a>
-<a href="https://www.facebook.com/" target="_blank">Facebook</a>
-</div></section>
+    <img src="logo.jpg"
+         alt="Darul Ifta Logo"
+         class="logo">
+
+    <h2>Darul Ifta Gulzar-e-Taiba</h2>
+
+    <p>Online Fatwa • Islamic Bayan • PDF Library</p>
+
+    <div class="hero-buttons">
+
+        <a href="#fatwa" class="btn">❓ Fatwa Puchhe</a>
+
+        <a href="#pdf" class="btn">📚 PDF Library</a>
+
+        <a href="#bayan" class="btn">🎤 Bayan Dekhen</a>
+
+    </div>
+
+</section>
+
+<!-- Image Slider -->
+
+<section class="slider">
+
+    <img src="images/slide1.jpg"
+         class="slide active"
+         alt="Slide 1">
+
+    <img src="images/slide2.jpg"
+         class="slide"
+         alt="Slide 2">
+
+    <img src="images/slide3.jpg"
+         class="slide"
+         alt="Slide 3">
+
+</section>
+
+<!-- Search Section -->
+
+<section class="search-section">
+
+    <h2>🔍 Search Fatwa, PDF & Bayan</h2>
+
+    <input
+        type="text"
+        id="search"
+        placeholder="Fatwa, PDF Ya Bayan Search Karein...">
+
+    <div id="search-results"></div>
+
+</section>
+
+<!-- Quick Access -->
+
+<section class="quick-links">
+
+    <h2>⚡ Quick Access</h2>
+
+    <div class="quick-grid">
+
+        <a href="#fatwa" class="quick-card">
+            <div class="icon">❓</div>
+            <h3>Fatwa</h3>
+            <p>Online Fatwa Puchhe</p>
+        </a>
+
+        <a href="#pdf" class="quick-card">
+            <div class="icon">📚</div>
+            <h3>PDF Library</h3>
+            <p>Fatwa PDFs Padhen</p>
+        </a>
+
+        <a href="#bayan" class="quick-card">
+            <div class="icon">🎤</div>
+            <h3>Bayan</h3>
+            <p>Islamic Bayan Dekhen</p>
+        </a>
+
+        <a href="#contact" class="quick-card">
+            <div class="icon">📞</div>
+            <h3>Contact</h3>
+            <p>Humse Rabta Karein</p>
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- Online Fatwa -->
+
+<section id="fatwa">
+
+    <h2>❓ Online Fatwa</h2>
+
+    <p>
+        Apna Sharai Sawal bhejne ke liye form bharein.
+    </p>
+
+    <form id="fatwaForm">
+
+        <input
+            type="text"
+            id="name"
+            placeholder="Apna Naam"
+            required>
+
+        <input
+            type="tel"
+            id="mobile"
+            placeholder="Mobile Number"
+            required>
+
+        <!-- Address Input Field Added -->
+        <input
+            type="text"
+            id="address"
+            placeholder="Apna Address / Shehar (Jaise: Dhrangadhra, Gujarat)"
+            required>
+
+        <textarea
+            id="question"
+            placeholder="Apna Sawal Likhiye..."
+            required></textarea>
+
+        <button type="submit">
+            📨 Fatwa Puchhe
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="https://wa.me/919327813704"
+       class="contact-btn"
+       target="_blank"
+       rel="noopener noreferrer">
+        📱 WhatsApp Se Fatwa Puchhe
+    </a>
+
+</section>
+
+<!-- Statistics -->
+
+<section class="stats">
+
+    <h2>📊 Darul Ifta Gulzar-e-Taiba</h2>
+
+    <div class="stats-grid">
+
+        <div class="stat-box">
+            <h3>📄</h3>
+            <h2>1500+</h2>
+            <p>Fatwas</p>
+        </div>
+
+        <div class="stat-box">
+            <h3>📚</h3>
+            <h2>500+</h2>
+            <p>PDFs</p>
+        </div>
+
+        <div class="stat-box">
+            <h3>🎤</h3>
+            <h2>200+</h2>
+            <p>Bayans</p>
+        </div>
+
+        <div class="stat-box">
+            <h3>👥</h3>
+            <h2>10000+</h2>
+            <p>Visitors</p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- PDF Library -->
+
+<section id="pdf">
+
+    <h2>📚 PDF Library</h2>
+
+    <p>
+        Darul Ifta ki PDF Library me khush aamdeed.
+    </p>
+
+    <div class="hero-buttons">
+
+        <a href="#" class="btn">📄 Fatwa</a>
+
+        <a href="#" class="btn">📚 Books</a>
+
+        <a href="#" class="btn">🕌 Aqeedah</a>
+
+        <a href="#" class="btn">📖 Fiqh</a>
+
+    </div>
+
+    <div class="quick-grid">
+
+        <div class="quick-card">
+
+            <div class="icon">📄</div>
+
+            <h3>Fatwa Collection 1</h3>
+
+            <p>Sharai Fatwe PDF</p>
+
+            <a href="#" class="btn">📥 Download</a>
+
+        </div>
+
+        <div class="quick-card">
+
+            <div class="icon">📘</div>
+
+            <h3>Islamic Book</h3>
+
+            <p>Deeni Kitab PDF</p>
+
+            <a href="pdf/gair-biradri-me-nikah-ka-hukam.pdf"
+               download
+               class="btn">
+                📥 Download
+            </a>
+
+        </div>
+
+        <div class="quick-card">
+
+            <div class="icon">📚</div>
+
+            <h3>More PDFs</h3>
+
+            <p>Jald hi aur PDFs upload hongi.</p>
+
+            <a href="#" class="btn">📥 Download</a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Bayan Section -->
+
+<section id="bayan">
+
+    <h2>🎤 Islamic Bayans</h2>
+
+    <p>Darul Ifta ke Bayanat yahan dekhein.</p>
+
+    <div class="quick-grid">
+
+        <div class="quick-card">
+
+            <div class="icon">🎤</div>
+
+            <h3>Jumuah Bayan</h3>
+
+            <p>Latest Jumuah Bayan</p>
+
+            <a href="#" class="btn">▶️ Dekhen</a>
+
+        </div>
+
+        <div class="quick-card">
+
+            <div class="icon">📺</div>
+
+            <h3>Ramzan Bayan</h3>
+
+            <p>Ramzan Mubarak Bayanat</p>
+
+            <a href="#" class="btn">▶️ Dekhen</a>
+
+        </div>
+
+        <div class="quick-card">
+
+            <div class="icon">🕌</div>
+
+            <h3>Aur Bayanat</h3>
+
+            <p>Jald hi aur Bayanat upload honge.</p>
+
+            <a href="#" class="btn">▶️ Dekhen</a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Contact Section -->
+
+<section id="contact">
+
+    <h2>📞 Contact Us</h2>
+
+    <p>
+        Darul Ifta se rabta karne ke liye neeche di gayi maloomat istemal karein.
+    </p>
+
+    <div class="quick-grid">
+
+        <div class="quick-card">
+
+            <div class="icon">📱</div>
+
+            <h3>WhatsApp</h3>
+
+            <p>+91 93278 13704</p>
+
+            <a href="https://wa.me/919327813704?text=Assalamu%20Alaikum.%20Mujhe%20ek%20Sharai%20Sawal%20Puchhna%20Hai."
+               class="btn"
+               target="_blank"
+               rel="noopener noreferrer">
+                WhatsApp
+            </a>
+
+        </div>
+
+        <div class="quick-card">
+
+            <div class="icon">📍</div>
+
+            <h3>Address</h3>
+
+            <p>Nimak Nagar, Dhrangadhra, Gujarat, India</p>
+
+        </div>
+
+        <div class="quick-card">
+
+            <div class="icon">📧</div>
+
+            <h3>Email</h3>
+
+            <p>shaikhaehmad15@gmail.com</p>
+
+            <a href="mailto:shaikhaehmad15@gmail.com"
+               class="btn">
+                📧 Email Karein
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
 </main>
-<footer><b>Darul Ifta Gulzar-e-Taiba</b><br>© <span id="year"></span> All Rights Reserved</footer>
-<script>
-document.getElementById("year").textContent=new Date().getFullYear();
-document.getElementById("fatwaForm").addEventListener("submit",function(e){
-e.preventDefault();
-let n=document.getElementById("name").value.trim(),p=document.getElementById("phone").value.trim(),a=document.getElementById("address").value.trim(),q=document.getElementById("question").value.trim();
-let f=document.getElementById("file").files[0],m="*Darul Ifta Gulzar-e-Taiba — Fatwa / Sawal*\\n\\n*Naam:* "+n+"\\n*Mobile:* "+p+"\\n*Address:* "+a+"\\n\\n*Sawal / Masla:*\\n"+q;
-if(f)m+="\\n\\n*Attachment:* "+f.name+"\\n(Attachment ko WhatsApp mein alag se bhejna hoga.)";
-window.open("https://wa.me/919327813704?text="+encodeURIComponent(m),"_blank");
-document.getElementById("msg").textContent="WhatsApp khul raha hai. Message check karke Send kar dein.";
-});
-</script>
+
+<!-- Footer -->
+
+<footer>
+
+    <p>
+        © 2026 Darul Ifta Gulzar-e-Taiba
+    </p>
+
+    <p>
+        All Rights Reserved.
+    </p>
+
+</footer>
+
+<!-- JavaScript Module -->
+
+<script type="module" src="script.js"></script>
+
 </body>
 </html>
