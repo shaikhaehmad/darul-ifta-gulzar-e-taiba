@@ -49,7 +49,7 @@
     <!-- Section 1: Kitabein & PDF -->
     <div id="section-kitabein" class="container">
         <div id="file-list" style="margin-top: 15px;">
-            <!-- Admin panel se add ki gayi files yahan aayengi -->
+            <!-- Files yahan load hongi -->
         </div>
     </div>
 
@@ -93,7 +93,7 @@
                 tabS.className = "nav-tab inactive";
                 secK.style.display = "block";
                 secS.style.display = "none";
-                loadWebsiteFiles();
+                loadFiles();
             } else {
                 tabS.className = "nav-tab active";
                 tabK.className = "nav-tab inactive";
@@ -102,20 +102,21 @@
             }
         }
 
-        function loadWebsiteFiles() {
+        function loadFiles() {
             const listContainer = document.getElementById('file-list');
             if (!listContainer) return;
 
-            let files = JSON.parse(localStorage.getItem('darul_ifta_files')) || [];
+            // LocalStorage se files load hongi
+            let files = JSON.parse(localStorage.getItem('darul_ifta_books')) || [];
 
             listContainer.innerHTML = "";
 
             if (files.length === 0) {
-                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Abhi koi kitab ya file mojood nahi hai. Admin Panel se upload karein.</div>`;
+                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Abhi koi kitab mojood nahi hai. Admin Panel se add karein.</div>`;
                 return;
             }
 
-            files.slice().reverse().forEach((item) => {
+            files.slice().reverse().forEach(item => {
                 listContainer.innerHTML += `
                     <div class="card">
                         <div class="card-info">
@@ -151,7 +152,7 @@
             window.open(whatsappUrl, '_blank');
         }
 
-        window.onload = loadWebsiteFiles;
+        window.onload = loadFiles;
     </script>
 </body>
 </html>
