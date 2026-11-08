@@ -1,472 +1,140 @@
 <!DOCTYPE html>
 <html lang="hi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Darul Ifta Gulzar-e-Taiba</title>
-
-    <meta name="description"
-        content="Official Website of Darul Ifta Gulzar-e-Taiba. Online Fatwa, Islamic Bayan, PDF Library.">
-
-    <meta name="keywords"
-        content="Darul Ifta, Fatwa, Mufti M.J. Akbari, Islamic Bayan, PDF">
-
-    <meta name="author" content="Darul Ifta Gulzar-e-Taiba">
-
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="favicon.png">
-
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background-color: #0b5329;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        header nav a {
+            color: #ffeb3b;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 15px;
+        }
+        .item-card {
+            background: white;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .item-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0b5329;
+        }
+        .item-type {
+            font-size: 12px;
+            background: #e0f2f1;
+            color: #00695c;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+        .btn-view {
+            background-color: #0b5329;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .btn-view:hover {
+            background-color: #083d1e;
+        }
+        .no-data {
+            text-align: center;
+            color: #777;
+            margin-top: 40px;
+        }
+    </style>
 </head>
-
 <body>
 
-<header id="top">
-
-    <h1>🕌 Darul Ifta Gulzar-e-Taiba</h1>
-
+<header>
+    <h1>📚 Darul Ifta Gulzar-e-Taiba</h1>
+    <p>Tamam PDF Kitabein aur Bayanat</p>
     <nav>
-        <a href="#top">Home</a>
-        <a href="#fatwa">Fatwa</a>
-        <a href="#pdf">PDF</a>
-        <a href="#bayan">Bayan</a>
-        <a href="#contact">Contact</a>
+        <a href="admin.html">🔐 Admin Panel (Upload Karein)</a>
     </nav>
-
-    <button id="themeToggle" class="btn" type="button">
-        🌙 Dark Mode
-    </button>
-
 </header>
 
-<main>
-
-<!-- Hero Section -->
-
-<section class="hero">
-
-    <img src="logo.jpg"
-         alt="Darul Ifta Logo"
-         class="logo">
-
-    <h2>Darul Ifta Gulzar-e-Taiba</h2>
-
-    <p>Online Fatwa • Islamic Bayan • PDF Library</p>
-
-    <div class="hero-buttons">
-
-        <a href="#fatwa" class="btn">❓ Fatwa Puchhe</a>
-
-        <a href="#pdf" class="btn">📚 PDF Library</a>
-
-        <a href="#bayan" class="btn">🎤 Bayan Dekhen</a>
-
+<div class="container">
+    <h2>Sabhi Upload ki gayi Files</h2>
+    <div id="itemList">
+        <p class="no-data">Loading ho raha hai...</p>
     </div>
-
-</section>
-
-<!-- Image Slider -->
-
-<section class="slider">
-
-    <img src="images/slide1.jpg"
-         class="slide active"
-         alt="Slide 1">
-
-    <img src="images/slide2.jpg"
-         class="slide"
-         alt="Slide 2">
-
-    <img src="images/slide3.jpg"
-         class="slide"
-         alt="Slide 3">
-
-</section>
-
-<!-- Search Section -->
-
-<section class="search-section">
-
-    <h2>🔍 Search Fatwa, PDF & Bayan</h2>
-
-    <input
-        type="text"
-        id="search"
-        placeholder="Fatwa, PDF Ya Bayan Search Karein...">
-
-    <div id="search-results"></div>
-
-</section>
-
-<!-- Quick Access -->
-
-<section class="quick-links">
-
-    <h2>⚡ Quick Access</h2>
-
-    <div class="quick-grid">
-
-        <a href="#fatwa" class="quick-card">
-            <div class="icon">❓</div>
-            <h3>Fatwa</h3>
-            <p>Online Fatwa Puchhe</p>
-        </a>
-
-        <a href="#pdf" class="quick-card">
-            <div class="icon">📚</div>
-            <h3>PDF Library</h3>
-            <p>Fatwa PDFs Padhen</p>
-        </a>
-
-        <a href="#bayan" class="quick-card">
-            <div class="icon">🎤</div>
-            <h3>Bayan</h3>
-            <p>Islamic Bayan Dekhen</p>
-        </a>
-
-        <a href="#contact" class="quick-card">
-            <div class="icon">📞</div>
-            <h3>Contact</h3>
-            <p>Humse Rabta Karein</p>
-        </a>
-
-    </div>
-
-</section>
-
-<!-- Online Fatwa -->
-
-<section id="fatwa">
-
-    <h2>❓ Online Fatwa</h2>
-
-    <p>
-        Apna Sharai Sawal bhejne ke liye form bharein.
-    </p>
-
-    <form id="fatwaForm">
-
-        <input
-            type="text"
-            id="name"
-            placeholder="Apna Naam"
-            required>
-
-        <input
-            type="tel"
-            id="mobile"
-            placeholder="Mobile Number"
-            required>
-
-        <!-- Address Input Field -->
-        <input
-            type="text"
-            id="address"
-            placeholder="Apna Address / Shehar (Jaise: Dhrangadhra, Gujarat)"
-            required>
-
-        <textarea
-            id="question"
-            placeholder="Apna Sawal Likhiye..."
-            required></textarea>
-
-        <!-- File / Attachment Input Added Here -->
-        <div style="text-align: left; margin: 10px 0;">
-            <label for="fileInput" style="font-size: 14px; opacity: 0.8;">Photo / File (Optional):</label>
-            <input type="file" id="fileInput" style="margin-top: 5px; display: block; width: 100%;">
-        </div>
-
-        <button type="submit">
-            📨 Fatwa Puchhe
-        </button>
-
-    </form>
-
-    <br>
-
-    <a href="https://wa.me/918758647929"
-       class="contact-btn btn"
-       target="_blank"
-       rel="noopener noreferrer"
-       style="display: block; text-align: center; text-decoration: none;">
-        📱 WhatsApp Se Fatwa Puchhe
-    </a>
-
-</section>
-
-<!-- Statistics -->
-
-<section class="stats">
-
-    <h2>📊 Darul Ifta Gulzar-e-Taiba</h2>
-
-    <div class="stats-grid">
-
-        <div class="stat-box">
-            <h3>📄</h3>
-            <h2>1500+</h2>
-            <p>Fatwas</p>
-        </div>
-
-        <div class="stat-box">
-            <h3>📚</h3>
-            <h2>500+</h2>
-            <p>PDFs</p>
-        </div>
-
-        <div class="stat-box">
-            <h3>🎤</h3>
-            <h2>200+</h2>
-            <p>Bayans</p>
-        </div>
-
-        <div class="stat-box">
-            <h3>👥</h3>
-            <h2>10000+</h2>
-            <p>Visitors</p>
-        </div>
-
-    </div>
-
-</section>
-
-<!-- PDF Library -->
-
-<section id="pdf">
-
-    <h2>📚 PDF Library</h2>
-
-    <p>
-        Darul Ifta ki PDF Library me khush aamdeed.
-    </p>
-
-    <div class="hero-buttons">
-
-        <a href="#" class="btn" onclick="alert('Jald hi naye Fatwe update honge!'); return false;">📄 Fatwa</a>
-
-        <a href="#" class="btn" onclick="alert('Jald hi nayi Books update hongi!'); return false;">📚 Books</a>
-
-        <a href="#" class="btn" onclick="alert('Jald hi Aqeedah ki kitabein aayengi!'); return false;">🕌 Aqeedah</a>
-
-        <a href="#" class="btn" onclick="alert('Jald hi Fiqh ke masail update honge!'); return false;">📖 Fiqh</a>
-
-    </div>
-
-    <div class="quick-grid">
-
-        <div class="quick-card">
-
-            <div class="icon">📄</div>
-
-            <h3>Fatwa Collection 1</h3>
-
-            <p>Sharai Fatwe PDF</p>
-
-            <a href="#" class="btn" onclick="alert('Jald hi upload hoga!'); return false;">📥 Download</a>
-
-        </div>
-
-        <div class="quick-card">
-
-            <div class="icon">📘</div>
-
-            <h3>Islamic Book</h3>
-
-            <p>Deeni Kitab PDF</p>
-
-            <a href="pdf/gair-biradri-me-nikah-ka-hukam.pdf"
-               download
-               class="btn">
-                📥 Download
-            </a>
-
-        </div>
-
-        <div class="quick-card">
-
-            <div class="icon">📚</div>
-
-            <h3>More PDFs</h3>
-
-            <p>Jald hi aur PDFs upload hongi.</p>
-
-            <a href="#" class="btn" onclick="alert('Jald hi aur PDFs aayengi!'); return false;">📥 Download</a>
-
-        </div>
-
-    </div>
-
-    <!-- Admin Panel se upload kiye gaye PDFs yahan dikhenge -->
-    <div id="dynamicPdfContainer" class="quick-grid" style="margin-top: 20px;"></div>
-
-</section>
-
-<!-- Bayan Section -->
-
-<section id="bayan">
-
-    <h2>🎤 Islamic Bayans</h2>
-
-    <p>Darul Ifta ke Bayanat yahan dekhein.</p>
-
-    <div class="quick-grid">
-
-        <div class="quick-card">
-
-            <div class="icon">🎤</div>
-
-            <h3>Jumuah Bayan</h3>
-
-            <p>Latest Jumuah Bayan</p>
-
-            <a href="#" class="btn" onclick="alert('Jald hi Bayan update hoga!'); return false;">▶️ Dekhen</a>
-
-        </div>
-
-        <div class="quick-card">
-
-            <div class="icon">📺</div>
-
-            <h3>Ramzan Bayan</h3>
-
-            <p>Ramzan Mubarak Bayanat</p>
-
-            <a href="#" class="btn" onclick="alert('Jald hi Bayan update hoga!'); return false;">▶️ Dekhen</a>
-
-        </div>
-
-        <div class="quick-card">
-
-            <div class="icon">🕌</div>
-
-            <h3>Aur Bayanat</h3>
-
-            <p>Jald hi aur Bayanat upload honge.</p>
-
-            <a href="#" class="btn" onclick="alert('Jald hi Bayan update hoga!'); return false;">▶️ Dekhen</a>
-
-        </div>
-
-    </div>
-
-    <!-- Admin Panel se upload kiye gaye Bayans yahan dikhenge -->
-    <div id="dynamicBayanContainer" class="quick-grid" style="margin-top: 20px;"></div>
-
-</section>
-
-<!-- Contact Section -->
-
-<section id="contact">
-
-    <h2>📞 Contact Us</h2>
-
-    <p>
-        Darul Ifta se rabta karne ke liye neeche di gayi maloomat istemal karein.
-    </p>
-
-    <div class="quick-grid">
-
-        <div class="quick-card">
-
-            <div class="icon">📱</div>
-
-            <h3>WhatsApp</h3>
-
-            <p>+91 87586 47929</p>
-
-            <a href="https://wa.me/918758647929?text=Assalamu%20Alaikum.%20Mujhe%20ek%20Sharai%20Sawal%20Puchhna%20Hai."
-               class="btn"
-               target="_blank"
-               rel="noopener noreferrer">
-                WhatsApp
-            </a>
-
-        </div>
-
-        <div class="quick-card">
-
-            <div class="icon">📍</div>
-
-            <h3>Address</h3>
-
-            <p>Nimak Nagar, Dhrangadhra, Gujarat, India</p>
-
-        </div>
-
-        <div class="quick-card">
-
-            <div class="icon">📧</div>
-
-            <h3>Email</h3>
-
-            <p>shaikhaehmad15@gmail.com</p>
-
-            <a href="mailto:shaikhaehmad15@gmail.com"
-               class="btn">
-                📧 Email Karein
-            </a>
-
-        </div>
-
-    </div>
-
-</section>
-
-</main>
-
-<!-- Footer -->
-
-<footer>
-
-    <p>
-        © 2026 Darul Ifta Gulzar-e-Taiba
-    </p>
-
-    <p>
-        All Rights Reserved.
-    </p>
-
-</footer>
-
-<!-- JavaScript Module & Dynamic Upload Loader Script -->
-
-<script type="module" src="script.js"></script>
+</div>
 
 <script>
-    window.addEventListener('DOMContentLoaded', () => {
-        const items = JSON.parse(localStorage.getItem('darulIftaItems')) || [];
-        
-        const pdfContainer = document.getElementById('dynamicPdfContainer');
-        const bayanContainer = document.getElementById('dynamicBayanContainer');
-        
-        items.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'quick-card';
-            
-            if (item.type === 'pdf') {
-                card.innerHTML = `
-                    <div class="icon">📚</div>
-                    <h3>${item.title}</h3>
-                    <p>${item.fileName}</p>
-                    <a href="${item.url}" download="${item.fileName}" class="btn">
-                        📥 Download PDF
-                    </a>
-                `;
-                if(pdfContainer) pdfContainer.appendChild(card);
-            } else if (item.type === 'bayan') {
-                card.innerHTML = `
-                    <div class="icon">🎤</div>
-                    <h3>${item.title}</h3>
-                    <p>${item.fileName}</p>
-                    <a href="${item.url}" target="_blank" class="btn">
-                        ▶️ Bayan Dekhen
-                    </a>
-                `;
-                if(bayanContainer) bayanContainer.appendChild(card);
+    async function loadContent() {
+        const user = "shaikhaehmad";
+        const repo = "darul-ifta-gulzar-e-taiba";
+        const listContainer = document.getElementById('itemList');
+
+        try {
+            const res = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/data.json`);
+            if (!res.ok) throw new Error("Data nahi mila");
+
+            const fileData = await res.json();
+            // UTF-8 safe decoding taaki Hindi/Urdu text theek se dikhe
+            const jsonString = decodeURIComponent(escape(window.atob(fileData.content)));
+            const items = JSON.parse(jsonString);
+
+            if (items.length === 0) {
+                listContainer.innerHTML = '<p class="no-data">Abhi koi file upload nahi ki gayi hai.</p>';
+                return;
             }
-        });
-    });
+
+            let html = '';
+            // Nayi upload ki gayi file sabse upar dikhegi (reverse order)
+            items.reverse().forEach(item => {
+                let badgeText = item.type === 'pdf' ? 'PDF Kitab' : 'Video Bayan';
+                let fileLink = item.type === 'pdf' ? `https://raw.githubusercontent.com/${user}/${repo}/main/${item.url}` : item.url;
+                
+                html += `
+                    <div class="item-card">
+                        <div>
+                            <span class="item-title">${item.title}</span>
+                            <span class="item-type">${badgeText}</span>
+                        </div>
+                        <a href="${fileLink}" target="_blank" class="btn-view">Dekhein / Padhein</a>
+                    </div>
+                `;
+            });
+
+            listContainer.innerHTML = html;
+
+        } catch (err) {
+            listContainer.innerHTML = '<p class="no-data">Abhi tak koi data available nahi hai ya file load nahi ho payi.</p>';
+        }
+    }
+
+    loadContent();
 </script>
 
 </body>
