@@ -4,352 +4,121 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Darul Ifta - Admin Panel</title>
-    <link rel="stylesheet" href="style.css">
     <style>
-        .admin-container {
-            max-width: 600px;
-            margin: 30px auto;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .admin-container h2 {
-            color: #0b5329;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-        .manage-section {
-            margin-top: 30px;
-            border-top: 2px dashed #ddd;
-            padding-top: 20px;
-        }
-        .manage-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f9f9f9;
-            padding: 10px 15px;
-            margin-bottom: 8px;
-            border-radius: 6px;
-            border: 1px solid #eee;
-        }
-        .btn-delete {
-            background-color: #d9534f;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .btn-delete:hover {
-            background-color: #c9302c;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background-color: #f4f6f8; color: #333; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { color: #0b5e2e; margin-bottom: 15px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+        .btn { background-color: #0b5e2e; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .btn:hover { background-color: #084823; }
+        .file-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px; border-radius: 6px; margin-bottom: 8px; border: 1px solid #e2e8f0; }
+        .btn-delete { background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
+        .back-link { display: inline-block; margin-bottom: 15px; color: #0b5e2e; text-decoration: none; font-weight: bold; font-size: 14px; }
+        #status { margin-top: 15px; font-weight: bold; text-align: center; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>🔐 Darul Ifta Admin Panel</h1>
-    <nav>
-        <a href="index.html">🌐 Website Dekhein</a>
-    </nav>
-</header>
+<div class="container">
+    <a href="index.html" class="back-link">⬅️ Website par Wapas Jayein</a>
+    <h2>🔐 Darul Ifta Admin Panel</h2>
+    
+    <div class="form-group">
+        <label>Content Type:</label>
+        <select id="content-type">
+            <option value="PDF">PDF Kitab</option>
+            <option value="Video">Video Bayan</option>
+        </select>
+    </div>
 
-<div class="admin-container">
-    <h2>Nayi PDF ya Video Upload Karein</h2>
-    <form id="adminUploadForm">
-        <!-- GitHub Token Setting -->
-        <div class="form-group" style="background: #f4fbf7; padding: 12px; border-radius: 8px; border: 1px dashed #0b5329;">
-            <label for="ghToken" style="color: #0b5329;">🔑 GitHub Token:</label>
-            <input type="password" id="ghToken" placeholder="ghp_..." required>
-            <small style="color: #555; display: block; margin-top: 5px;">Token browser mein safe rahega.</small>
-        </div>
+    <div class="form-group">
+        <label>Title / Naam:</label>
+        <input type="text" id="file-title" placeholder="Jaise: Namaz ka Tareeqa">
+    </div>
 
-        <div class="form-group">
-            <label for="contentType">Content Type:</label>
-            <select id="contentType">
-                <option value="pdf">📚 PDF Kitab</option>
-                <option value="bayan">🎤 Islamic Bayan (YouTube/Video Link)</option>
-            </select>
-        </div>
+    <div class="form-group">
+        <label>File Select Karein:</label>
+        <input type="file" id="file-input">
+    </div>
 
-        <div class="form-group">
-            <label for="itemTitle">Title / Naam:</label>
-            <input type="text" id="itemTitle" placeholder="Jaise: Namaz ka Tareeqa" required>
-        </div>
+    <button class="btn" onclick="uploadFileLocally()">🚀 Upload Karein</button>
 
-        <!-- PDF ke liye file upload -->
-        <div class="form-group" id="fileGroup">
-            <label for="itemFile">PDF File Select Karein:</label>
-            <input type="file" id="itemFile" accept=".pdf">
-        </div>
+    <div id="status"></div>
 
-        <!-- Video/Bayan ke liye Link input -->
-        <div class="form-group" id="linkGroup" style="display: none;">
-            <label for="itemLink">YouTube / Instagram Link:</label>
-            <input type="text" id="itemLink" placeholder="https://youtube.com/...">
-        </div>
+    <hr style="margin: 20px 0;">
 
-        <button type="submit" class="btn" style="width: 100%; background-color: #0b5329; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-            🚀 GitHub par Publish Karein
-        </button>
-    </form>
-    <p id="uploadStatus" style="text-align: center; margin-top: 15px; font-weight: bold;"></p>
-
-    <!-- Uploaded Files Management / Delete Section -->
-    <div class="manage-section">
-        <h3>🗑️ Upload ki gayi Files Manage Karein</h3>
-        <div id="manageList">
-            <p style="color: #666; text-align: center;">Files load ho rahi hain...</p>
-        </div>
+    <h3>📁 Maujuda Files (Hatayein)</h3>
+    <div id="admin-file-list" style="margin-top: 15px;">
+        <!-- List yahan aayegi -->
     </div>
 </div>
 
 <script>
-    const user = "shaikhaehmad"; 
-    const repo = "darul-ifta-gulzar-e-taiba"; 
-
-    function utoa(str) {
-        return window.btoa(unescape(encodeURIComponent(str)));
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-        const savedToken = localStorage.getItem('darul_github_token');
-        if (savedToken) {
-            document.getElementById('ghToken').value = savedToken;
-            loadManageList();
-        }
-    });
-
-    const typeSelect = document.getElementById('contentType');
-    const fileGroup = document.getElementById('fileGroup');
-    const linkGroup = document.getElementById('linkGroup');
-
-    typeSelect.addEventListener('change', () => {
-        if(typeSelect.value === 'pdf') {
-            fileGroup.style.display = 'block';
-            linkGroup.style.display = 'none';
-        } else {
-            fileGroup.style.display = 'none';
-            linkGroup.style.display = 'block';
-        }
-    });
-
-    // Admin panel ke andar upload ki gayi files ki list dikhana aur delete karna
-    async function loadManageList() {
-        const token = document.getElementById('ghToken').value.trim();
-        const manageListEl = document.getElementById('manageList');
-
-        if (!token) {
-            manageListEl.innerHTML = '<p style="color: #777; text-align: center;">Files dekhne ke liye upar token daalein.</p>';
-            return;
-        }
-
-        try {
-            const res = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/data.json`, {
-                headers: { 'Authorization': `token ${token}` }
-            });
-
-            if (!res.ok) {
-                manageListEl.innerHTML = '<p style="color: #777; text-align: center;">Abhi tak koi file upload nahi ki gayi hai.</p>';
-                return;
-            }
-
-            const fileData = await res.json();
-            const items = JSON.parse(decodeURIComponent(escape(window.atob(fileData.content))));
-
-            if (items.length === 0) {
-                manageListEl.innerHTML = '<p style="color: #777; text-align: center;">Koi file available nahi hai.</p>';
-                return;
-            }
-
-            let html = '';
-            items.forEach((item, index) => {
-                html += `
-                    <div class="manage-item">
-                        <div>
-                            <strong>${item.title}</strong> <span style="font-size: 11px; color: #555;">(${item.type === 'pdf' ? 'PDF' : 'Video'})</span>
-                        </div>
-                        <button class="btn-delete" onclick="deleteItem(${index})">Hataein</button>
-                    </div>
-                `;
-            });
-
-            manageListEl.innerHTML = html;
-
-        } catch (err) {
-            manageListEl.innerHTML = '<p style="color: red; text-align: center;">List load karne mein error aayi.</p>';
-        }
-    }
-
-    // Token change hone par bhi list load ho jaye
-    document.getElementById('ghToken').addEventListener('input', function() {
-        localStorage.setItem('darul_github_token', this.value.trim());
-        loadManageList();
-    });
-
-    // Item delete karne ka function
-    window.deleteItem = async function(index) {
-        if (!confirm("Kya aap waqayi is file ko delete karna chahte hain?")) return;
-
-        const token = document.getElementById('ghToken').value.trim();
-        if (!token) {
-            alert("Pehle GitHub Token daalein!");
-            return;
-        }
-
-        try {
-            const dataPath = `data.json`;
-            const getRes = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${dataPath}`, {
-                headers: { 'Authorization': `token ${token}` }
-            });
-
-            if (!getRes.ok) throw new Error("Data fetch nahi ho paya");
-
-            const fileData = await getRes.json();
-            let items = JSON.parse(decodeURIComponent(escape(window.atob(fileData.content))));
-            const sha = fileData.sha;
-
-            // Selected index wali item ko hata dena
-            items.splice(index, 1);
-
-            // GitHub par updated data.json save karna
-            const updateRes = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${dataPath}`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message: `Delete item from admin panel`,
-                    content: utoa(JSON.stringify(items)),
-                    sha: sha
-                })
-            });
-
-            if (!updateRes.ok) throw new Error("Delete nahi ho paya");
-
-            alert("✅ File successfully delete ho gayi hai!");
-            loadManageList(); // List refresh karein
-
-        } catch (err) {
-            alert("❌ Error: " + err.message);
-        }
-    };
-
-    // Upload Form Submit Handler
-    document.getElementById('adminUploadForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
+    function loadAdminFiles() {
+        const adminList = document.getElementById('admin-file-list');
+        let files = JSON.parse(localStorage.getItem('darul_ifta_files')) || [];
         
-        const token = document.getElementById('ghToken').value.trim();
-        localStorage.setItem('darul_github_token', token);
-
-        const type = typeSelect.value;
-        const title = document.getElementById('itemTitle').value.trim();
-        const statusEl = document.getElementById('uploadStatus');
-
-        statusEl.style.color = "blue";
-        statusEl.innerText = "⏳ Upload ho raha hai, thoda intezaar karein...";
-
-        try {
-            let fileUrl = "";
-            let fileName = "";
-
-            if (type === 'pdf') {
-                const fileInput = document.getElementById('itemFile');
-                const file = fileInput.files[0];
-                if (!file) {
-                    alert("Kripya PDF file select karein!");
-                    return;
-                }
-                fileName = file.name;
-                
-                const base64Content = await new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => resolve(e.target.result.split(',')[1]);
-                    reader.readAsDataURL(file);
-                });
-
-                const path = `pdf/${Date.now()}_${fileName}`;
-                const res = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${path}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        message: `Upload PDF: ${title}`,
-                        content: base64Content
-                    })
-                });
-
-                if (!res.ok) throw new Error("GitHub par PDF upload nahi ho payi. Token check karein.");
-                fileUrl = path;
-            } else {
-                fileUrl = document.getElementById('itemLink').value.trim();
-                fileName = "Online Video Link";
-            }
-
-            const dataPath = `data.json`;
-            let existingItems = [];
-            let sha = "";
-
-            const getRes = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${dataPath}`, {
-                headers: { 'Authorization': `token ${token}` }
-            });
-
-            if (getRes.ok) {
-                const fileData = await getRes.json();
-                sha = fileData.sha;
-                existingItems = JSON.parse(decodeURIComponent(escape(window.atob(fileData.content))));
-            }
-
-            existingItems.push({ type, title, url: fileUrl, fileName });
-
-            await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${dataPath}`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message: `Update data.json with ${title}`,
-                    content: utoa(JSON.stringify(existingItems)),
-                    sha: sha ? sha : undefined
-                })
-            });
-
-            statusEl.style.color = "green";
-            statusEl.innerText = "✅ Mubarak ho! File successfully publish ho gayi hai.";
-            
-            document.getElementById('adminUploadForm').reset();
-            document.getElementById('ghToken').value = token;
-            loadManageList(); // Nayi list turant load ho jayegi
-
-        } catch (err) {
-            statusEl.style.color = "red";
-            statusEl.innerText = "❌ Error: " + err.message;
+        adminList.innerHTML = "";
+        if (files.length === 0) {
+            adminList.innerHTML = "<p style='color: #64748b; font-size: 14px;'>Koi file nahi hai.</p>";
+            return;
         }
-    });
+
+        files.forEach((file, index) => {
+            adminList.innerHTML += `
+                <div class="file-item">
+                    <div>
+                        <strong>${file.title}</strong> (${file.type})
+                    </div>
+                    <button class="btn-delete" onclick="deleteFile(${index})">Hatain</button>
+                </div>
+            `;
+        });
+    }
+
+    function uploadFileLocally() {
+        const title = document.getElementById('file-title').value.trim();
+        const type = document.getElementById('content-type').value;
+        const fileInput = document.getElementById('file-input').files[0];
+        const statusEl = document.getElementById('status');
+
+        if (!title || !fileInput) {
+            alert("Kripya Title aur File dono select karein!");
+            return;
+        }
+
+        statusEl.style.color = "#2563eb";
+        statusEl.innerText = "Upload ho raha hai...";
+
+        const reader = new FileReader();
+        reader.readAsDataURL(fileInput);
+        reader.onload = function () {
+            const fileUrl = reader.result; // Base64 URL format taki direct download/view chale
+            
+            let files = JSON.parse(localStorage.getItem('darul_ifta_files')) || [];
+            files.push({ title: title, type: type, url: fileUrl });
+            localStorage.setItem('darul_ifta_files', JSON.stringify(files));
+
+            statusEl.style.color = "#16a34a";
+            statusEl.innerText = "✅ File safalta-purvak add ho gayi!";
+            
+            document.getElementById('file-title').value = "";
+            document.getElementById('file-input').value = "";
+            loadAdminFiles();
+        };
+    }
+
+    function deleteFile(index) {
+        let files = JSON.parse(localStorage.getItem('darul_ifta_files')) || [];
+        files.splice(index, 1);
+        localStorage.setItem('darul_ifta_files', JSON.stringify(files));
+        loadAdminFiles();
+    }
+
+    window.onload = loadAdminFiles;
 </script>
 
 </body>
