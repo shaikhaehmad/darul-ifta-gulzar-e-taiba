@@ -10,20 +10,15 @@
         .header { background-color: #0b5e2e; color: white; padding: 20px; text-align: center; }
         .header h1 { font-size: 22px; margin-bottom: 5px; }
         .header p { font-size: 13px; opacity: 0.9; margin-bottom: 12px; }
-        .admin-btn { background-color: #ffffff; color: #0b5e2e; padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; text-decoration: none; display: inline-block; }
         
         .nav-container { display: flex; gap: 10px; padding: 15px; max-width: 600px; margin: 0 auto; }
         .nav-tab { flex: 1; padding: 12px; text-align: center; border-radius: 8px; font-weight: bold; font-size: 14px; text-decoration: none; cursor: pointer; }
         .nav-tab.active { background-color: #0b5e2e; color: white; }
         .nav-tab.inactive { background-color: #e2e8f0; color: #4a5568; }
 
-        .filter-section { max-width: 600px; margin: 0 auto 15px auto; padding: 0 15px; display: flex; align-items: center; gap: 10px; }
-        .filter-select { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; background-color: white; font-size: 14px; }
-
         .container { max-width: 600px; margin: 0 auto; padding: 0 15px 30px 15px; }
         .card { background-color: white; border-radius: 10px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
         .card-info h3 { font-size: 16px; margin-bottom: 6px; color: #1e293b; }
-        .badges { display: flex; gap: 6px; }
         .badge { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: bold; background-color: #e0f2fe; color: #0369a1; }
         
         .card-actions { display: flex; flex-direction: column; gap: 6px; }
@@ -44,7 +39,6 @@
     <div class="header">
         <h1>📚 Darul Ifta Gulzar-e-Taiba</h1>
         <p>Tamam PDF Kitabein, Bayanat aur Fatwa Service</p>
-        <a href="admin.html" class="admin-btn">🔒 Admin Panel</a>
     </div>
 
     <!-- Navigation Tabs -->
@@ -54,17 +48,8 @@
     </div>
 
     <!-- Section 1: Kitabein & Bayanat -->
-    <div id="section-kitabein">
-        <div class="filter-section">
-            <span>🔍 Dekhein:</span>
-            <select id="filter-select" class="filter-select" onchange="loadFiles()">
-                <option value="ALL">📁 Sabhi Files (PDF + Videos)</option>
-                <option value="PDF">PDF Kitabein</option>
-                <option value="Video">Video Bayanat</option>
-            </select>
-        </div>
-
-        <div class="container" id="file-list">
+    <div id="section-kitabein" class="container">
+        <div id="file-list">
             <!-- Files yahan load hongi -->
         </div>
     </div>
@@ -109,7 +94,6 @@
                 tabS.className = "nav-tab inactive";
                 secK.style.display = "block";
                 secS.style.display = "none";
-                loadFiles();
             } else {
                 tabS.className = "nav-tab active";
                 tabK.className = "nav-tab inactive";
@@ -118,49 +102,30 @@
             }
         }
 
+        // Yahan aap apni jitni bhi PDF ya Video files dikhana chahte hain, unke naam direct yahan add kar sakte hain
+        const filesList = [
+            { title: "Jarbe murtaja", type: "PDF", url: "jarbe-murtaja.pdf" },
+            { title: "Kabar Par Fateha", type: "PDF", url: "कबर_पर_फातेहा_पढवानो_सही_तरीको.pdf" }
+        ];
+
         function loadFiles() {
             const listContainer = document.getElementById('file-list');
-            const filterSelect = document.getElementById('filter-select');
-            
             if (!listContainer) return;
-            const filterVal = filterSelect ? filterSelect.value : 'ALL';
-
-            // Yahan hum direct files define kar rahe hain jo aapke GitHub folder me maujood hain
-            let files = JSON.parse(localStorage.getItem('darul_ifta_files'));
-
-            if (!files || files.length === 0) {
-                files = [
-                    { title: "Jarbe murtaja", type: "PDF", url: "jarbe-murtaja.pdf" },
-                    { title: "Kabar Par Fateha", type: "PDF", url: "कबर_पर_फातेहा_पढवानो_सही_तरीको.pdf" }
-                ];
-            }
 
             listContainer.innerHTML = "";
 
-            let filtered = files.filter(item => {
-                if (filterVal === 'ALL') return true;
-                return item.type === filterVal;
-            });
-
-            if (filtered.length === 0) {
-                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Koi file maujood nahi hai.</div>`;
-                return;
-            }
-
-            filtered.forEach(item => {
-                let fileUrl = item.url;
-                // Agar local storage me base64 data hai toh theek, nahi toh direct file name
+            filesList.forEach(item => {
                 listContainer.innerHTML += `
                     <div class="card">
                         <div class="card-info">
                             <h3>${item.title}</h3>
-                            <div class="badges">
+                            <div class="badges" style="margin-top: 4px;">
                                 <span class="badge">${item.type}</span>
                             </div>
                         </div>
                         <div class="card-actions">
-                            <a href="${fileUrl}" target="_blank" class="btn-view">Dekhein / Padhein</a>
-                            <a href="${fileUrl}" download class="btn-download">⬇️ Download</a>
+                            <a href="${item.url}" target="_blank" class="btn-view">Dekhein / Padhein</a>
+                            <a href="${item.url}" download class="btn-download">⬇️ Download</a>
                         </div>
                     </div>
                 `;
@@ -181,7 +146,7 @@
             const muftiWhatsAppNumber = "918758647929"; 
 
             const message = `*دارالافتاء گلزار طیبہ*%0A*--- جدید سوال / مسئلہ ---*%0A%0A👤 *Naam:* ${name}%0A📱 *Mobile:* ${phone}%0A🏠 *Address:* ${address}%0A%0A❓ *Sawal / Masla:*%0A${text}%0A%0A📎 *(Note: Agar koi photo/document hai, toh kripya is message ke sath ya alag se WhatsApp par bhej dein.)*`;
-            const whatsappUrl = `https://wa.me/${muftiWhatsAppNumber}?text=${message}`;
+            const whatsappUrl = `https://wa.me/${muftestWhatsAppNumber || muftiWhatsAppNumber}?text=${message}`;
 
             window.open(whatsappUrl, '_blank');
         }
