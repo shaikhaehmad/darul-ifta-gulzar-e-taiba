@@ -102,7 +102,7 @@
             }
         }
 
-        // Yahan aap apni jitni bhi PDF ya Video files dikhana chahte hain, unke naam direct yahan add kar sakte hain
+        // Files list (Aap yahan direkt apni files ke naam add kar sakte hain)
         const filesList = [
             { title: "Jarbe murtaja", type: "PDF", url: "jarbe-murtaja.pdf" },
             { title: "Kabar Par Fateha", type: "PDF", url: "कबर_पर_फातेहा_पढवानो_सही_तरीको.pdf" }
@@ -115,6 +115,9 @@
             listContainer.innerHTML = "";
 
             filesList.forEach(item => {
+                // Encode URL to properly handle special/Hindi characters without 404 error
+                const encodedUrl = encodeURI(item.url);
+
                 listContainer.innerHTML += `
                     <div class="card">
                         <div class="card-info">
@@ -124,8 +127,8 @@
                             </div>
                         </div>
                         <div class="card-actions">
-                            <a href="${item.url}" target="_blank" class="btn-view">Dekhein / Padhein</a>
-                            <a href="${item.url}" download class="btn-download">⬇️ Download</a>
+                            <a href="${encodedUrl}" target="_blank" class="btn-view">Dekhein / Padhein</a>
+                            <a href="${encodedUrl}" download class="btn-download">⬇️ Download</a>
                         </div>
                     </div>
                 `;
@@ -146,7 +149,9 @@
             const muftiWhatsAppNumber = "918758647929"; 
 
             const message = `*دارالافتاء گلزار طیبہ*%0A*--- جدید سوال / مسئلہ ---*%0A%0A👤 *Naam:* ${name}%0A📱 *Mobile:* ${phone}%0A🏠 *Address:* ${address}%0A%0A❓ *Sawal / Masla:*%0A${text}%0A%0A📎 *(Note: Agar koi photo/document hai, toh kripya is message ke sath ya alag se WhatsApp par bhej dein.)*`;
-            const whatsappUrl = `https://wa.me/${muftestWhatsAppNumber || muftiWhatsAppNumber}?text=${message}`;
+            
+            // Fixed variable name to point directly to your correct number
+            const whatsappUrl = `https://wa.me/${muftiWhatsAppNumber}?text=${message}`;
 
             window.open(whatsappUrl, '_blank');
         }
