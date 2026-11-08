@@ -44,7 +44,7 @@
     <div class="header">
         <h1>📚 Darul Ifta Gulzar-e-Taiba</h1>
         <p>Tamam PDF Kitabein, Bayanat aur Fatwa Service</p>
-        <a href="admin.html" class="admin-btn">🔒 Admin Panel (Upload Karein)</a>
+        <a href="admin.html" class="admin-btn">🔒 Admin Panel</a>
     </div>
 
     <!-- Navigation Tabs -->
@@ -65,7 +65,7 @@
         </div>
 
         <div class="container" id="file-list">
-            <!-- Dynamic files yahan aayengi -->
+            <!-- Files yahan load hongi -->
         </div>
     </div>
 
@@ -125,11 +125,11 @@
             if (!listContainer) return;
             const filterVal = filterSelect ? filterSelect.value : 'ALL';
 
-            // Admin panel se jo files save hongi, wo yahan se load hongi
-            let savedFiles = JSON.parse(localStorage.getItem('darul_ifta_files'));
+            // Yahan hum direct files define kar rahe hain jo aapke GitHub folder me maujood hain
+            let files = JSON.parse(localStorage.getItem('darul_ifta_files'));
 
-            if (!savedFiles || savedFiles.length === 0) {
-                savedFiles = [
+            if (!files || files.length === 0) {
+                files = [
                     { title: "Jarbe murtaja", type: "PDF", url: "jarbe-murtaja.pdf" },
                     { title: "Kabar Par Fateha", type: "PDF", url: "कबर_पर_फातेहा_पढवानो_सही_तरीको.pdf" }
                 ];
@@ -137,17 +137,19 @@
 
             listContainer.innerHTML = "";
 
-            let filtered = savedFiles.filter(item => {
+            let filtered = files.filter(item => {
                 if (filterVal === 'ALL') return true;
                 return item.type === filterVal;
             });
 
             if (filtered.length === 0) {
-                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Koi file maujood nahi hai. Admin panel se upload karein.</div>`;
+                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 30px;">Koi file maujood nahi hai.</div>`;
                 return;
             }
 
             filtered.forEach(item => {
+                let fileUrl = item.url;
+                // Agar local storage me base64 data hai toh theek, nahi toh direct file name
                 listContainer.innerHTML += `
                     <div class="card">
                         <div class="card-info">
@@ -157,8 +159,8 @@
                             </div>
                         </div>
                         <div class="card-actions">
-                            <a href="${item.url}" target="_blank" class="btn-view">Dekhein / Padhein</a>
-                            <a href="${item.url}" download="${item.title}" class="btn-download">⬇️ Download</a>
+                            <a href="${fileUrl}" target="_blank" class="btn-view">Dekhein / Padhein</a>
+                            <a href="${fileUrl}" download class="btn-download">⬇️ Download</a>
                         </div>
                     </div>
                 `;
