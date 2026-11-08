@@ -29,6 +29,13 @@
             margin-bottom: 5px;
             font-size: 14px;
         }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
@@ -43,11 +50,18 @@
 <div class="admin-container">
     <h2>Nayi PDF ya Video Upload Karein</h2>
     <form id="adminUploadForm">
+        <!-- GitHub Token Setting (Sirf pehli baar dalna hoga) -->
+        <div class="form-group" style="background: #f4fbf7; padding: 12px; border-radius: 8px; border: 1px dashed #0b5329;">
+            <label for="ghToken" style="color: #0b5329;">🔑 GitHub Token (Sirf pehli baar yahan daalein):</label>
+            <input type="password" id="ghToken" placeholder="ghp_..." required>
+            <small style="color: #555; display: block; margin-top: 5px;">Yeh token aapke browser mein safe rahega, baar-baar nahi dalna padega.</small>
+        </div>
+
         <div class="form-group">
             <label for="contentType">Content Type:</label>
-            <select id="contentType" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+            <select id="contentType">
                 <option value="pdf">📚 PDF Kitab</option>
-                <option value="bayan">🎤 Islamic Bayan (Video)</option>
+                <option value="bayan">🎤 Islamic Bayan (YouTube/Video Link)</option>
             </select>
         </div>
 
@@ -56,48 +70,147 @@
             <input type="text" id="itemTitle" placeholder="Jaise: Namaz ka Tareeqa" required>
         </div>
 
-        <div class="form-group">
-            <label for="itemFile">Apni File ya Video Select Karein:</label>
-            <input type="file" id="itemFile" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 8px;" required>
+        <!-- PDF ke liye file upload -->
+        <div class="form-group" id="fileGroup">
+            <label for="itemFile">PDF File Select Karein:</label>
+            <input type="file" id="itemFile" accept=".pdf">
+        </div>
+
+        <!-- Video/Bayan ke liye Link input -->
+        <div class="form-group" id="linkGroup" style="display: none;">
+            <label for="itemLink">YouTube / Instagram Link:</label>
+            <input type="text" id="itemLink" placeholder="https://youtube.com/...">
         </div>
 
         <button type="submit" class="btn" style="width: 100%; background-color: #0b5329; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-            🚀 Upload & Publish Karein
+            🚀 GitHub par Publish Karein
         </button>
     </form>
-    <p id="uploadStatus" style="text-align: center; margin-top: 15px; font-weight: bold; color: green;"></p>
+    <p id="uploadStatus" style="text-align: center; margin-top: 15px; font-weight: bold;"></p>
 </div>
 
 <script>
-    document.getElementById('adminUploadForm').addEventListener('submit', function(e) {
+    // Page load hone par agar token pehle se saved hai toh field mein apne aap aa jayega
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedToken = localStorage.getItem('darul_github_token');
+        if (savedToken) {
+            document.getElementById('ghToken').value = savedToken;
+        }
+    });
+
+    const typeSelect = document.getElementById('contentType');
+    const fileGroup = document.getElementById('fileGroup');
+    const linkGroup = document.getElementById('linkGroup');
+
+    typeSelect.addEventListener('change', () => {
+        if(typeSelect.value === 'pdf') {
+            fileGroup.style.display = 'block';
+            linkGroup.style.display = 'none';
+        } else {
+            fileGroup.style.display = 'none';
+            linkGroup.style.display = 'block';
+        }
+    });
+
+    document.getElementById('adminUploadForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        const type = document.getElementById('contentType').value;
-        const title = document.getElementById('itemTitle').value;
-        const fileInput = document.getElementById('itemFile');
-        const file = fileInput.files[0];
+        const user = "shaikhaehmad"; 
+        const repo = "darul-ifta-gulzar-e-taiba"; 
+        const token = document.getElementById('ghToken').value.trim();
 
-        if (!file) return;
+        // Token ko browser mein secure save kar lo taaki agli baar na dalna pade
+        localStorage.setItem('darul_github_token', token);
 
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            const fileData = {
-                type: type,
-                title: title,
-                url: event.target.result,
-                fileName: file.name
-            };
+        const type = typeSelect.value;
+        const title = document.getElementById('itemTitle').value.trim();
+        const statusEl = document.getElementById('uploadStatus');
 
-            // Purana data nikalein aur naya jodein
-            let items = JSON.parse(localStorage.getItem('darulIftaItems')) || [];
-            items.push(fileData);
-            localStorage.setItem('darulIftaItems', JSON.stringify(items));
+        statusEl.style.color = "blue";
+        statusEl.innerText = "⏳ Upload ho raha hai, thoda intezaar karein...";
 
-            document.getElementById('uploadStatus').innerText = "✅ Aapki file successfully upload ho gayi hai!";
+        try {
+            let fileUrl = "";
+            let fileName = "";
+
+            if (type === 'pdf') {
+                const fileInput = document.getElementById('itemFile');
+                const file = fileInput.files[0];
+                if (!file) {
+                    alert("Kripya PDF file select karein!");
+                    return;
+                }
+                fileName = file.name;
+                
+                // File ko base64 mein convert karna
+                const base64Content = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result.split(',')[1]);
+                    reader.readAsDataURL(file);
+                });
+
+                // GitHub ke `pdf/` folder mein file upload karna
+                const path = `pdf/${Date.now()}_${fileName}`;
+                const res = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${path}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: `Upload PDF: ${title}`,
+                        content: base64Content
+                    })
+                });
+
+                if (!res.ok) throw new Error("GitHub par PDF upload nahi ho payi. Token ya Repo name check karein.");
+                fileUrl = path;
+            } else {
+                fileUrl = document.getElementById('itemLink').value.trim();
+                fileName = "Online Video Link";
+            }
+
+            // `data.json` file ko update karna taaki website par naya item dikhe
+            const dataPath = `data.json`;
+            let existingItems = [];
+            let sha = "";
+
+            const getRes = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${dataPath}`, {
+                headers: { 'Authorization': `token ${token}` }
+            });
+
+            if (getRes.ok) {
+                const fileData = await getRes.json();
+                sha = fileData.sha;
+                existingItems = JSON.parse(atob(fileData.content));
+            }
+
+            existingItems.push({ type, title, url: fileUrl, fileName });
+
+            await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${dataPath}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: `Update data.json with ${title}`,
+                    content: btoa(JSON.stringify(existingItems)),
+                    sha: sha ? sha : undefined
+                })
+            });
+
+            statusEl.style.color = "green";
+            statusEl.innerText = "✅ Mubarak ho! File successfully website par publish ho gayi hai.";
+            
+            // Form reset karein lekin token ko wapas box mein bhr dein
             document.getElementById('adminUploadForm').reset();
-        };
+            document.getElementById('ghToken').value = token;
 
-        reader.readAsDataURL(file);
+        } catch (err) {
+            statusEl.style.color = "red";
+            statusEl.innerText = "❌ Error: " + err.message;
+        }
     });
 </script>
 
