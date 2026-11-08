@@ -95,10 +95,18 @@
             margin-bottom: 10px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
+        .card-info {
+            flex: 1;
+            min-width: 0;
+            margin-right: 10px;
+        }
         .card-info h3 {
             font-size: 15px;
             margin-bottom: 5px;
             color: #111;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .badges {
             display: flex;
@@ -124,12 +132,13 @@
             display: flex;
             gap: 5px;
             align-items: center;
+            flex-shrink: 0;
         }
         .btn {
-            padding: 8px 12px;
+            padding: 7px 10px;
             border-radius: 6px;
             text-decoration: none;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
             cursor: pointer;
             border: none;
@@ -224,9 +233,9 @@
     </div>
 
     <script>
-        // Tumhara data jo localStorage me save rahega
+        // LocalStorage se data load karna
         let items = JSON.parse(localStorage.getItem('darul_ifta_items')) || [
-            { title: "Jarbe murtaja", cat: "Kitab", type: "PDF", link: "" },
+            { title: "Jarbe murtaja", cat: "Kitab", type: "PDF", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
             { title: "Test video", cat: "Bayan", type: "Video", link: "https://www.instagram.com" }
         ];
 
@@ -252,15 +261,15 @@
                 let actionButtons = "";
 
                 if(item.type === "PDF") {
-                    // Agar PDF hai toh 'Dekhein' aur 'Download' dono buttons ayenge
+                    // PDF ke liye Dekhein aur Download dono buttons
                     actionButtons = `
                         <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein</a>
                         <a href="${item.link}" download class="btn btn-download">Download</a>
                     `;
                 } else {
-                    // Agar Video (Instagram/Facebook/YouTube) hai toh sirf wahi link khulega jo tumne dala hai
+                    // Video ke liye sirf Dekhein button jo exact wahi link kholega jo aapne dala hai
                     actionButtons = `
-                        <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein / Chalaein</a>
+                        <a href="${item.link}" target="_blank" class="btn btn-view">Dekhein</a>
                     `;
                 }
 
@@ -283,7 +292,7 @@
         }
 
         function filterItems() {
-            const val = document.getElementById('filterSelect',).value;
+            const val = document.getElementById('filterSelect').value;
             renderItems(val);
         }
 
