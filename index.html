@@ -6,161 +6,279 @@
     <title>Darul Ifta Gulzar-e-Taiba</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-        body { background-color: #f4f6f8; color: #333; }
-        .header { background-color: #0b5e2e; color: white; padding: 20px; text-align: center; }
-        .header h1 { font-size: 22px; margin-bottom: 5px; }
-        .header p { font-size: 13px; opacity: 0.9; margin-bottom: 5px; }
-        
-        .nav-container { display: flex; gap: 6px; padding: 12px; max-width: 650px; margin: 0 auto; overflow-x: auto; }
-        .nav-tab { flex: 1; padding: 10px 8px; text-align: center; border-radius: 8px; font-weight: bold; font-size: 13px; text-decoration: none; cursor: pointer; white-space: nowrap; }
-        .nav-tab.active { background-color: #0b5e2e; color: white; }
-        .nav-tab.inactive { background-color: #e2e8f0; color: #4a5568; }
+        body { background-color: #f8fafc; color: #1e293b; padding-bottom: 40px; }
 
-        .container { max-width: 650px; margin: 0 auto; padding: 0 15px 30px 15px; }
-        .card { background-color: white; border-radius: 10px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
-        .card-info h3 { font-size: 16px; margin-bottom: 6px; color: #1e293b; }
-        
-        .badge-pdf { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: bold; background-color: #e0f2fe; color: #0369a1; }
-        .badge-tele { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: bold; background-color: #fef08a; color: #854d0e; }
-        .badge-video { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: bold; background-color: #fee2e2; color: #991b1b; }
-        
+        /* Naya Home Page Color Theme */
+        .header { background: linear-gradient(135deg, #0f5132, #198754); color: #ffffff; padding: 22px 15px; text-align: center; }
+        .header h1 { font-size: 22px; margin-bottom: 5px; letter-spacing: 0.3px; }
+        .header p { font-size: 13px; opacity: 0.95; margin-bottom: 14px; }
+
+        .social-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 780px; margin: 0 auto; }
+        .s-link { text-decoration: none; color: #ffffff; font-size: 12px; font-weight: bold; padding: 7px 11px; border-radius: 7px; border: 1px solid rgba(255,255,255,0.22); }
+        .s-tg { background-color: #0284c7; }
+        .s-wa { background-color: #15803d; }
+        .s-ig { background-color: #be185d; }
+        .s-fb { background-color: #1d4ed8; }
+        .s-yt { background-color: #b91c1c; }
+
+        .nav-container { display: flex; gap: 7px; padding: 14px 15px 6px; max-width: 720px; margin: 0 auto; overflow-x: auto; }
+        .nav-tab { flex: 1; padding: 10px 8px; text-align: center; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; white-space: nowrap; transition: 0.2s; }
+        .nav-tab.active { background-color: #0f5132; color: #ffffff; box-shadow: 0 2px 6px rgba(15,81,50,0.25); }
+        .nav-tab.inactive { background-color: #e2e8f0; color: #334155; }
+
+        .container { max-width: 720px; margin: 0 auto; padding: 8px 15px 20px; }
+
+        .filter-box { background-color: #ffffff; padding: 13px; border-radius: 10px; box-shadow: 0 2px 6px rgba(15,23,42,0.06); border: 1px solid #e2e8f0; margin-bottom: 16px; }
+        #search-input { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 7px; font-size: 14px; margin-bottom: 10px; background-color: #f8fafc; color: #0f172a; }
+        .lang-filters { display: flex; flex-wrap: wrap; gap: 7px; }
+        .lang-btn { border: 1px solid #cbd5e1; background-color: #f1f5f9; color: #334155; padding: 7px 13px; border-radius: 7px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .lang-btn.active { background-color: #0f5132; color: #ffffff; border-color: #0f5132; }
+
+        .lang-section { margin-bottom: 24px; }
+        .lang-heading { font-size: 17px; color: #0f5132; border-bottom: 2px solid #0f5132; padding-bottom: 6px; margin-bottom: 12px; }
+
+        .card { background-color: #ffffff; border-radius: 10px; padding: 15px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(15,23,42,0.05); border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+        .rtl-card { direction: rtl; text-align: right; }
+        .card-info h3 { font-size: 16px; margin-bottom: 6px; color: #0f172a; }
+
+        .badge-pdf { font-size: 11px; padding: 3px 8px; border-radius: 5px; font-weight: bold; background-color: #e0f2fe; color: #0369a1; display: inline-block; }
+        .badge-tele { font-size: 11px; padding: 3px 8px; border-radius: 5px; font-weight: bold; background-color: #fef3c7; color: #92400e; display: inline-block; }
+        .badge-video { font-size: 11px; padding: 3px 8px; border-radius: 5px; font-weight: bold; background-color: #fee2e2; color: #991b1b; display: inline-block; }
+
         .card-actions { display: flex; flex-direction: column; gap: 6px; }
-        .btn-view { background-color: #0b5e2e; color: white; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: bold; text-align: center; white-space: nowrap; }
+        .btn-view { background-color: #0f5132; color: #ffffff; text-decoration: none; padding: 9px 14px; border-radius: 7px; font-size: 13px; font-weight: bold; text-align: center; white-space: nowrap; }
+        .btn-view:hover { background-color: #146c43; }
 
-        .sawaal-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-top: 15px; }
-        .sawaal-box h3 { color: #0b5e2e; margin-bottom: 15px; font-size: 18px; }
+        .sawaal-box { background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(15,23,42,0.06); border: 1px solid #e2e8f0; margin-top: 10px; }
+        .sawaal-box h3 { color: #0f5132; margin-bottom: 15px; font-size: 18px; }
         .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; }
-        .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
-        .btn-submit { background-color: #0b5e2e; color: white; border: none; padding: 10px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 15px; }
+        .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #1e293b; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 7px; font-size: 14px; background-color: #f8fafc; }
+        .btn-submit { background-color: #0f5132; color: #ffffff; border: none; padding: 11px; width: 100%; border-radius: 7px; font-weight: bold; cursor: pointer; font-size: 15px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>📚 Darul Ifta Gulzar-e-Taiba</h1>
-        <p>Tamam Google Drive PDF, Telegram & Video Bayanat</p>
+        <h1>Darul Ifta Gulzar-e-Taiba</h1>
+        <p>Gujarati • Hindi • Urdu — PDF, Telegram & Video Bayanat</p>
+        <div class="social-bar" id="header-socials"></div>
     </div>
 
     <!-- Navigation Tabs -->
     <div class="nav-container">
-        <div id="tab-pdf" class="nav-tab active" onclick="switchSection('pdf')">📖 PDF Kitabein</div>
-        <div id="tab-telegram" class="nav-tab inactive" onclick="switchSection('telegram')">✈️ Telegram</div>
-        <div id="tab-video" class="nav-tab inactive" onclick="switchSection('video')">🎥 Video Bayan</div>
-        <div id="tab-sawaal" class="nav-tab inactive" onclick="switchSection('sawaal')">❓ Fatwa / Sawaal</div>
+        <div id="tab-pdf" class="nav-tab active" onclick="switchSection('pdf')">PDF Kitabein</div>
+        <div id="tab-telegram" class="nav-tab inactive" onclick="switchSection('telegram')">Telegram</div>
+        <div id="tab-video" class="nav-tab inactive" onclick="switchSection('video')">Video Bayan</div>
+        <div id="tab-sawaal" class="nav-tab inactive" onclick="switchSection('sawaal')">Fatwa / Sawaal</div>
     </div>
 
     <div class="container">
-        <!-- Content List -->
-        <div id="content-list" style="margin-top: 15px;">
-            <!-- Items yahan load honge -->
+        <!-- Search & Language Filter -->
+        <div id="filter-panel" class="filter-box">
+            <input type="text" id="search-input" placeholder="Gujarati, Hindi, Urdu mein search karein..." oninput="handleSearch(this.value)">
+            <div class="lang-filters">
+                <button type="button" class="lang-btn active" data-lang="all" onclick="setLangFilter('all')">Sabhi Bhasha</button>
+                <button type="button" class="lang-btn" data-lang="gu" onclick="setLangFilter('gu')">ગુજરાતી</button>
+                <button type="button" class="lang-btn" data-lang="hi" onclick="setLangFilter('hi')">हिन्दी</button>
+                <button type="button" class="lang-btn" data-lang="ur" onclick="setLangFilter('ur')">اردو</button>
+            </div>
         </div>
+
+        <!-- Content List -->
+        <div id="content-list"></div>
 
         <!-- Sawaal / Fatwa Section -->
         <div id="section-sawaal" style="display: none;">
             <div class="sawaal-box">
-                <h3>*دارالافتاء گلزار طیبہ*</h3>
-                <p style="font-size: 14px; color: #555; margin-bottom: 15px; font-weight: bold;">--- جدید سوال / مسئلہ ---</p>
-                
+                <h3>دارالافتاء گلزار طیبہ</h3>
+                <p style="font-size: 14px; color: #475569; margin-bottom: 15px; font-weight: bold;">--- جدید سوال / مسئلہ ---</p>
+
                 <div class="form-group">
-                    <label>👤 Naam:</label>
+                    <label>Naam:</label>
                     <input type="text" id="s-name" placeholder="Apna naam likhein">
                 </div>
                 <div class="form-group">
-                    <label>📱 Mobile:</label>
+                    <label>Mobile:</label>
                     <input type="tel" id="s-phone" placeholder="Mobile number">
                 </div>
                 <div class="form-group">
-                    <label>🏠 Address:</label>
+                    <label>Address:</label>
                     <input type="text" id="s-address" placeholder="Apna address likhein (jaise: Malvan)">
                 </div>
                 <div class="form-group">
-                    <label>❓ Sawal / Masla:</label>
+                    <label>Sawal / Masla:</label>
                     <textarea id="s-text" rows="4" placeholder="Apna sawaal tafseel se likhein..."></textarea>
                 </div>
-                <p style="font-size: 11px; color: #666; margin-bottom: 12px; font-style: italic;">📎 (Note: Agar koi photo/document hai, toh kripya is message ke sath ya alag se WhatsApp par bhej dein.)</p>
-                
-                <button class="btn-submit" onclick="sendWhatsAppSawaal()">📲 WhatsApp par Sawaal Bhejein</button>
+                <p style="font-size: 11px; color: #64748b; margin-bottom: 12px; font-style: italic;">(Note: Agar koi photo/document hai, toh kripya is message ke sath ya alag se WhatsApp par bhej dein.)</p>
+
+                <button class="btn-submit" onclick="sendWhatsAppSawaal()">WhatsApp par Sawaal Bhejein</button>
             </div>
         </div>
     </div>
 
     <script>
         // =========================================================================
+        // Aapke Channels aur Pages (Direct https:// links)
+        // =========================================================================
+        const SOCIAL_LINKS = [
+            { label: "Telegram Channel", url: "https://t.me/daruliftagulzaretaiba", cls: "s-tg" },
+            { label: "WhatsApp Channel", url: "https://whatsapp.com/channel/0029VaAYgoVA2pL4X43ctJ12", cls: "s-wa" },
+            { label: "Instagram (Darul Ifta)", url: "https://www.instagram.com/daruliftagulzaretaiba.official?knvt=eXVyMjBkbzczenZs", cls: "s-ig" },
+            { label: "Instagram (Shaikh Aehmad)", url: "https://www.instagram.com/shaikh_aehmad__786?avpt=aThsbjFycHlrdmZw", cls: "s-ig" },
+            { label: "Facebook Page 1", url: "https://www.facebook.com/share/1J9RGN3SPX/", cls: "s-fb" },
+            { label: "Facebook Page 2", url: "https://www.facebook.com/share/1BtsykWUjo/", cls: "s-fb" },
+            { label: "YouTube Channel", url: "https://youtube.com/@shaikhaehmad-786?si=8sO1wtw1BbE-KmSl", cls: "s-yt" }
+        ];
+
+        // =========================================================================
         // YAHAN AAPKA DATA LIVE REHTA HAI (Admin Panel se copy karke yahan paste karein)
         // =========================================================================
- const GLOBAL_DATA = [
-    { type: 'pdf', title: 'अनवारे एहले बैत', url: 'https://drive.google.com/file/d/1h29PxSGpErb53Sx1KHnOb3myUhlVARuS/view?usp=drivesdk' },
-    { type: 'telegram', title: 'બાળકો ના (200) નામ', url: 'https://t.me/+mVBc7DjytRk2MDE1' },
-    { type: 'pdf', title: 'मोहब्बते रसुल', url: 'https://drive.google.com/file/d/1Tj7B4CATDBEVAOi0cROV2KjBJqMDZh7F/view?usp=drivesdk' },
-    { type: 'pdf', title: 'મોહબ્બતે રસુલ', url: 'https://drive.google.com/file/d/1iCPegplJiuZTKMdFaY18M0vMdlSROawT/view?usp=drivesdk' },
-];
+        const GLOBAL_DATA = [
+            { lang: 'hi', type: 'pdf', title: 'अनवारे एहले बैत', url: 'https://drive.google.com/file/d/1h29PxSGpErb53Sx1KHnOb3myUhlVARuS/view?usp=drivesdk' },
+            { lang: 'gu', type: 'telegram', title: 'બાળકો ના (200) નામ', url: 'https://t.me/+mVBc7DjytRk2MDE1' },
+            { lang: 'hi', type: 'pdf', title: 'मोहब्बते रसुल', url: 'https://drive.google.com/file/d/1Tj7B4CATDBEVAOi0cROV2KjBJqMDZh7F/view?usp=drivesdk' },
+            { lang: 'gu', type: 'pdf', title: 'મોહબ્બતે રસુલ', url: 'https://drive.google.com/file/d/1iCPegplJiuZTKMdFaY18M0vMdlSROawT/view?usp=drivesdk' },
+        ];
         // =========================================================================
 
+        const LANG_TITLES = {
+            gu: "ગુજરાતી Kitabein / Bayanat",
+            hi: "हिन्दी Kitabein / Bayanat",
+            ur: "اردو Kitabein / Bayanat"
+        };
+
+        let currentTab = "pdf";
+        let currentLang = "all";
+        let searchQuery = "";
+
+        function renderSocialLinks() {
+            const markup = SOCIAL_LINKS.map(
+                s => `<a href="${s.url}" target="_blank" rel="noopener noreferrer" class="s-link ${s.cls}">${s.label}</a>`
+            ).join("");
+            document.getElementById("header-socials").innerHTML = markup;
+        }
+
         function switchSection(sectionName) {
+            currentTab = sectionName;
             ['pdf', 'telegram', 'video', 'sawaal'].forEach(sec => {
                 const tabEl = document.getElementById('tab-' + sec);
-                if (sec === sectionName) {
-                    tabEl.className = "nav-tab active";
-                } else {
-                    tabEl.className = "nav-tab inactive";
-                }
+                tabEl.className = (sec === sectionName) ? "nav-tab active" : "nav-tab inactive";
             });
 
             const contentList = document.getElementById('content-list');
             const sawaalSec = document.getElementById('section-sawaal');
+            const filterPanel = document.getElementById('filter-panel');
 
             if (sectionName === 'sawaal') {
                 contentList.style.display = 'none';
+                filterPanel.style.display = 'none';
                 sawaalSec.style.display = 'block';
             } else {
                 sawaalSec.style.display = 'none';
+                filterPanel.style.display = 'block';
                 contentList.style.display = 'block';
-                loadFilteredContent(sectionName);
+                loadFilteredContent();
             }
         }
 
-        function loadFilteredContent(typeFilter) {
+        function setLangFilter(langCode) {
+            currentLang = langCode;
+            document.querySelectorAll(".lang-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.lang === langCode);
+            });
+            if (currentTab !== "sawaal") {
+                loadFilteredContent();
+            }
+        }
+
+        function handleSearch(val) {
+            searchQuery = val || "";
+            if (currentTab !== "sawaal") {
+                loadFilteredContent();
+            }
+        }
+
+        function normalizeStr(s) {
+            return (s || "").toLowerCase().normalize("NFKC").trim();
+        }
+
+        function matchesQuery(item) {
+            if (!searchQuery.trim()) return true;
+            const q = normalizeStr(searchQuery);
+            const hay = [item.title, item.lang, item.type].map(normalizeStr).join(" ");
+            return hay.includes(q);
+        }
+
+        function escapeAttr(str) {
+            return (str || "")
+                .replace(/&/g, "&amp;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+        }
+
+        function buildCardHTML(item) {
+            let badgeHTML = '';
+            let btnText = 'Dekhein';
+
+            if (item.type === 'pdf') {
+                badgeHTML = '<span class="badge-pdf">Google Drive PDF</span>';
+                btnText = 'PDF Padhein';
+            } else if (item.type === 'telegram') {
+                badgeHTML = '<span class="badge-tele">Telegram Link</span>';
+                btnText = 'Kholein';
+            } else if (item.type === 'video') {
+                badgeHTML = '<span class="badge-video">Video Bayan</span>';
+                btnText = 'Video Dekhein';
+            }
+
+            const rtlClass = item.lang === 'ur' ? 'rtl-card' : '';
+            const safeUrl = escapeAttr(item.url);
+
+            return `
+                <div class="card ${rtlClass}">
+                    <div class="card-info">
+                        <h3>${item.title}</h3>
+                        <div style="margin-top: 4px;">${badgeHTML}</div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="btn-view">${btnText}</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadFilteredContent() {
             const listContainer = document.getElementById('content-list');
-            const filtered = GLOBAL_DATA.filter(item => item.type === typeFilter);
+            const byType = GLOBAL_DATA.filter(item => item.type === currentTab);
+            const langsToRender = currentLang === "all" ? ["gu", "hi", "ur"] : [currentLang];
 
-            listContainer.innerHTML = "";
+            let htmlOut = "";
+            let totalFound = 0;
 
-            if (filtered.length === 0) {
-                let msgName = typeFilter === 'pdf' ? 'Google Drive PDF Kitabein' : (typeFilter === 'telegram' ? 'Telegram Links' : 'Video Bayanat');
-                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 40px;">Yahan abhi koi ${msgName} mojood nahi hai. Admin Panel se jodein.</div>`;
+            langsToRender.forEach(langCode => {
+                const items = byType
+                    .filter(item => (item.lang || "hi") === langCode && matchesQuery(item))
+                    .slice()
+                    .reverse();
+
+                if (items.length === 0) return;
+                totalFound += items.length;
+
+                htmlOut += `<div class="lang-section">`;
+                htmlOut += `<h2 class="lang-heading">${LANG_TITLES[langCode]}</h2>`;
+                htmlOut += items.map(buildCardHTML).join("");
+                htmlOut += `</div>`;
+            });
+
+            if (totalFound === 0) {
+                listContainer.innerHTML = `<div style="text-align: center; color: #64748b; margin-top: 32px;">Is section ya bhasha mein abhi koi item nahi mila.</div>`;
                 return;
             }
 
-            filtered.slice().reverse().forEach(item => {
-                let badgeHTML = '';
-                let btnText = '📖 Dekhein';
-
-                if (item.type === 'pdf') {
-                    badgeHTML = '<span class="badge-pdf">📖 Google Drive PDF</span>';
-                    btnText = '📖 PDF Padhein';
-                } else if (item.type === 'telegram') {
-                    badgeHTML = '<span class="badge-tele">📢 Telegram Channel/Post</span>';
-                    btnText = '✈️ Telegram par Kholein';
-                } else if (item.type === 'video') {
-                    badgeHTML = '<span class="badge-video">🎥 Social Video (YT/Insta/FB)</span>';
-                    btnText = '▶️ Video Dekhein';
-                }
-
-                listContainer.innerHTML += `
-                    <div class="card">
-                        <div class="card-info">
-                            <h3>${item.title}</h3>
-                            <div style="margin-top: 4px;">
-                                ${badgeHTML}
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <a href="${item.url}" target="_blank" class="btn-view">${btnText}</a>
-                        </div>
-                    </div>
-                `;
-            });
+            listContainer.innerHTML = htmlOut;
         }
 
         function sendWhatsAppSawaal() {
@@ -174,7 +292,7 @@
                 return;
             }
 
-            const muftiWhatsAppNumber = "918758647929"; 
+            const muftiWhatsAppNumber = "918758647929";
             const message = `*دارالافتاء گلزار طیبہ*%0A*--- جدید سوال / مسئلہ ---*%0A%0A👤 *Naam:* ${name}%0A📱 *Mobile:* ${phone}%0A🏠 *Address:* ${address}%0A%0A❓ *Sawal / Masla:*%0A${text}%0A%0A📎 *(Note: Agar koi photo/document hai, toh kripya is message ke sath ya alag se WhatsApp par bhej dein.)*`;
             const whatsappUrl = `https://wa.me/${muftiWhatsAppNumber}?text=${message}`;
 
@@ -182,6 +300,7 @@
         }
 
         window.onload = function() {
+            renderSocialLinks();
             switchSection('pdf');
         };
     </script>
