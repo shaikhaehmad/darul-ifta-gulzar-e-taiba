@@ -118,9 +118,6 @@
     </div>
 
     <script>
-        // =========================================================================
-        // Aapke Channels aur Pages (Direct https:// links)
-        // =========================================================================
         const SOCIAL_LINKS = [
             { label: "Telegram Channel", url: "https://t.me/daruliftagulzaretaiba", cls: "s-tg" },
             { label: "WhatsApp Channel", url: "https://whatsapp.com/channel/0029VaAYgoVA2pL4X43ctJ12", cls: "s-wa" },
@@ -131,17 +128,14 @@
             { label: "YouTube Channel", url: "https://youtube.com/@shaikhaehmad-786?si=8sO1wtw1BbE-KmSl", cls: "s-yt" }
         ];
 
-        // =========================================================================
-        // YAHAN AAPKA DATA LIVE REHTA HAI (Admin Panel se copy karke yahan paste karein)
-        // =========================================================================
-       const GLOBAL_DATA = [
-    { lang: 'hi', type: 'pdf', title: 'अनवारे एहले बैत', url: 'https://drive.google.com/file/d/1h29PxSGpErb53Sx1KHnOb3myUhlVARuS/view?usp=drivesdk' },
-    { lang: 'hi', type: 'pdf', title: 'मोहब्बते रसुल', url: 'https://drive.google.com/file/d/1Tj7B4CATDBEVAOi0cROV2KjBJqMDZh7F/view?usp=drivesdk' },
-    { lang: 'ur', type: 'pdf', title: 'محبت رسول', url: 'https://drive.google.com/file/d/1VJJ8eF_ubul2JLSpo21GPLRvWPLKuXHx/view?usp=drivesdk' },
-    { lang: 'gu', type: 'pdf', title: 'મોહોબ્બતે રસુલ', url: 'https://drive.google.com/file/d/1iCPegplJiuZTKMdFaY18M0vMdlSROawT/view?usp=drivesdk' },
-    { lang: 'gu', type: 'telegram', title: 'બાળકોના (200) ઇસ્લામી નામ', url: 'https://t.me/daruliftagulzaretaiba/3' },
-];
-        // =========================================================================
+        // Fallback data agar Firestore mein abhi data na ho ya offline ho
+        const FALLBACK_DATA = [
+            { lang: 'hi', type: 'pdf', title: 'अनवारे एहले बैत', url: 'https://drive.google.com/file/d/1h29PxSGpErb53Sx1KHnOb3myUhlVARuS/view?usp=drivesdk' },
+            { lang: 'hi', type: 'pdf', title: 'मोहब्बते रसुल', url: 'https://drive.google.com/file/d/1Tj7B4CATDBEVAOi0cROV2KjBJqMDZh7F/view?usp=drivesdk' },
+            { lang: 'ur', type: 'pdf', title: 'محبت رسول', url: 'https://drive.google.com/file/d/1VJJ8eF_ubul2JLSpo21GPLRvWPLKuXHx/view?usp=drivesdk' },
+            { lang: 'gu', type: 'pdf', title: 'મોહોબ્બતે રસુલ', url: 'https://drive.google.com/file/d/1iCPegplJiuZTKMdFaY18M0vMdlSROawT/view?usp=drivesdk' },
+            { lang: 'gu', type: 'telegram', title: 'બાળકોના (200) ઇસ્લામી નામ', url: 'https://t.me/daruliftagulzaretaiba/3' }
+        ];
 
         const LANG_TITLES = {
             gu: "ગુજરાતી Kitabein / Bayanat",
@@ -149,13 +143,26 @@
             ur: "اردو Kitabein / Bayanat"
         };
 
+        let activeItems = FALLBACK_DATA.slice();
         let currentTab = "pdf";
         let currentLang = "all";
         let searchQuery = "";
 
+        // Firestore se live items set karne ka helper
+        window.setLiveWebsiteItems = function(items) {
+            if (Array.isArray(items) && items.length > 0) {
+                activeItems = items;
+            } else {
+                activeItems = FALLBACK_DATA.slice();
+            }
+            if (currentTab !== "sawaal") {
+                loadFilteredContent();
+            }
+        };
+
         function renderSocialLinks() {
             const markup = SOCIAL_LINKS.map(
-                s => `<a href="${s.url}" target="_blank" rel="noopener noreferrer" class="s-link ${s.cls}">${s.label}</a>`
+                s => `<a href="${escapeAttr(s.url)}" target="_blank" rel="noopener noreferrer" class="s-link ${s.cls}">${escapeHTML(s.label)}</a>`
             ).join("");
             document.getElementById("header-socials").innerHTML = markup;
         }
@@ -211,13 +218,17 @@
             return hay.includes(q);
         }
 
-        function escapeAttr(str) {
+        function escapeHTML(str) {
             return (str || "")
                 .replace(/&/g, "&amp;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#39;")
                 .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;");
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        function escapeAttr(str) {
+            return escapeHTML(str);
         }
 
         function buildCardHTML(item) {
@@ -237,11 +248,12 @@
 
             const rtlClass = item.lang === 'ur' ? 'rtl-card' : '';
             const safeUrl = escapeAttr(item.url);
+            const safeTitle = escapeHTML(item.title);
 
             return `
                 <div class="card ${rtlClass}">
                     <div class="card-info">
-                        <h3>${item.title}</h3>
+                        <h3>${safeTitle}</h3>
                         <div style="margin-top: 4px;">${badgeHTML}</div>
                     </div>
                     <div class="card-actions">
@@ -253,7 +265,7 @@
 
         function loadFilteredContent() {
             const listContainer = document.getElementById('content-list');
-            const byType = GLOBAL_DATA.filter(item => item.type === currentTab);
+            const byType = activeItems.filter(item => item.type === currentTab);
             const langsToRender = currentLang === "all" ? ["gu", "hi", "ur"] : [currentLang];
 
             let htmlOut = "";
@@ -294,7 +306,7 @@
             }
 
             const muftiWhatsAppNumber = "918758647929";
-            const message = `*دارالافتاء گلزار طیبہ*%0A*--- جدید سوال / مسئلہ ---*%0A%0A👤 *Naam:* ${name}%0A📱 *Mobile:* ${phone}%0A🏠 *Address:* ${address}%0A%0A❓ *Sawal / Masla:*%0A${text}%0A%0A📎 *(Note: Agar koi photo/document hai, toh kripya is message ke sath ya alag se WhatsApp par bhej dein.)*`;
+            const message = `*دارالافتاء گلزار طیبہ*%0A*--- جدید سوال / مسئلہ ---*%0A%0A👤 *Naam:* ${encodeURIComponent(name)}%0A📱 *Mobile:* ${encodeURIComponent(phone)}%0A🏠 *Address:* ${encodeURIComponent(address)}%0A%0A❓ *Sawal / Masla:*%0A${encodeURIComponent(text)}%0A%0A📎 *(Note: Agar koi photo/document hai, toh kripya is message ke sath ya alag se WhatsApp par bhej dein.)*`;
             const whatsappUrl = `https://wa.me/${muftiWhatsAppNumber}?text=${message}`;
 
             window.open(whatsappUrl, '_blank');
@@ -304,6 +316,39 @@
             renderSocialLinks();
             switchSection('pdf');
         };
+    </script>
+
+    <script type="module">
+        import { db, auth } from "./firebase-config.js";
+        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+        console.log("Firebase connected:", db, auth);
+
+        async function loadItemsFromFirestore() {
+            try {
+                const snap = await getDocs(collection(db, "items"));
+                const docsData = [];
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    if (data && data.title && data.url && data.type) {
+                        docsData.push({
+                            id: doc.id,
+                            lang: data.lang || "hi",
+                            type: data.type,
+                            title: data.title,
+                            url: data.url
+                        });
+                    }
+                });
+                if (docsData.length > 0 && typeof window.setLiveWebsiteItems === "function") {
+                    window.setLiveWebsiteItems(docsData);
+                }
+            } catch (err) {
+                console.warn("Firestore se data load nahi ho paya, fallback data dikh raha hai:", err);
+            }
+        }
+
+        loadItemsFromFirestore();
     </script>
 </body>
 </html>
