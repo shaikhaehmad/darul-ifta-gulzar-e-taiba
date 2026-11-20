@@ -7,7 +7,7 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
         body { background-color: #f4f6f8; color: #333; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: none; }
+        .container { max-width: 640px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: none; }
         .login-box { max-width: 400px; margin: 80px auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
         h2, h3 { color: #0b5e2e; margin-bottom: 12px; }
         .form-group { margin-bottom: 15px; text-align: left; }
@@ -15,7 +15,7 @@
         input, select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
         .btn { background-color: #0b5e2e; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 5px; }
         .btn:hover { background-color: #084823; }
-        .file-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px; border-radius: 6px; margin-bottom: 8px; border: 1px solid #e2e8f0; }
+        .file-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px; border-radius: 6px; margin-bottom: 8px; border: 1px solid #e2e8f0; gap: 10px; }
         .btn-delete { background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
         .back-link { display: inline-block; margin-bottom: 15px; color: #0b5e2e; text-decoration: none; font-weight: bold; font-size: 14px; }
         .section-box { background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
@@ -25,28 +25,37 @@
 <body>
 
 <div id="login-screen" class="login-box">
-    <h2>🔐 Admin Login</h2>
+    <h2>Admin Login</h2>
     <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Secret PIN Darj Karein</p>
     <div class="form-group">
-        <label>PIN (786):</label>
+        <label>PIN:</label>
         <input type="password" id="admin-pass" placeholder="PIN daalein">
     </div>
     <button class="btn" onclick="checkPassword()">Login Karein</button>
 </div>
 
 <div id="admin-panel" class="container">
-    <a href="index.html" class="back-link">⬅️ Website par Wapas Jayein</a>
-    <h2>🔐 Darul Ifta Admin Panel</h2>
-    
+    <a href="index.html" class="back-link">Website par Wapas Jayein</a>
+    <h2>Darul Ifta Admin Panel</h2>
+
     <!-- 1. Single Item Add Box -->
     <div class="section-box">
-        <h3>➕ Ek-Ek Karke Jodein (Single Add)</h3>
+        <h3>Ek-Ek Karke Jodein (Single Add)</h3>
+        <div class="form-group">
+            <label>Bhasha (Language) Chunein:</label>
+            <select id="item-lang">
+                <option value="gu">Gujarati (gu)</option>
+                <option value="hi">Hindi (hi)</option>
+                <option value="ur">Urdu (ur)</option>
+            </select>
+        </div>
+
         <div class="form-group">
             <label>Item ka Type Chunein:</label>
             <select id="item-type">
-                <option value="pdf">📖 Google Drive PDF Kitab Link</option>
-                <option value="telegram">✈️ Telegram Channel / Kitab Link</option>
-                <option value="video">🎥 YouTube / Insta / FB Video Link</option>
+                <option value="pdf">Google Drive PDF Kitab Link</option>
+                <option value="telegram">Telegram Channel / Kitab Link</option>
+                <option value="video">YouTube / Insta / FB Video Link</option>
             </select>
         </div>
 
@@ -60,182 +69,324 @@
             <input type="url" id="item-url-input" placeholder="https://... link yahan dalein">
         </div>
 
-        <button class="btn" onclick="addNewItem()">🚀 Item Jodein</button>
+        <button class="btn" id="btn-add-single" onclick="addNewItem()">Item Jodein</button>
     </div>
 
-    <!-- 2. Bulk Add Box (Ek Saath Kai Saare) -->
+    <!-- 2. Bulk Add Box -->
     <div class="section-box" style="background-color: #f0fdf4; border-color: #bbf7d0;">
-        <h3 style="color: #166534;">📦 Bulk Add (Ek Saath Kai Saare Jodein)</h3>
-        <p style="font-size: 12px; color: #555; margin-bottom: 10px;">Har line mein is format mein likhein: <b>Type, Title, URL</b><br>Misal ke taur par:<br><code>pdf, Namaz Kitab, https://drive.google.com/...</code><br><code>video, Bayan Title, https://youtube.com/...</code></p>
-        
+        <h3 style="color: #166534;">Bulk Add (Ek Saath Kai Saare Jodein)</h3>
+        <p style="font-size: 12px; color: #555; margin-bottom: 10px;">
+            Har line mein likhein: <b>lang, type, title, url</b><br>
+            Misal: <code>gu, pdf, ગુજરાતી કિતાબ, https://drive.google.com/...</code><br>
+            Misal: <code>ur, telegram, اردو کتاب, https://t.me/...</code>
+        </p>
+
         <div class="form-group">
-            <textarea id="bulk-textarea" rows="4" placeholder="Yahan ek se zyada lines paste kar sakte hain..."></textarea>
+            <textarea id="bulk-textarea" rows="4" placeholder="gu, pdf, Kitab Name, https://..."></textarea>
         </div>
-        <button class="btn" style="background-color: #16a34a;" onclick="addBulkItems()">📥 Sabhi Ek Saath Jodein</button>
+        <button class="btn" id="btn-add-bulk" style="background-color: #16a34a;" onclick="addBulkItems()">Sabhi Ek Saath Jodein</button>
     </div>
 
     <div id="status"></div>
 
     <hr style="margin: 20px 0;">
 
-    <h3>📋 Website ke liye Code (Ise Copy karke index.html mein dalein)</h3>
+    <h3>Backup Code (Optional — Agar index.html mein fallback rakhna ho)</h3>
     <div class="form-group" style="margin-top: 10px;">
-        <textarea id="export-code-box" rows="4" readonly placeholder="Yahan code apne aap ban jayega..." onclick="this.select()"></textarea>
+        <textarea id="export-code-box" rows="6" readonly onclick="this.select()"></textarea>
     </div>
-    <button class="btn" style="background-color: #2563eb;" onclick="copyCode()">📋 Code Copy Karein</button>
+    <button class="btn" style="background-color: #2563eb;" onclick="copyCode()">Code Copy Karein</button>
 
     <hr style="margin: 20px 0;">
 
-    <h3>📁 Maujuda List (Yahan se hatayein / Delete karein)</h3>
-    <div id="admin-item-list" style="margin-top: 15px;">
-        <!-- List yahan aayegi -->
-    </div>
+    <h3>Maujuda List (Yahan se hatayein / Delete karein)</h3>
+    <div id="admin-item-list" style="margin-top: 15px;"></div>
 </div>
 
 <script>
-    const SECRET_PIN htm "2013";
+    const SECRET_PIN = "2013";
+    const STORAGE_KEY = "darul_ifta_permanent_data";
+    let currentAdminItems = [];
+
+    function escapeHTML(str) {
+        return (str || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
+    function setStatus(msg, color = "#334155") {
+        const statusEl = document.getElementById('status');
+        statusEl.style.color = color;
+        statusEl.innerText = msg;
+    }
 
     function checkPassword() {
         const enteredPass = document.getElementById('admin-pass').value.trim();
         if (enteredPass === SECRET_PIN) {
             document.getElementById('login-screen').style.display = "none";
             document.getElementById('admin-panel').style.display = "block";
-            loadAdminList();
+            if (typeof window.refreshAdminFirestoreList === "function") {
+                window.refreshAdminFirestoreList();
+            } else {
+                loadAdminList(getLocalItems());
+            }
         } else {
             alert("Galat PIN!");
             document.getElementById('admin-pass').value = "";
         }
     }
 
-    function getItems() {
-        return JSON.parse(localStorage.getItem('darul_ifta_permanent_data')) || [];
+    function getLocalItems() {
+        try {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        } catch (e) {
+            return [];
+        }
     }
 
-    function saveItems(items) {
-        localStorage.setItem('darul_ifta_permanent_data', JSON.stringify(items));
-        updateExportBox(items);
+    function saveLocalItems(items) {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+        } catch (e) {
+            console.warn("LocalStorage save failed:", e);
+        }
     }
 
     function updateExportBox(items) {
-        let codeStr = "const GLOBAL_DATA = [\n";
+        let codeStr = "const FALLBACK_DATA = [\n";
         items.forEach(item => {
-            codeStr += `    { type: '${item.type}', title: '${item.title.replace(/'/g, "\\'")}', url: '${item.url}' },\n`;
+            const lang = item.lang || "hi";
+            const safeTitle = (item.title || "").replace(/'/g, "\\'");
+            const safeUrl = (item.url || "").replace(/'/g, "\\'");
+            codeStr += `    { lang: '${lang}', type: '${item.type}', title: '${safeTitle}', url: '${safeUrl}' },\n`;
         });
         codeStr += "];";
         document.getElementById('export-code-box').value = codeStr;
     }
 
-    function loadAdminList() {
+    function loadAdminList(items) {
+        currentAdminItems = Array.isArray(items) ? items : [];
+        saveLocalItems(currentAdminItems);
+
         const adminList = document.getElementById('admin-item-list');
-        let items = getItems();
-        
         adminList.innerHTML = "";
-        if (items.length === 0) {
+
+        if (currentAdminItems.length === 0) {
             adminList.innerHTML = "<p style='color: #64748b; font-size: 14px;'>Abhi koi item mojood nahi hai.</p>";
-            updateExportBox(items);
+            updateExportBox(currentAdminItems);
             return;
         }
 
-        items.slice().reverse().forEach((item, index) => {
-            const realIndex = items.length - 1 - index;
-            let badgeText = '[Link]';
-            if(item.type === 'pdf') badgeText = '[Google Drive PDF]';
-            if(item.type === 'telegram') badgeText = '[Telegram]';
-            if(item.type === 'video') badgeText = '[Video]';
+        currentAdminItems.slice().reverse().forEach((item, revIndex) => {
+            const realIndex = currentAdminItems.length - 1 - revIndex;
+            const langCode = escapeHTML((item.lang || "hi").toUpperCase());
+            const safeType = escapeHTML(item.type || "");
+            const safeTitle = escapeHTML(item.title || "");
+            const safeId = escapeHTML(item.id || "");
 
             adminList.innerHTML += `
                 <div class="file-item">
                     <div>
-                        <strong>${item.title}</strong><br>
-                        <small style="color:#666;">${badgeText}</small>
+                        <strong>${safeTitle}</strong><br>
+                        <small style="color:#666;">[${langCode}] [${safeType}]</small>
                     </div>
-                    <button class="btn-delete" onclick="deleteItem(${realIndex})">Hatayein</button>
+                    <button class="btn-delete" onclick="deleteItem(${realIndex}, '${safeId}')">Hatayein</button>
                 </div>
             `;
         });
 
-        updateExportBox(items);
+        updateExportBox(currentAdminItems);
     }
 
-    function addNewItem() {
+    async function addNewItem() {
+        const lang = document.getElementById('item-lang').value;
         const type = document.getElementById('item-type').value;
         const title = document.getElementById('item-title').value.trim();
         const url = document.getElementById('item-url-input').value.trim();
-        const statusEl = document.getElementById('status');
 
         if (!title || !url) {
             alert("Kripya Title aur Link dono zaroor bharein!");
             return;
         }
 
-        let items = getItems();
-        items.push({ type: type, title: title, url: url });
-        saveItems(items);
-        loadAdminList();
-        
-        statusEl.style.color = "#16a34a";
-        statusEl.innerText = "✅ Item jud gaya! Neeche code copy karke index.html mein update karein.";
-        
+        const newItem = { lang, type, title, url };
+
+        if (typeof window.firestoreAddItem === "function") {
+            setStatus("Firebase mein save ho raha hai...", "#0284c7");
+            const ok = await window.firestoreAddItem(newItem);
+            if (!ok) return;
+        } else {
+            const items = getLocalItems();
+            items.push(newItem);
+            loadAdminList(items);
+        }
+
+        setStatus("Item Firebase mein jud gaya! Website live update ho gayi hai.", "#16a34a");
         document.getElementById('item-title').value = "";
         document.getElementById('item-url-input').value = "";
     }
 
-    function addBulkItems() {
+    async function addBulkItems() {
         const bulkText = document.getElementById('bulk-textarea').value.trim();
-        const statusEl = document.getElementById('status');
 
         if (!bulkText) {
             alert("Kripya bulk box mein data paste karein!");
             return;
         }
 
-        let items = getItems();
-        let lines = bulkText.split('\n');
-        let addedCount = 0;
+        const lines = bulkText.split('\n');
+        const parsedItems = [];
 
         lines.forEach(line => {
-            let parts = line.split(',');
-            if (parts.length >= 3) {
-                let type = parts[0].trim().toLowerCase();
-                let title = parts[1].trim();
-                let url = parts.slice(2).join(',').trim(); // taki URL ke andar agar comma ho toh kharab na ho
+            const parts = line.split(',');
+            if (parts.length >= 4) {
+                const lang = parts[0].trim().toLowerCase();
+                const type = parts[1].trim().toLowerCase();
+                const title = parts[2].trim();
+                const url = parts.slice(3).join(',').trim();
 
-                if(['pdf', 'telegram', 'video'].includes(type) && title && url) {
-                    items.push({ type: type, title: title, url: url });
-                    addedCount++;
+                if (['gu', 'hi', 'ur'].includes(lang) && ['pdf', 'telegram', 'video'].includes(type) && title && url) {
+                    parsedItems.push({ lang, type, title, url });
                 }
             }
         });
 
-        if (addedCount > 0) {
-            saveItems(items);
-            loadAdminList();
-            statusEl.style.color = "#16a34a";
-            statusEl.innerText = `✅ ${addedCount} items safalta-purvak jud gaye! Naya code copy karein.`;
-            document.getElementById('bulk-textarea').value = "";
-        } else {
-            alert("Format galat hai! Kripya check karein: type, title, url");
+        if (parsedItems.length === 0) {
+            alert("Format check karein: lang, type, title, url (jaise gu, pdf, Kitab, https://...)");
+            return;
         }
+
+        if (typeof window.firestoreAddBulkItems === "function") {
+            setStatus(`${parsedItems.length} items Firebase mein save ho rahe hain...`, "#0284c7");
+            const ok = await window.firestoreAddBulkItems(parsedItems);
+            if (!ok) return;
+        } else {
+            const items = getLocalItems().concat(parsedItems);
+            loadAdminList(items);
+        }
+
+        setStatus(`${parsedItems.length} items Firebase mein jud gaye!`, "#16a34a");
+        document.getElementById('bulk-textarea').value = "";
     }
 
-    function deleteItem(index) {
-        if (confirm("Kya aap is item ko hatana chahte hain?")) {
-            let items = getItems();
-            items.splice(index, 1);
-            saveItems(items);
-            loadAdminList();
-            alert("Item hata diya gaya hai! Naya code copy karke index.html mein update karein.");
+    async function deleteItem(index, docId) {
+        if (!confirm("Kya aap is item ko hatana chahte hain?")) return;
+
+        if (docId && typeof window.firestoreDeleteItem === "function") {
+            setStatus("Firebase se item hataya ja raha hai...", "#0284c7");
+            const ok = await window.firestoreDeleteItem(docId);
+            if (ok) {
+                setStatus("Item Firebase se hat gaya!", "#16a34a");
+            }
+            return;
         }
+
+        const items = getLocalItems();
+        items.splice(index, 1);
+        loadAdminList(items);
+        setStatus("Item list se hat gaya!", "#16a34a");
     }
 
     function copyCode() {
         const copyText = document.getElementById("export-code-box");
         copyText.select();
-        copyText.setSelectionRange(0, 99999); 
+        copyText.setSelectionRange(0, 99999);
         navigator.clipboard.writeText(copyText.value);
-        alert("✅ Code copy ho gaya! Ise apni index.html ke GLOBAL_DATA mein paste kar dein.");
+        alert("Backup code copy ho gaya!");
     }
 </script>
 
+<script type="module">
+    import { db, auth } from "./firebase-config.js";
+    import {
+        collection,
+        getDocs,
+        addDoc,
+        deleteDoc,
+        doc,
+        serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+    console.log("Firebase connected in Admin:", db, auth);
+
+    async function fetchAndRenderAdminItems() {
+        try {
+            const snap = await getDocs(collection(db, "items"));
+            const list = [];
+            snap.forEach(d => {
+                const data = d.data();
+                if (data && data.title && data.url && data.type) {
+                    list.push({
+                        id: d.id,
+                        lang: data.lang || "hi",
+                        type: data.type,
+                        title: data.title,
+                        url: data.url
+                    });
+                }
+            });
+            window.loadAdminList(list);
+        } catch (err) {
+            console.error("Firestore admin list error:", err);
+            window.setStatus("Firestore se list load karne mein dikkat aayi. Rules check karein.", "#dc2626");
+            window.loadAdminList(window.getLocalItems());
+        }
+    }
+
+    window.refreshAdminFirestoreList = fetchAndRenderAdminItems;
+
+    window.firestoreAddItem = async function(item) {
+        try {
+            await addDoc(collection(db, "items"), {
+                lang: item.lang,
+                type: item.type,
+                title: item.title,
+                url: item.url,
+                createdAt: serverTimestamp()
+            });
+            await fetchAndRenderAdminItems();
+            return true;
+        } catch (err) {
+            console.error("Add item error:", err);
+            window.setStatus("Firestore mein item save nahi ho paya. Security rules check karein.", "#dc2626");
+            return false;
+        }
+    };
+
+    window.firestoreAddBulkItems = async function(itemsArr) {
+        try {
+            for (const item of itemsArr) {
+                await addDoc(collection(db, "items"), {
+                    lang: item.lang,
+                    type: item.type,
+                    title: item.title,
+                    url: item.url,
+                    createdAt: serverTimestamp()
+                });
+            }
+            await fetchAndRenderAdminItems();
+            return true;
+        } catch (err) {
+            console.error("Bulk add error:", err);
+            window.setStatus("Bulk items save karne mein dikkat aayi. Security rules check karein.", "#dc2626");
+            return false;
+        }
+    };
+
+    window.firestoreDeleteItem = async function(docId) {
+        try {
+            await deleteDoc(doc(db, "items", docId));
+            await fetchAndRenderAdminItems();
+            return true;
+        } catch (err) {
+            console.error("Delete item error:", err);
+            window.setStatus("Firestore se item delete nahi ho paya. Security rules check karein.", "#dc2626");
+            return false;
+        }
+    };
+</script>
 </body>
 </html>
