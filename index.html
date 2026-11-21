@@ -14,12 +14,14 @@
         .header p { font-size: 13px; opacity: 0.95; margin-bottom: 14px; }
 
         .social-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 780px; margin: 0 auto; }
-        .s-link { text-decoration: none; color: #ffffff; font-size: 12px; font-weight: bold; padding: 7px 11px; border-radius: 7px; border: 1px solid rgba(255,255,255,0.22); }
+        .s-link { text-decoration: none; color: #ffffff; font-size: 12px; font-weight: bold; padding: 7px 11px; border-radius: 7px; border: 1px solid rgba(255,255,255,0.22); transition: background-color 0.2s ease; }
         .s-tg { background-color: #0284c7; }
         .s-wa { background-color: #15803d; }
         .s-ig { background-color: #be185d; }
         .s-fb { background-color: #1d4ed8; }
         .s-yt { background-color: #b91c1c; }
+        .s-blog { background-color: #FF5722; }
+        .s-blog:hover { background-color: #E64A19; }
 
         .nav-container { display: flex; gap: 7px; padding: 14px 15px 6px; max-width: 720px; margin: 0 auto; overflow-x: auto; }
         .nav-tab { flex: 1; padding: 10px 8px; text-align: center; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; white-space: nowrap; transition: 0.2s; }
@@ -125,16 +127,27 @@
             { label: "Instagram (Shaikh Aehmad)", url: "https://www.instagram.com/shaikh_aehmad__786?avpt=aThsbjFycHlrdmZw", cls: "s-ig" },
             { label: "Facebook Page 1", url: "https://www.facebook.com/share/1J9RGN3SPX/", cls: "s-fb" },
             { label: "Facebook Page 2", url: "https://www.facebook.com/share/1BtsykWUjo/", cls: "s-fb" },
-            { label: "YouTube Channel", url: "https://youtube.com/@shaikhaehmad-786?si=8sO1wtw1BbE-KmSl", cls: "s-yt" }
+            { label: "YouTube Channel", url: "https://youtube.com/@shaikhaehmad-786?si=8sO1wtw1BbE-KmSl", cls: "s-yt" },
+            { label: "Blog", url: "https://mgakbar37.blogspot.com/2021/11/blog-post_133.html", cls: "s-blog", color: "#FF5722", hoverColor: "#E64A19" }
         ];
 
         // Fallback data agar Firestore mein abhi data na ho ya offline ho
         const FALLBACK_DATA = [
-            { lang: 'hi', type: 'pdf', title: 'अनवारे एहले बैत', url: 'https://drive.google.com/file/d/1h29PxSGpErb53Sx1KHnOb3myUhlVARuS/view?usp=drivesdk' },
-            { lang: 'hi', type: 'pdf', title: 'मोहब्बते रसुल', url: 'https://drive.google.com/file/d/1Tj7B4CATDBEVAOi0cROV2KjBJqMDZh7F/view?usp=drivesdk' },
+            { lang: 'hi', type: 'telegram', title: 'नसब सफाअत और नफाए मुस्तफा', url: 'https://t.me/daruliftagulzaretaiba/17' },
+            { lang: 'gu', type: 'video', title: 'મફત ના મજુર', url: 'https://www.instagram.com/reel/DbLvYn4vRWf/?avpt=YjlyaDVmcWxodjN6' },
+            { lang: 'hi', type: 'telegram', title: 'कान कटे हुए जानवर की क़ुरबानी', url: 'https://t.me/daruliftagulzaretaiba/16' },
+            { lang: 'hi', type: 'telegram', title: 'नापाकी की हालत में ओरत के  हज का किया हुकम', url: 'https://t.me/daruliftagulzaretaiba/14' },
+            { lang: 'hi', type: 'telegram', title: 'सहाबामे सबसे बड़े आलिम कोन ?', url: 'https://t.me/daruliftagulzaretaiba/19' },
+            { lang: 'hi', type: 'pdf', title: 'मोहब्बते रसूल', url: 'https://drive.google.com/file/d/1Tj7B4CATDBEVAOi0cROV2KjBJqMDZh7F/view?usp=drivesdk' },
+            { lang: 'hi', type: 'telegram', title: 'नमाजे इद का वक्त फिक्स हे', url: 'https://t.me/daruliftagulzaretaiba/13' },
+            { lang: 'hi', type: 'telegram', title: 'मस्जिद और कब्र', url: 'https://t.me/daruliftagulzaretaiba/18' },
             { lang: 'ur', type: 'pdf', title: 'محبت رسول', url: 'https://drive.google.com/file/d/1VJJ8eF_ubul2JLSpo21GPLRvWPLKuXHx/view?usp=drivesdk' },
+            { lang: 'hi', type: 'pdf', title: 'जर्बे मुर्तजा', url: 'https://drive.google.com/file/d/14Pr2sfVjq0uu9b5PbTbuT9Jspf290y56/view?usp=drivesdk' },
+            { lang: 'hi', type: 'telegram', title: 'कान कटे हुए जानवर की क़ुरबानी', url: 'https://t.me/daruliftagulzaretaiba/16' },
+            { lang: 'hi', type: 'pdf', title: 'अनवार-ए-अहले बैत', url: 'https://drive.google.com/file/d/1h29PxSGpErb53Sx1KHnOb3myUhlVARuS/view?usp=drivesdk' },
+            { lang: 'gu', type: 'video', title: 'ખામોસી કે પીછેકી કહાની', url: 'https://www.instagram.com/reel/Df_M5SSPcOl/?utm_source=ig_web_copy_link&cnvx=NTc4MTIwNjQ2YQ==' },
             { lang: 'gu', type: 'pdf', title: 'મોહોબ્બતે રસુલ', url: 'https://drive.google.com/file/d/1iCPegplJiuZTKMdFaY18M0vMdlSROawT/view?usp=drivesdk' },
-            { lang: 'gu', type: 'telegram', title: 'બાળકોના (200) ઇસ્લામી નામ', url: 'https://t.me/daruliftagulzaretaiba/3' }
+            { lang: 'hi', type: 'telegram', title: 'वलिदेन की अजमत', url: 'https://t.me/daruliftagulzaretaiba/8' },
         ];
 
         const LANG_TITLES = {
@@ -161,9 +174,17 @@
         };
 
         function renderSocialLinks() {
-            const markup = SOCIAL_LINKS.map(
-                s => `<a href="${escapeAttr(s.url)}" target="_blank" rel="noopener noreferrer" class="s-link ${s.cls}">${escapeHTML(s.label)}</a>`
-            ).join("");
+            const markup = SOCIAL_LINKS.map(s => {
+                const styles = [];
+                if (s.color) styles.push(`background-color: ${escapeAttr(s.color)}`);
+                if (s.hoverColor) styles.push(`--hover-bg: ${escapeAttr(s.hoverColor)}`);
+                const styleAttr = styles.length > 0 ? ` style="${styles.join("; ")}"` : "";
+                const hoverAttrs = s.hoverColor
+                    ? ` onmouseover="this.style.backgroundColor='${escapeAttr(s.hoverColor)}'" onmouseout="this.style.backgroundColor='${escapeAttr(s.color || "")}'"`
+                    : "";
+
+                return `<a href="${escapeAttr(s.url)}" target="_blank" rel="noopener noreferrer" class="s-link ${escapeAttr(s.cls)}"${styleAttr}${hoverAttrs}>${escapeHTML(s.label)}</a>`;
+            }).join("");
             document.getElementById("header-socials").innerHTML = markup;
         }
 
