@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="/logo.jpg">
+    <link rel="apple-touch-icon" href="/logo.jpg">
     <title>Darul Ifta Gulzar-e-Taiba</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
@@ -135,22 +137,40 @@
 
         // Fallback data agar Firestore mein abhi data na ho ya offline ho
         const FALLBACK_DATA = [
-            { lang: 'hi', type: 'telegram', title: 'नसब सफाअत और नफाए मुस्तफा', url: 'https://t.me/daruliftagulzaretaiba/17' },
-            { lang: 'gu', type: 'video', title: 'મફત ના મજુર', url: 'https://www.instagram.com/reel/DbLvYn4vRWf/?avpt=YjlyaDVmcWxodjN6' },
-            { lang: 'hi', type: 'telegram', title: 'कान कटे हुए जानवर की क़ुरबानी', url: 'https://t.me/daruliftagulzaretaiba/16' },
-            { lang: 'hi', type: 'telegram', title: 'नापाकी की हालत में ओरत के  हज का किया हुकम', url: 'https://t.me/daruliftagulzaretaiba/14' },
-            { lang: 'hi', type: 'telegram', title: 'सहाबामे सबसे बड़े आलिम कोन ?', url: 'https://t.me/daruliftagulzaretaiba/19' },
-            { lang: 'hi', type: 'pdf', title: 'मोहब्बते रसूल', url: 'https://drive.google.com/file/d/1Tj7B4CATDBEVAOi0cROV2KjBJqMDZh7F/view?usp=drivesdk' },
-            { lang: 'hi', type: 'telegram', title: 'नमाजे इद का वक्त फिक्स हे', url: 'https://t.me/daruliftagulzaretaiba/13' },
-            { lang: 'hi', type: 'telegram', title: 'मस्जिद और कब्र', url: 'https://t.me/daruliftagulzaretaiba/18' },
-            { lang: 'ur', type: 'pdf', title: 'محبت رسول', url: 'https://drive.google.com/file/d/1VJJ8eF_ubul2JLSpo21GPLRvWPLKuXHx/view?usp=drivesdk' },
-            { lang: 'hi', type: 'pdf', title: 'जर्बे मुर्तजा', url: 'https://drive.google.com/file/d/14Pr2sfVjq0uu9b5PbTbuT9Jspf290y56/view?usp=drivesdk' },
-            { lang: 'hi', type: 'telegram', title: 'कान कटे हुए जानवर की क़ुरबानी', url: 'https://t.me/daruliftagulzaretaiba/16' },
-            { lang: 'hi', type: 'pdf', title: 'अनवार-ए-अहले बैत', url: 'https://drive.google.com/file/d/1h29PxSGpErb53Sx1KHnOb3myUhlVARuS/view?usp=drivesdk' },
-            { lang: 'gu', type: 'video', title: 'ખામોસી કે પીછેકી કહાની', url: 'https://www.instagram.com/reel/Df_M5SSPcOl/?utm_source=ig_web_copy_link&cnvx=NTc4MTIwNjQ2YQ==' },
-            { lang: 'gu', type: 'pdf', title: 'મોહોબ્બતે રસુલ', url: 'https://drive.google.com/file/d/1iCPegplJiuZTKMdFaY18M0vMdlSROawT/view?usp=drivesdk' },
-            { lang: 'hi', type: 'telegram', title: 'वलिदेन की अजमत', url: 'https://t.me/daruliftagulzaretaiba/8' },
-        ];
+    { lang: 'hi', type: 'telegram', title: 'नसब सफाअत और नफाए मुस्तफा', url: 'https://t.me/daruliftagulzaretaiba/17' },
+    { lang: 'gu', type: 'video', title: 'મફત ના મજુર', url: 'https://www.instagram.com/reel/DbLvYn4vRWf/?avpt=YjlyaDVmcWxodjN6' },
+    { lang: 'ur', type: 'pdf', title: 'ہندوستان کی بینکوں سے ملن  ے والاسود_کا', url: 'https://drive.google.com/file/d/1FNtHnpkaHj0pOM8Xp3QMCpIWdKXwnHvf/view?usp=drivesdk' },
+    { lang: 'hi', type: 'telegram', title: 'फतवा-ए-सरइ', url: 'https://t.me/daruliftagulzaretaiba/49' },
+    { lang: 'hi', type: 'telegram', title: 'कान कटे हुए जानवर की क़ुरबानी', url: 'https://t.me/daruliftagulzaretaiba/16' },
+    { lang: 'hi', type: 'telegram', title: 'नापाकी की हालत में ओरत के  हज का किया हुकम', url: 'https://t.me/daruliftagulzaretaiba/14' },
+    { lang: 'gu', type: 'telegram', title: 'અફ્જલીયત-એ-સિદ્દીકે અકબર', url: 'https://t.me/daruliftagulzaretaiba/52' },
+    { lang: 'hi', type: 'telegram', title: 'शमशिरे दिफाए माविया', url: 'https://t.me/daruliftagulzaretaiba/45' },
+    { lang: 'hi', type: 'pdf', title: 'मस्जिद ओर कबुर', url: 'https://drive.google.com/file/d/1vuUGkLbSukJAKiBj2no0X4SqEN2p7gIZ/view?usp=drivesdk' },
+    { lang: 'gu', type: 'telegram', title: 'उमराह करनेका तरीका', url: 'https://t.me/daruliftagulzaretaiba/40' },
+    { lang: 'gu', type: 'telegram', title: 'ઉમરાહ કરવાનો તરીકો', url: 'https://t.me/daruliftagulzaretaiba/39' },
+    { lang: 'hi', type: 'telegram', title: 'क्या सवाब के नाम पर लकी ड्रॉ जायज़ हो जाता है', url: 'https://t.me/daruliftagulzaretaiba/24' },
+    { lang: 'gu', type: 'telegram', title: 'બાળકોના(200) ઇસ્લામી નામ', url: 'https://t.me/daruliftagulzaretaiba/53' },
+    { lang: 'gu', type: 'telegram', title: 'ઓલીયા-એ-કિરામ થી મદદ માંગવાનો સરઈ હુકમ', url: 'https://t.me/daruliftagulzaretaiba/34' },
+    { lang: 'gu', type: 'telegram', title: 'मंगेतर से फ़ोन पे बात करना', url: 'https://t.me/daruliftagulzaretaiba/36' },
+    { lang: 'hi', type: 'telegram', title: 'सहाबामे सबसे बड़े आलिम कोन ?', url: 'https://t.me/daruliftagulzaretaiba/19' },
+    { lang: 'gu', type: 'telegram', title: 'નસબ અને સફાઅતે મુસ્તફા', url: 'https://t.me/daruliftagulzaretaiba/48' },
+    { lang: 'hi', type: 'pdf', title: 'मोहब्बते रसूल', url: 'https://drive.google.com/file/d/1Tj7B4CATDBEVAOi0cROV2KjBJqMDZh7F/view?usp=drivesdk' },
+    { lang: 'hi', type: 'telegram', title: 'नमाजे इद का वक्त फिक्स हे', url: 'https://t.me/daruliftagulzaretaiba/13' },
+    { lang: 'hi', type: 'telegram', title: 'अकाइदे एहले सुन्नत', url: 'https://t.me/daruliftagulzaretaiba/46' },
+    { lang: 'hi', type: 'telegram', title: 'कुरान ओर हदीस के मुकाबले में अपने दीन', url: 'https://t.me/daruliftagulzaretaiba/20' },
+    { lang: 'ur', type: 'pdf', title: 'عصمت انبیاء علیہم السلام', url: 'https://drive.google.com/file/d/18UcHrle2KMj1Gj-JDT8dlAgtr-D575gG/view?usp=drivesdk' },
+    { lang: 'ur', type: 'pdf', title: 'محبت رسول', url: 'https://drive.google.com/file/d/1VJJ8eF_ubul2JLSpo21GPLRvWPLKuXHx/view?usp=drivesdk' },
+    { lang: 'hi', type: 'pdf', title: 'जर्बे मुर्तजा', url: 'https://drive.google.com/file/d/14Pr2sfVjq0uu9b5PbTbuT9Jspf290y56/view?usp=drivesdk' },
+    { lang: 'hi', type: 'telegram', title: 'कान कटे हुए जानवर की क़ुरबानी', url: 'https://t.me/daruliftagulzaretaiba/16' },
+    { lang: 'hi', type: 'pdf', title: 'अनवार-ए-अहले बैत', url: 'https://drive.google.com/file/d/1h29PxSGpErb53Sx1KHnOb3myUhlVARuS/view?usp=drivesdk' },
+    { lang: 'hi', type: 'telegram', title: 'ओलियाह अल्लाह से इस्तिआनत और सरइ रहनुमाई', url: 'https://t.me/daruliftagulzaretaiba/21' },
+    { lang: 'gu', type: 'telegram', title: 'વાલીદેનના હકો', url: 'https://t.me/daruliftagulzaretaiba/43' },
+    { lang: 'gu', type: 'video', title: 'ખામોસી કે પીછેકી કહાની', url: 'https://www.instagram.com/reel/Df_M5SSPcOl/?utm_source=ig_web_copy_link&cnvx=NTc4MTIwNjQ2YQ==' },
+    { lang: 'gu', type: 'pdf', title: 'મોહોબ્બતે રસુલ', url: 'https://drive.google.com/file/d/1iCPegplJiuZTKMdFaY18M0vMdlSROawT/view?usp=drivesdk' },
+    { lang: 'gu', type: 'telegram', title: 'મંગેતર થી ફોને પર વાત કરવી', url: 'https://t.me/daruliftagulzaretaiba/37' },
+    { lang: 'hi', type: 'telegram', title: 'वलिदेन की अजमत', url: 'https://t.me/daruliftagulzaretaiba/8' },
+    { lang: 'ur', type: 'pdf', title: 'کفر پر مرنے والوں کی نماز', url: 'https://drive.google.com/file/d/1tPnOx91dM6y_mk_4wR69sbA4F5h07uLR/view?usp=drivesdk' },
+];
 
         const LANG_TITLES = {
             gu: "ગુજરાતી Kitabein / Bayanat",
