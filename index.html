@@ -53,9 +53,37 @@
         .badge-tele { font-size: 11px; padding: 3px 8px; border-radius: 5px; font-weight: bold; background-color: #fef3c7; color: #92400e; display: inline-block; }
         .badge-video { font-size: 11px; padding: 3px 8px; border-radius: 5px; font-weight: bold; background-color: #fee2e2; color: #991b1b; display: inline-block; }
 
-        .card-actions { display: flex; flex-direction: column; gap: 6px; }
-        .btn-view { background-color: #0f5132; color: #ffffff; text-decoration: none; border: none; cursor: pointer; padding: 9px 14px; border-radius: 7px; font-size: 13px; font-weight: bold; text-align: center; white-space: nowrap; }
-        .btn-view:hover { background-color: #146c43; }
+        .card-actions { display: flex; flex-direction: column; gap: 7px; min-width: 148px; }
+        .btn-view { background: linear-gradient(135deg, #0f5132, #157347); color: #ffffff; text-decoration: none; border: none; cursor: pointer; padding: 9px 14px; border-radius: 8px; font-size: 13px; font-weight: bold; text-align: center; white-space: nowrap; box-shadow: 0 2px 4px rgba(15,81,50,0.2); transition: transform 0.12s ease, opacity 0.15s ease; }
+        .btn-view:hover { opacity: 0.94; transform: translateY(-1px); }
+
+        /* Improved 3-Option Fatwa Buttons (Copy, Share, Download) */
+        .fatwa-3btn-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .f-btn { border: 1px solid transparent; cursor: pointer; padding: 7px 6px; border-radius: 8px; font-size: 11.5px; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; gap: 3px; white-space: nowrap; box-shadow: 0 1px 2px rgba(15,23,42,0.06); transition: transform 0.12s ease, filter 0.15s ease; }
+        .f-btn:hover { filter: brightness(0.97); transform: translateY(-1px); }
+        .f-btn:active { transform: translateY(0); }
+        .f-btn-copy { background-color: #ecfdf5; color: #065f46; border-color: #a7f3d0; }
+        .f-btn-share { background-color: #eff6ff; color: #1e40af; border-color: #bfdbfe; }
+        .f-btn-dl { background-color: #fffbeb; color: #92400e; border-color: #fde68a; }
+
+        .modal-fatwa-toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0; }
+        .modal-fatwa-toolbar .f-btn { padding: 8px 13px; font-size: 12.5px; }
+
+        /* Direct App Share Popover / Modal */
+        .share-backdrop { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); z-index: 1200; padding: 16px; align-items: center; justify-content: center; }
+        .share-backdrop.open { display: flex; }
+        .share-sheet { background: #ffffff; width: 100%; max-width: 380px; border-radius: 14px; padding: 18px; box-shadow: 0 14px 35px rgba(15,23,42,0.3); border: 1px solid #e2e8f0; }
+        .share-sheet-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9; }
+        .share-sheet-top h4 { font-size: 15px; color: #0f5132; }
+        .share-close-btn { background: #f1f5f9; color: #334155; border: none; border-radius: 6px; padding: 4px 10px; font-weight: bold; cursor: pointer; font-size: 12px; }
+        .share-app-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; margin-top: 10px; }
+        .share-app-btn { text-decoration: none; border: none; cursor: pointer; padding: 11px 10px; border-radius: 9px; font-size: 13px; font-weight: bold; color: #ffffff; display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-align: center; transition: opacity 0.15s ease; }
+        .share-app-btn:hover { opacity: 0.92; }
+        .share-wa { background-color: #16a34a; }
+        .share-tg { background-color: #0284c7; }
+        .share-link { background-color: #0f5132; }
+        .share-sys { background-color: #475569; }
+        .share-txt-dl { background-color: #d97706; grid-column: 1 / -1; }
 
         .sawaal-box { background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(15,23,42,0.06); border: 1px solid #e2e8f0; margin-top: 10px; }
         .sawaal-box h3 { color: #0f5132; margin-bottom: 15px; font-size: 18px; }
@@ -67,12 +95,18 @@
         /* Direct Fatwa Text Reader Modal */
         .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); z-index: 999; padding: 16px; overflow-y: auto; }
         .modal-card { background: #ffffff; max-width: 680px; margin: 30px auto; border-radius: 12px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
-        .modal-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 16px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 14px; }
         .modal-close { background: #ef4444; color: #fff; border: none; border-radius: 6px; padding: 6px 12px; font-weight: bold; cursor: pointer; font-size: 13px; }
         .fatwa-q-box { background: #f0fdf4; border-left: 4px solid #16a34a; padding: 12px 14px; border-radius: 6px; margin-bottom: 16px; }
         .fatwa-q-label { font-size: 12px; font-weight: bold; color: #166534; margin-bottom: 4px; }
         .fatwa-a-label { font-size: 12px; font-weight: bold; color: #0f5132; margin-bottom: 6px; }
         .fatwa-text-body { font-size: 15px; line-height: 1.75; color: #0f172a; white-space: pre-line; }
+
+        @media (max-width: 600px) {
+            .card { flex-direction: column; align-items: stretch; }
+            .card-actions { min-width: 0; }
+            .f-btn { padding: 8px 6px; font-size: 11.5px; }
+        }
     </style>
 </head>
 <body>
@@ -136,13 +170,14 @@
         </div>
     </div>
 
-    <!-- Direct Fatwa Text Modal -->
+    <!-- Direct Fatwa Text Reader Modal -->
     <div id="fatwa-modal" class="modal-backdrop" onclick="closeFatwaModal(event)">
         <div class="modal-card" id="fatwa-modal-card">
             <div class="modal-header">
                 <h3 id="modal-fatwa-title" style="color: #0f5132; font-size: 18px;"></h3>
                 <button type="button" class="modal-close" onclick="closeFatwaModal()">Band Karein</button>
             </div>
+            <div class="modal-fatwa-toolbar" id="modal-fatwa-actions"></div>
             <div class="fatwa-q-box">
                 <div class="fatwa-q-label">Sawal / Masla</div>
                 <div id="modal-fatwa-question" class="fatwa-text-body"></div>
@@ -151,6 +186,18 @@
                 <div class="fatwa-a-label">Jawab / Fatwa</div>
                 <div id="modal-fatwa-answer" class="fatwa-text-body"></div>
             </div>
+        </div>
+    </div>
+
+    <!-- Direct App Share Menu Modal -->
+    <div id="fatwa-share-modal" class="share-backdrop" onclick="closeShareMenu(event)">
+        <div class="share-sheet" onclick="event.stopPropagation()">
+            <div class="share-sheet-top">
+                <h4 id="share-sheet-title">Fatwa Share Karein</h4>
+                <button type="button" class="share-close-btn" onclick="closeShareMenu()">Band</button>
+            </div>
+            <p style="font-size: 12px; color: #64748b; line-height: 1.4;">Direct app chunein ya link copy karein:</p>
+            <div class="share-app-grid" id="share-app-buttons"></div>
         </div>
     </div>
 
@@ -230,6 +277,7 @@
         let currentTab = "pdf";
         let currentLang = "all";
         let searchQuery = "";
+        let activeShareKey = null;
 
         // Firestore se live items set karne ka helper
         window.setLiveWebsiteItems = function(items) {
@@ -241,6 +289,7 @@
             if (currentTab !== "sawaal") {
                 loadFilteredContent();
             }
+            openFatwaFromHashIfPresent();
         };
 
         function renderSocialLinks() {
@@ -324,8 +373,262 @@
             return escapeHTML(str);
         }
 
+        // --- Fatwa Copy, Direct App Share & PDF/Download Helpers ---
+        function getFatwaByKey(itemKey) {
+            const indexed = activeItems.map((item, idx) => ({
+                ...item,
+                _key: item.id || `item-${idx}`
+            }));
+            return indexed.find(x => String(x._key) === String(itemKey) && x.type === 'fatwa') || null;
+        }
+
+        function getFatwaShareUrl(itemKey) {
+            const base = `${window.location.origin}${window.location.pathname}${window.location.search}`;
+            return `${base}#fatwa=${encodeURIComponent(String(itemKey))}`;
+        }
+
+        function formatFatwaPlainText(item, itemKey) {
+            const parts = [];
+            parts.push("دارالافتاء گلزار طیبہ");
+            if (item.title) parts.push(`عنوان: ${item.title}`);
+            if (item.question) {
+                parts.push(`\n--- سوال / مسئلہ ---\n${item.question}`);
+            }
+            if (item.answer) {
+                parts.push(`\n--- جواب / فتویٰ ---\n${item.answer}`);
+            }
+            if (itemKey) {
+                parts.push(`\nلنک: ${getFatwaShareUrl(itemKey)}`);
+            }
+            return parts.join("\n").trim();
+        }
+
+        function flashButtonText(btnEl, tempLabel, durationMs = 1600) {
+            if (!btnEl) return;
+            const prevText = btnEl.dataset.origLabel || btnEl.innerHTML;
+            btnEl.dataset.origLabel = prevText;
+            btnEl.innerHTML = tempLabel;
+            setTimeout(() => {
+                btnEl.innerHTML = btnEl.dataset.origLabel || prevText;
+            }, durationMs);
+        }
+
+        async function copyTextFallback(text) {
+            if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return true;
+                } catch (_) {}
+            }
+            const ta = document.createElement("textarea");
+            ta.value = text;
+            ta.setAttribute("readonly", "");
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            let ok = false;
+            try {
+                ok = document.execCommand("copy");
+            } catch (_) {
+                ok = false;
+            }
+            document.body.removeChild(ta);
+            return ok;
+        }
+
+        async function copyFatwaById(itemKey, btnEl) {
+            const item = getFatwaByKey(itemKey);
+            if (!item) return;
+            const fullText = formatFatwaPlainText(item, itemKey);
+            const copied = await copyTextFallback(fullText);
+            if (copied) {
+                flashButtonText(btnEl, "✓ Copied");
+            } else {
+                alert("Copy nahi ho saka, kripya text select karke copy karein.");
+            }
+        }
+
+        function openShareMenuById(itemKey) {
+            const item = getFatwaByKey(itemKey);
+            if (!item) return;
+            activeShareKey = String(item._key);
+
+            const shareUrl = getFatwaShareUrl(activeShareKey);
+            const shareText = formatFatwaPlainText(item, activeShareKey);
+            const waUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+            const tgUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent((item.title || "Fatwa") + " - Darul Ifta Gulzar-e-Taiba")}`;
+
+            document.getElementById("share-sheet-title").innerText = item.title || "Fatwa Share Karein";
+
+            const sysBtnHTML = navigator.share
+                ? `<button type="button" class="share-app-btn share-sys" onclick="triggerSystemShare()">📤 Aur Apps</button>`
+                : `<button type="button" class="share-app-btn share-sys" onclick="copyFatwaTextOnly(this)">📋 Poora Text Copy</button>`;
+
+            document.getElementById("share-app-buttons").innerHTML = `
+                <a href="${escapeAttr(waUrl)}" target="_blank" rel="noopener noreferrer" class="share-app-btn share-wa">💬 WhatsApp</a>
+                <a href="${escapeAttr(tgUrl)}" target="_blank" rel="noopener noreferrer" class="share-app-btn share-tg">✈️ Telegram</a>
+                <button type="button" class="share-app-btn share-link" onclick="copyShareLinkOnly(this)">🔗 Link Copy</button>
+                ${sysBtnHTML}
+                <button type="button" class="share-app-btn share-txt-dl" onclick="downloadFatwaTxtOnly(this)">📄 Text File (.txt) Download</button>
+            `;
+
+            document.getElementById("fatwa-share-modal").classList.add("open");
+        }
+
+        function closeShareMenu(event) {
+            if (!event || event.target.id === "fatwa-share-modal") {
+                document.getElementById("fatwa-share-modal").classList.remove("open");
+                activeShareKey = null;
+            }
+        }
+
+        async function copyShareLinkOnly(btnEl) {
+            if (!activeShareKey) return;
+            const shareUrl = getFatwaShareUrl(activeShareKey);
+            const ok = await copyTextFallback(shareUrl);
+            if (ok) {
+                flashButtonText(btnEl, "✓ Link Copied");
+            } else {
+                prompt("Is link ko copy karein:", shareUrl);
+            }
+        }
+
+        async function copyFatwaTextOnly(btnEl) {
+            if (!activeShareKey) return;
+            const item = getFatwaByKey(activeShareKey);
+            if (!item) return;
+            const ok = await copyTextFallback(formatFatwaPlainText(item, activeShareKey));
+            if (ok) flashButtonText(btnEl, "✓ Text Copied");
+        }
+
+        async function triggerSystemShare() {
+            if (!activeShareKey || !navigator.share) return;
+            const item = getFatwaByKey(activeShareKey);
+            if (!item) return;
+            const shareUrl = getFatwaShareUrl(activeShareKey);
+            try {
+                await navigator.share({
+                    title: item.title || "Fatwa - Darul Ifta Gulzar-e-Taiba",
+                    text: formatFatwaPlainText(item, activeShareKey),
+                    url: shareUrl
+                });
+            } catch (_) {}
+        }
+
+        function downloadFatwaTxtOnly(btnEl) {
+            if (!activeShareKey) return;
+            const item = getFatwaByKey(activeShareKey);
+            if (!item) return;
+            const content = formatFatwaPlainText(item, activeShareKey);
+            const safeSlug = (item.title || "fatwa")
+                .replace(/[\\/:*?"<>|]+/g, "_")
+                .trim()
+                .slice(0, 50) || "fatwa";
+
+            const blob = new Blob(["\uFEFF" + content], { type: "text/plain;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${safeSlug}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            flashButtonText(btnEl, "✓ TXT Downloaded");
+        }
+
+        // PDF / Print View Download for Fatwa
+        function downloadFatwaById(itemKey, btnEl) {
+            const item = getFatwaByKey(itemKey);
+            if (!item) return;
+
+            const hasUrduScript = /[\u0600-\u06FF]/.test((item.answer || "") + (item.question || ""));
+            const dir = (item.lang === "ur" || hasUrduScript) ? "rtl" : "ltr";
+            const align = dir === "rtl" ? "right" : "left";
+            const shareUrl = getFatwaShareUrl(item._key);
+
+            const printWin = window.open("", "_blank", "width=760,height=900");
+            if (!printWin) {
+                alert("Pop-up block hai; kripya browser pop-up allow karein ya Share se TXT download karein.");
+                return;
+            }
+
+            const safeTitle = escapeHTML(item.title || "Fatwa");
+            const safeQ = escapeHTML(item.question || item.title || "");
+            const safeA = escapeHTML(item.answer || "");
+            const safeUrl = escapeHTML(shareUrl);
+
+            printWin.document.open();
+            printWin.document.write(`<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>${safeTitle} - Darul Ifta Gulzar-e-Taiba</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f8fafc; color: #0f172a; margin: 0; padding: 24px; }
+  .sheet { max-width: 720px; margin: 0 auto; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 28px; direction: ${dir}; text-align: ${align}; }
+  .top-banner { text-align: center; border-bottom: 2px solid #0f5132; padding-bottom: 14px; margin-bottom: 18px; direction: ltr; }
+  .top-banner h1 { margin: 0 0 4px; font-size: 21px; color: #0f5132; }
+  .top-banner p { margin: 0; font-size: 12px; color: #475569; }
+  .fatwa-title { font-size: 18px; font-weight: bold; color: #0f5132; margin-bottom: 14px; }
+  .box-q { background: #f0fdf4; border-left: 4px solid #16a34a; padding: 12px 14px; border-radius: 6px; margin-bottom: 16px; }
+  .lbl { font-size: 12px; font-weight: bold; color: #166534; margin-bottom: 6px; }
+  .body-txt { font-size: 15px; line-height: 1.8; white-space: pre-line; }
+  .foot-link { margin-top: 20px; padding-top: 12px; border-top: 1px dashed #cbd5e1; font-size: 11.5px; color: #64748b; word-break: break-all; direction: ltr; text-align: left; }
+  .no-print { text-align: center; margin-bottom: 16px; direction: ltr; }
+  .print-btn { background: #0f5132; color: #fff; border: none; padding: 10px 18px; border-radius: 7px; font-size: 14px; font-weight: bold; cursor: pointer; }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .sheet { border: none; border-radius: 0; padding: 10px; }
+    .no-print { display: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="no-print">
+    <button class="print-btn" onclick="window.print()">PDF Save / Print Karein</button>
+  </div>
+  <div class="sheet">
+    <div class="top-banner">
+      <h1>Darul Ifta Gulzar-e-Taiba</h1>
+      <p>Official Fatwa Document</p>
+    </div>
+    <div class="fatwa-title">${safeTitle}</div>
+    <div class="box-q">
+      <div class="lbl">Sawal / Masla</div>
+      <div class="body-txt">${safeQ}</div>
+    </div>
+    <div>
+      <div class="lbl" style="color:#0f5132;">Jawab / Fatwa</div>
+      <div class="body-txt">${safeA}</div>
+    </div>
+    <div class="foot-link">Link: ${safeUrl}</div>
+  </div>
+  <script>
+    window.addEventListener("load", function() {
+      setTimeout(function() { window.print(); }, 250);
+    });
+  <\/script>
+</body>
+</html>`);
+            printWin.document.close();
+            flashButtonText(btnEl, "✓ PDF View");
+        }
+
+        function buildFatwaActionButtonsHTML(itemKey) {
+            const k = escapeAttr(itemKey);
+            return `
+                <div class="fatwa-3btn-row">
+                    <button type="button" class="f-btn f-btn-copy" onclick="copyFatwaById('${k}', this)">📋 Copy</button>
+                    <button type="button" class="f-btn f-btn-share" onclick="openShareMenuById('${k}')">📤 Share</button>
+                    <button type="button" class="f-btn f-btn-dl" onclick="downloadFatwaById('${k}', this)">⬇️ PDF</button>
+                </div>
+            `;
+        }
+
         function openFatwaModalById(itemId) {
-            const item = activeItems.find(x => String(x.id) === String(itemId));
+            const item = getFatwaByKey(itemId);
             if (!item) return;
 
             const modal = document.getElementById("fatwa-modal");
@@ -335,6 +638,7 @@
             card.style.textAlign = (item.lang === "ur" || hasUrduScript) ? "right" : "left";
 
             document.getElementById("modal-fatwa-title").innerText = item.title || "Fatwa";
+            document.getElementById("modal-fatwa-actions").innerHTML = buildFatwaActionButtonsHTML(item._key);
             document.getElementById("modal-fatwa-question").innerText = item.question || item.title || "";
             document.getElementById("modal-fatwa-answer").innerText = item.answer || "";
             modal.style.display = "block";
@@ -344,6 +648,17 @@
             if (!event || event.target.id === "fatwa-modal") {
                 document.getElementById("fatwa-modal").style.display = "none";
             }
+        }
+
+        function openFatwaFromHashIfPresent() {
+            const hash = window.location.hash || "";
+            const match = hash.match(/^#fatwa=(.+)$/);
+            if (!match) return;
+            const targetKey = decodeURIComponent(match[1]);
+            const targetItem = getFatwaByKey(targetKey);
+            if (!targetItem) return;
+            switchSection("fatwa");
+            openFatwaModalById(targetItem._key);
         }
 
         function buildCardHTML(item, fallbackKey) {
@@ -364,6 +679,7 @@
                         </div>
                         <div class="card-actions">
                             <button type="button" class="btn-view" onclick="openFatwaModalById('${escapeAttr(itemKey)}')">Fatwa Padhein</button>
+                            ${buildFatwaActionButtonsHTML(itemKey)}
                         </div>
                     </div>
                 `;
@@ -449,9 +765,12 @@
             window.open(whatsappUrl, '_blank');
         }
 
+        window.addEventListener("hashchange", openFatwaFromHashIfPresent);
+
         window.onload = function() {
             renderSocialLinks();
             switchSection('pdf');
+            openFatwaFromHashIfPresent();
         };
     </script>
 
