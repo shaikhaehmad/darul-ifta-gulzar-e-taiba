@@ -1,0 +1,16 @@
+{
+  "name": "Darul Ifta Gulzar-e-Taiba",
+  "short_name": "Darul Ifta",
+  "scope": "/darul-ifta-gulzar-e-taiba/",
+  "start_url": "/darul-ifta-gulzar-e-taiba/index.html",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0f5132",
+  "icons": [
+    {
+      "src": "/darul-ifta-gulzar-e-taiba/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
