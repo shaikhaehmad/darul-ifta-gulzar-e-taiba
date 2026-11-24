@@ -52,10 +52,11 @@
 
         <div class="form-group">
             <label>Item ka Type Chunein:</label>
-            <select id="item-type">
+            <select id="item-type" onchange="toggleTypeFields()">
                 <option value="pdf">Google Drive PDF Kitab Link</option>
                 <option value="telegram">Telegram Channel / Kitab Link</option>
                 <option value="video">YouTube / Insta / FB Video Link</option>
+                <option value="fatwa">Fatwa (Direct Text — Bina PDF / Link)</option>
             </select>
         </div>
 
@@ -64,9 +65,22 @@
             <input type="text" id="item-title" placeholder="Jaise: Namaz ka Tareeqa">
         </div>
 
-        <div class="form-group">
+        <!-- Link Field (Default jaise pehle tha) -->
+        <div id="url-field" class="form-group">
             <label>Direct Link URL:</label>
             <input type="url" id="item-url-input" placeholder="https://... link yahan dalein">
+        </div>
+
+        <!-- Direct Fatwa Text Fields (Sirf 'fatwa' select karne par dikhenge) -->
+        <div id="fatwa-fields" style="display: none;">
+            <div class="form-group">
+                <label>Sawal (Direct Text):</label>
+                <textarea id="item-question" rows="3" placeholder="Sawal yahan likhein..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Jawab / Fatwa Text (Direct Text):</label>
+                <textarea id="item-answer" rows="6" placeholder="Fatwe ka poora text yahan likhein..."></textarea>
+            </div>
         </div>
 
         <button class="btn" id="btn-add-single" onclick="addNewItem()">Item Jodein</button>
@@ -123,11 +137,26 @@
         statusEl.innerText = msg;
     }
 
+    function toggleTypeFields() {
+        const type = document.getElementById('item-type').value;
+        const urlField = document.getElementById('url-field');
+        const fatwaFields = document.getElementById('fatwa-fields');
+
+        if (type === 'fatwa') {
+            urlField.style.display = 'none';
+            fatwaFields.style.display = 'block';
+        } else {
+            urlField.style.display = 'block';
+            fatwaFields.style.display = 'none';
+        }
+    }
+
     function checkPassword() {
         const enteredPass = document.getElementById('admin-pass').value.trim();
         if (enteredPass === SECRET_PIN) {
             document.getElementById('login-screen').style.display = "none";
             document.getElementById('admin-panel').style.display = "block";
+            toggleTypeFields();
             if (typeof window.refreshAdminFirestoreList === "function") {
                 window.refreshAdminFirestoreList();
             } else {
@@ -160,8 +189,14 @@
         items.forEach(item => {
             const lang = item.lang || "hi";
             const safeTitle = (item.title || "").replace(/'/g, "\\'");
-            const safeUrl = (item.url || "").replace(/'/g, "\\'");
-            codeStr += `    { lang: '${lang}', type: '${item.type}', title: '${safeTitle}', url: '${safeUrl}' },\n`;
+            if (item.type === "fatwa") {
+                const safeQ = (item.question || "").replace(/'/g, "\\'").replace(/\n/g, "\\n");
+                const safeA = (item.answer || "").replace(/'/g, "\\'").replace(/\n/g, "\\n");
+                codeStr += `    { lang: '${lang}', type: 'fatwa', title: '${safeTitle}', question: '${safeQ}', answer: '${safeA}' },\n`;
+            } else {
+                const safeUrl = (item.url || "").replace(/'/g, "\\'");
+                codeStr += `    { lang: '${lang}', type: '${item.type}', title: '${safeTitle}', url: '${safeUrl}' },\n`;
+            }
         });
         codeStr += "];";
         document.getElementById('export-code-box').value = codeStr;
@@ -206,13 +241,28 @@
         const type = document.getElementById('item-type').value;
         const title = document.getElementById('item-title').value.trim();
         const url = document.getElementById('item-url-input').value.trim();
+        const question = document.getElementById('item-question').value.trim();
+        const answer = document.getElementById('item-answer').value.trim();
 
-        if (!title || !url) {
-            alert("Kripya Title aur Link dono zaroor bharein!");
+        if (!title) {
+            alert("Kripya Title zaroor likhein!");
             return;
         }
 
-        const newItem = { lang, type, title, url };
+        let newItem;
+        if (type === "fatwa") {
+            if (!answer) {
+                alert("Kripya Fatwe ka Jawab / Text zaroor likhein!");
+                return;
+            }
+            newItem = { lang, type, title, question, answer, url: "" };
+        } else {
+            if (!url) {
+                alert("Kripya Title aur Link dono zaroor bharein!");
+                return;
+            }
+            newItem = { lang, type, title, question: "", answer: "", url };
+        }
 
         if (typeof window.firestoreAddItem === "function") {
             setStatus("Firebase mein save ho raha hai...", "#0284c7");
@@ -227,6 +277,8 @@
         setStatus("Item Firebase mein jud gaya! Website live update ho gayi hai.", "#16a34a");
         document.getElementById('item-title').value = "";
         document.getElementById('item-url-input').value = "";
+        document.getElementById('item-question').value = "";
+        document.getElementById('item-answer').value = "";
     }
 
     async function addBulkItems() {
@@ -249,7 +301,7 @@
                 const url = parts.slice(3).join(',').trim();
 
                 if (['gu', 'hi', 'ur'].includes(lang) && ['pdf', 'telegram', 'video'].includes(type) && title && url) {
-                    parsedItems.push({ lang, type, title, url });
+                    parsedItems.push({ lang, type, title, question: "", answer: "", url });
                 }
             }
         });
@@ -318,13 +370,18 @@
             const list = [];
             snap.forEach(d => {
                 const data = d.data();
-                if (data && data.title && data.url && data.type) {
+                const isFatwa = data && data.type === "fatwa" && data.title && data.answer;
+                const isLinkItem = data && data.title && data.url && data.type;
+
+                if (isFatwa || isLinkItem) {
                     list.push({
                         id: d.id,
                         lang: data.lang || "hi",
                         type: data.type,
                         title: data.title,
-                        url: data.url
+                        question: data.question || "",
+                        answer: data.answer || "",
+                        url: data.url || ""
                     });
                 }
             });
@@ -344,7 +401,9 @@
                 lang: item.lang,
                 type: item.type,
                 title: item.title,
-                url: item.url,
+                question: item.question || "",
+                answer: item.answer || "",
+                url: item.url || "",
                 createdAt: serverTimestamp()
             });
             await fetchAndRenderAdminItems();
@@ -363,7 +422,9 @@
                     lang: item.lang,
                     type: item.type,
                     title: item.title,
-                    url: item.url,
+                    question: item.question || "",
+                    answer: item.answer || "",
+                    url: item.url || "",
                     createdAt: serverTimestamp()
                 });
             }
