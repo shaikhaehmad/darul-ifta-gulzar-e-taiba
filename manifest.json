@@ -1,6 +1,7 @@
 {
   "name": "Darul Ifta Gulzar-e-Taiba",
   "short_name": "Darul Ifta",
+  "description": "Darul Ifta Gulzar-e-Taiba - Gujarati, Hindi aur Urdu mein Fatwe, PDF Kitabein aur Bayanat",
   "scope": "/darul-ifta-gulzar-e-taiba/",
   "start_url": "/darul-ifta-gulzar-e-taiba/index.html",
   "display": "standalone",
