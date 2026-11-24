@@ -25,12 +25,12 @@
         .s-blog { background-color: #FF5722; }
         .s-blog:hover { background-color: #E64A19; }
 
-        .nav-container { display: flex; gap: 7px; padding: 14px 15px 6px; max-width: 720px; margin: 0 auto; overflow-x: auto; }
+        .nav-container { display: flex; gap: 7px; padding: 14px 15px 6px; max-width: 760px; margin: 0 auto; overflow-x: auto; }
         .nav-tab { flex: 1; padding: 10px 8px; text-align: center; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; white-space: nowrap; transition: 0.2s; }
         .nav-tab.active { background-color: #0f5132; color: #ffffff; box-shadow: 0 2px 6px rgba(15,81,50,0.25); }
         .nav-tab.inactive { background-color: #e2e8f0; color: #334155; }
 
-        .container { max-width: 720px; margin: 0 auto; padding: 8px 15px 20px; }
+        .container { max-width: 760px; margin: 0 auto; padding: 8px 15px 20px; }
 
         .filter-box { background-color: #ffffff; padding: 13px; border-radius: 10px; box-shadow: 0 2px 6px rgba(15,23,42,0.06); border: 1px solid #e2e8f0; margin-bottom: 16px; }
         #search-input { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 7px; font-size: 14px; margin-bottom: 10px; background-color: #f8fafc; color: #0f172a; }
@@ -44,13 +44,15 @@
         .card { background-color: #ffffff; border-radius: 10px; padding: 15px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(15,23,42,0.05); border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
         .rtl-card { direction: rtl; text-align: right; }
         .card-info h3 { font-size: 16px; margin-bottom: 6px; color: #0f172a; }
+        .card-preview { font-size: 13px; color: #475569; margin-top: 6px; line-height: 1.45; }
 
+        .badge-fatwa { font-size: 11px; padding: 3px 8px; border-radius: 5px; font-weight: bold; background-color: #dcfce7; color: #166534; display: inline-block; }
         .badge-pdf { font-size: 11px; padding: 3px 8px; border-radius: 5px; font-weight: bold; background-color: #e0f2fe; color: #0369a1; display: inline-block; }
         .badge-tele { font-size: 11px; padding: 3px 8px; border-radius: 5px; font-weight: bold; background-color: #fef3c7; color: #92400e; display: inline-block; }
         .badge-video { font-size: 11px; padding: 3px 8px; border-radius: 5px; font-weight: bold; background-color: #fee2e2; color: #991b1b; display: inline-block; }
 
         .card-actions { display: flex; flex-direction: column; gap: 6px; }
-        .btn-view { background-color: #0f5132; color: #ffffff; text-decoration: none; padding: 9px 14px; border-radius: 7px; font-size: 13px; font-weight: bold; text-align: center; white-space: nowrap; }
+        .btn-view { background-color: #0f5132; color: #ffffff; text-decoration: none; border: none; cursor: pointer; padding: 9px 14px; border-radius: 7px; font-size: 13px; font-weight: bold; text-align: center; white-space: nowrap; }
         .btn-view:hover { background-color: #146c43; }
 
         .sawaal-box { background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(15,23,42,0.06); border: 1px solid #e2e8f0; margin-top: 10px; }
@@ -59,6 +61,16 @@
         .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #1e293b; }
         .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 7px; font-size: 14px; background-color: #f8fafc; }
         .btn-submit { background-color: #0f5132; color: #ffffff; border: none; padding: 11px; width: 100%; border-radius: 7px; font-weight: bold; cursor: pointer; font-size: 15px; }
+
+        /* Direct Fatwa Text Reader Modal */
+        .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); z-index: 999; padding: 16px; overflow-y: auto; }
+        .modal-card { background: #ffffff; max-width: 680px; margin: 30px auto; border-radius: 12px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+        .modal-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 16px; }
+        .modal-close { background: #ef4444; color: #fff; border: none; border-radius: 6px; padding: 6px 12px; font-weight: bold; cursor: pointer; font-size: 13px; }
+        .fatwa-q-box { background: #f0fdf4; border-left: 4px solid #16a34a; padding: 12px 14px; border-radius: 6px; margin-bottom: 16px; }
+        .fatwa-q-label { font-size: 12px; font-weight: bold; color: #166534; margin-bottom: 4px; }
+        .fatwa-a-label { font-size: 12px; font-weight: bold; color: #0f5132; margin-bottom: 6px; }
+        .fatwa-text-body { font-size: 15px; line-height: 1.75; color: #0f172a; white-space: pre-line; }
     </style>
 </head>
 <body>
@@ -74,6 +86,7 @@
         <div id="tab-pdf" class="nav-tab active" onclick="switchSection('pdf')">PDF Kitabein</div>
         <div id="tab-telegram" class="nav-tab inactive" onclick="switchSection('telegram')">Telegram</div>
         <div id="tab-video" class="nav-tab inactive" onclick="switchSection('video')">Video Bayan</div>
+        <div id="tab-fatwa" class="nav-tab inactive" onclick="switchSection('fatwa')">Fatwe</div>
         <div id="tab-sawaal" class="nav-tab inactive" onclick="switchSection('sawaal')">Fatwa / Sawaal</div>
     </div>
 
@@ -121,6 +134,24 @@
         </div>
     </div>
 
+    <!-- Direct Fatwa Text Modal -->
+    <div id="fatwa-modal" class="modal-backdrop" onclick="closeFatwaModal(event)">
+        <div class="modal-card" id="fatwa-modal-card">
+            <div class="modal-header">
+                <h3 id="modal-fatwa-title" style="color: #0f5132; font-size: 18px;"></h3>
+                <button type="button" class="modal-close" onclick="closeFatwaModal()">Band Karein</button>
+            </div>
+            <div class="fatwa-q-box">
+                <div class="fatwa-q-label">Sawal / Masla</div>
+                <div id="modal-fatwa-question" class="fatwa-text-body"></div>
+            </div>
+            <div>
+                <div class="fatwa-a-label">Jawab / Fatwa</div>
+                <div id="modal-fatwa-answer" class="fatwa-text-body"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
         const SOCIAL_LINKS = [
             { label: "Telegram Channel", url: "https://t.me/daruliftagulzaretaiba", cls: "s-tg" },
@@ -134,7 +165,6 @@
             { label: "Blog 2", url: "https://daruliftafaizanemadina.blogspot.com/2026/11/blog-post_08.html", cls: "s-blog", color: "#FF5722", hoverColor: "#E64A19" }
         ];
 
-
         // Fallback data agar Firestore mein abhi data na ho ya offline ho
         const FALLBACK_DATA = [
     { lang: 'hi', type: 'telegram', title: 'नसब सफाअत और नफाए मुस्तफा', url: 'https://t.me/daruliftagulzaretaiba/17' },
@@ -142,13 +172,18 @@
     { lang: 'ur', type: 'pdf', title: 'ہندوستان کی بینکوں سے ملن  ے والاسود_کا', url: 'https://drive.google.com/file/d/1FNtHnpkaHj0pOM8Xp3QMCpIWdKXwnHvf/view?usp=drivesdk' },
     { lang: 'hi', type: 'telegram', title: 'फतवा-ए-सरइ', url: 'https://t.me/daruliftagulzaretaiba/49' },
     { lang: 'hi', type: 'telegram', title: 'कान कटे हुए जानवर की क़ुरबानी', url: 'https://t.me/daruliftagulzaretaiba/16' },
+    { lang: 'ur', type: 'telegram', title: 'حرام اشیاء سے علاج؟', url: 'https://t.me/daruliftagulzaretaiba/35' },
+    { lang: 'ur', type: 'telegram', title: 'محبت رسول', url: 'https://t.me/daruliftagulzaretaiba/7' },
+    { lang: 'ur', type: 'telegram', title: 'قسطو پر مکان', url: 'https://t.me/daruliftagulzaretaiba/30' },
     { lang: 'hi', type: 'telegram', title: 'नापाकी की हालत में ओरत के  हज का किया हुकम', url: 'https://t.me/daruliftagulzaretaiba/14' },
     { lang: 'gu', type: 'telegram', title: 'અફ્જલીયત-એ-સિદ્દીકે અકબર', url: 'https://t.me/daruliftagulzaretaiba/52' },
     { lang: 'hi', type: 'telegram', title: 'शमशिरे दिफाए माविया', url: 'https://t.me/daruliftagulzaretaiba/45' },
+    { lang: 'ur', type: 'telegram', title: 'امام حسن کو ذہر کس نے دیا تھا؟', url: 'https://t.me/daruliftagulzaretaiba/29' },
     { lang: 'hi', type: 'pdf', title: 'मस्जिद ओर कबुर', url: 'https://drive.google.com/file/d/1vuUGkLbSukJAKiBj2no0X4SqEN2p7gIZ/view?usp=drivesdk' },
     { lang: 'gu', type: 'telegram', title: 'उमराह करनेका तरीका', url: 'https://t.me/daruliftagulzaretaiba/40' },
     { lang: 'gu', type: 'telegram', title: 'ઉમરાહ કરવાનો તરીકો', url: 'https://t.me/daruliftagulzaretaiba/39' },
     { lang: 'hi', type: 'telegram', title: 'क्या सवाब के नाम पर लकी ड्रॉ जायज़ हो जाता है', url: 'https://t.me/daruliftagulzaretaiba/24' },
+    { lang: 'ur', type: 'telegram', title: 'نسبندی کا شرعی موقف - اضطراری حالات میں فقهی احکام', url: 'https://t.me/daruliftagulzaretaiba/59' },
     { lang: 'gu', type: 'telegram', title: 'બાળકોના(200) ઇસ્લામી નામ', url: 'https://t.me/daruliftagulzaretaiba/53' },
     { lang: 'gu', type: 'telegram', title: 'ઓલીયા-એ-કિરામ થી મદદ માંગવાનો સરઈ હુકમ', url: 'https://t.me/daruliftagulzaretaiba/34' },
     { lang: 'gu', type: 'telegram', title: 'मंगेतर से फ़ोन पे बात करना', url: 'https://t.me/daruliftagulzaretaiba/36' },
@@ -156,26 +191,37 @@
     { lang: 'gu', type: 'telegram', title: 'નસબ અને સફાઅતે મુસ્તફા', url: 'https://t.me/daruliftagulzaretaiba/48' },
     { lang: 'hi', type: 'pdf', title: 'मोहब्बते रसूल', url: 'https://drive.google.com/file/d/1Tj7B4CATDBEVAOi0cROV2KjBJqMDZh7F/view?usp=drivesdk' },
     { lang: 'hi', type: 'telegram', title: 'नमाजे इद का वक्त फिक्स हे', url: 'https://t.me/daruliftagulzaretaiba/13' },
+    { lang: 'gu', type: 'fatwa', title: 'Fatva no. 1', question: 'السلام علیکم حضرت صاحب\nقرآن و حدیث شریف میں گناہ سے بچنے کی دعا ہو تو بتا دیجئے؟\nابراھیم خان راجستھان', answer: 'وعلیکم السلام ورحمۃ اللہ وبرکاتہ\n\nگناہوں سے بچنے اور تقویٰ اختیار کرنے کی چند قرآنی و نبوی دعائیں:\n\n1۔ قرآن مجید کی دعا\n\nرَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا وَهَبْ لَنَا مِنْ لَدُنْكَ رَحْمَةً إِنَّكَ أَنْتَ الْوَهَّابُ۔\n\nترجمہ: اے ہمارے رب! ہمیں ہدایت دینے کے بعد ہمارے دلوں کو ٹیڑھا نہ کر اور ہمیں اپنے پاس سے رحمت عطا فرما، بے شک تو ہی بہت عطا فرمانے والا ہے۔\n\n(سورۂ آل عمران: 8)\n\n2۔ گناہوں سے حفاظت کی نبوی دعا\n\nاللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى۔\n\nترجمہ: اے اللہ! میں تجھ سے ہدایت، تقویٰ، پاک دامنی اور بے نیازی کا سوال کرتا ہوں۔\n\n(صحیح مسلم: 2721)\n\n3۔ نفس کی برائی سے حفاظت کی دعا\n\nاللَّهُمَّ آتِ نَفْسِي تَقْوَاهَا، وَزَكِّهَا أَنْتَ خَيْرُ مَنْ زَكَّاهَا، أَنْتَ وَلِيُّهَا وَمَوْلَاهَا۔\n\nترجمہ: اے اللہ! میرے نفس کو اس کا تقویٰ عطا فرما اور اسے پاک فرما، تو ہی اسے سب سے بہتر پاک کرنے والا ہے، تو ہی اس کا کارساز اور مالک ہے۔\n\n(صحیح مسلم: 2722)\n\n4۔ گناہوں اور نافرمانی سے بچنے کی دعا\n\nاللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ۔\n\nترجمہ: اے اللہ! اپنے ذکر، اپنے شکر اور اچھی طرح اپنی عبادت کرنے میں میری مدد فرما۔\n\n(سنن ابی داؤد: 1522)\n\nعمل کی نصیحت:\n\nابراہیم خان صاحب! ان دعاؤں کو روزانہ خصوصاً نمازوں کے بعد اور صبح و شام پڑھنے کا معمول بنائیں۔ گناہوں سے بچنے کے لیے بری صحبت، گناہ کے اسباب اور تنہائی میں ہونے والی نافرمانیوں سے بھی بچیں۔ اگر کبھی گناہ ہو جائے تو مایوس نہ ہوں، فوراً سچی توبہ کریں۔\n\nاللہ تعالیٰ ہم سب کو گناہوں سے محفوظ رکھے اور تقویٰ و پرہیزگاری والی زندگی عطا فرمائے۔ آمین۔\n\nمفتی ابو احمد محمد رضا نوری قادری حنفی (مشہور بہ نام ایم. جے. اکبری)\n\nدارالافتاء گلزار طیبہ تحقیق سینٹر' },
+    { lang: 'ur', type: 'telegram', title: 'زکوۃ کی اہمیت', url: 'https://t.me/daruliftagulzaretaiba/9' },
     { lang: 'hi', type: 'telegram', title: 'अकाइदे एहले सुन्नत', url: 'https://t.me/daruliftagulzaretaiba/46' },
+    { lang: 'ur', type: 'telegram', title: 'نجس شے سے سورہ فاتحہ لکھنے کا؟', url: 'https://t.me/daruliftagulzaretaiba/11?single' },
+    { lang: 'ur', type: 'telegram', title: 'فقتی محقق بننے کے اصول', url: 'https://t.me/daruliftagulzaretaiba/38' },
     { lang: 'hi', type: 'telegram', title: 'कुरान ओर हदीस के मुकाबले में अपने दीन', url: 'https://t.me/daruliftagulzaretaiba/20' },
+    { lang: 'ur', type: 'telegram', title: 'تحقیقات گلزار طیبہ', url: 'https://t.me/daruliftagulzaretaiba/27' },
     { lang: 'ur', type: 'pdf', title: 'عصمت انبیاء علیہم السلام', url: 'https://drive.google.com/file/d/18UcHrle2KMj1Gj-JDT8dlAgtr-D575gG/view?usp=drivesdk' },
+    { lang: 'ur', type: 'telegram', title: 'ہندوستان کی بینکوں_سے_ملنے والا سود کاحکم', url: 'https://t.me/daruliftagulzaretaiba/28' },
+    { lang: 'ur', type: 'telegram', title: 'اصول رد باطل', url: 'https://t.me/daruliftagulzaretaiba/31' },
     { lang: 'ur', type: 'pdf', title: 'محبت رسول', url: 'https://drive.google.com/file/d/1VJJ8eF_ubul2JLSpo21GPLRvWPLKuXHx/view?usp=drivesdk' },
     { lang: 'hi', type: 'pdf', title: 'जर्बे मुर्तजा', url: 'https://drive.google.com/file/d/14Pr2sfVjq0uu9b5PbTbuT9Jspf290y56/view?usp=drivesdk' },
     { lang: 'hi', type: 'telegram', title: 'कान कटे हुए जानवर की क़ुरबानी', url: 'https://t.me/daruliftagulzaretaiba/16' },
     { lang: 'hi', type: 'pdf', title: 'अनवार-ए-अहले बैत', url: 'https://drive.google.com/file/d/1h29PxSGpErb53Sx1KHnOb3myUhlVARuS/view?usp=drivesdk' },
     { lang: 'hi', type: 'telegram', title: 'ओलियाह अल्लाह से इस्तिआनत और सरइ रहनुमाई', url: 'https://t.me/daruliftagulzaretaiba/21' },
+    { lang: 'ur', type: 'telegram', title: 'سنت غير مؤكده_ترک کرنے والے کیاقتدا ؟', url: 'https://t.me/daruliftagulzaretaiba/22' },
     { lang: 'gu', type: 'telegram', title: 'વાલીદેનના હકો', url: 'https://t.me/daruliftagulzaretaiba/43' },
     { lang: 'gu', type: 'video', title: 'ખામોસી કે પીછેકી કહાની', url: 'https://www.instagram.com/reel/Df_M5SSPcOl/?utm_source=ig_web_copy_link&cnvx=NTc4MTIwNjQ2YQ==' },
+    { lang: 'ur', type: 'telegram', title: 'سجدہ میں تینوں انگلیوں ؟', url: 'https://t.me/daruliftagulzaretaiba/25' },
     { lang: 'gu', type: 'pdf', title: 'મોહોબ્બતે રસુલ', url: 'https://drive.google.com/file/d/1iCPegplJiuZTKMdFaY18M0vMdlSROawT/view?usp=drivesdk' },
     { lang: 'gu', type: 'telegram', title: 'મંગેતર થી ફોને પર વાત કરવી', url: 'https://t.me/daruliftagulzaretaiba/37' },
+    { lang: 'ur', type: 'telegram', title: 'مسجد اور قبور', url: 'https://t.me/daruliftagulzaretaiba/32' },
+    { lang: 'ur', type: 'telegram', title: 'کیا_ثواب_کی_نام_پر لکی ڈرا جائز ہو جا تا ہے', url: 'https://t.me/daruliftagulzaretaiba/23' },
+    { lang: 'ur', type: 'telegram', title: 'عورتوں بغیر محرم کے عمره؟', url: 'https://t.me/daruliftagulzaretaiba/26' },
     { lang: 'hi', type: 'telegram', title: 'वलिदेन की अजमत', url: 'https://t.me/daruliftagulzaretaiba/8' },
     { lang: 'ur', type: 'pdf', title: 'کفر پر مرنے والوں کی نماز', url: 'https://drive.google.com/file/d/1tPnOx91dM6y_mk_4wR69sbA4F5h07uLR/view?usp=drivesdk' },
 ];
-
         const LANG_TITLES = {
-            gu: "ગુજરાતી Kitabein / Bayanat",
-            hi: "हिन्दी Kitabein / Bayanat",
-            ur: "اردو Kitabein / Bayanat"
+            gu: "ગુજરાતી Kitabein / Bayanat / Fatwe",
+            hi: "हिन्दी Kitabein / Bayanat / Fatwe",
+            ur: "اردو Kitabein / Bayanat / Fatwe"
         };
 
         let activeItems = FALLBACK_DATA.slice();
@@ -212,7 +258,7 @@
 
         function switchSection(sectionName) {
             currentTab = sectionName;
-            ['pdf', 'telegram', 'video', 'sawaal'].forEach(sec => {
+            ['pdf', 'telegram', 'video', 'fatwa', 'sawaal'].forEach(sec => {
                 const tabEl = document.getElementById('tab-' + sec);
                 tabEl.className = (sec === sectionName) ? "nav-tab active" : "nav-tab inactive";
             });
@@ -257,7 +303,9 @@
         function matchesQuery(item) {
             if (!searchQuery.trim()) return true;
             const q = normalizeStr(searchQuery);
-            const hay = [item.title, item.lang, item.type].map(normalizeStr).join(" ");
+            const hay = [item.title, item.question, item.answer, item.lang, item.type]
+                .map(normalizeStr)
+                .join(" ");
             return hay.includes(q);
         }
 
@@ -274,7 +322,49 @@
             return escapeHTML(str);
         }
 
+        function openFatwaModalById(itemId) {
+            const item = activeItems.find(x => String(x.id) === String(itemId));
+            if (!item) return;
+
+            const modal = document.getElementById("fatwa-modal");
+            const card = document.getElementById("fatwa-modal-card");
+            card.style.direction = item.lang === "ur" ? "rtl" : "ltr";
+            card.style.textAlign = item.lang === "ur" ? "right" : "left";
+
+            document.getElementById("modal-fatwa-title").innerText = item.title || "Fatwa";
+            document.getElementById("modal-fatwa-question").innerText = item.question || item.title || "";
+            document.getElementById("modal-fatwa-answer").innerText = item.answer || "";
+            modal.style.display = "block";
+        }
+
+        function closeFatwaModal(event) {
+            if (!event || event.target.id === "fatwa-modal") {
+                document.getElementById("fatwa-modal").style.display = "none";
+            }
+        }
+
         function buildCardHTML(item) {
+            const rtlClass = item.lang === 'ur' ? 'rtl-card' : '';
+            const safeTitle = escapeHTML(item.title);
+
+            if (item.type === 'fatwa') {
+                const rawText = item.answer || item.question || "";
+                const snippet = escapeHTML(rawText.slice(0, 120));
+                const suffix = rawText.length > 120 ? "..." : "";
+                return `
+                    <div class="card ${rtlClass}">
+                        <div class="card-info">
+                            <h3>${safeTitle}</h3>
+                            <span class="badge-fatwa">Direct Fatwa (Text)</span>
+                            <p class="card-preview">${snippet}${suffix}</p>
+                        </div>
+                        <div class="card-actions">
+                            <button type="button" class="btn-view" onclick="openFatwaModalById('${escapeAttr(item.id)}')">Fatwa Padhein</button>
+                        </div>
+                    </div>
+                `;
+            }
+
             let badgeHTML = '';
             let btnText = 'Dekhein';
 
@@ -289,9 +379,7 @@
                 btnText = 'Video Dekhein';
             }
 
-            const rtlClass = item.lang === 'ur' ? 'rtl-card' : '';
             const safeUrl = escapeAttr(item.url);
-            const safeTitle = escapeHTML(item.title);
 
             return `
                 <div class="card ${rtlClass}">
@@ -373,13 +461,18 @@
                 const docsData = [];
                 snap.forEach(doc => {
                     const data = doc.data();
-                    if (data && data.title && data.url && data.type) {
+                    const isFatwa = data && data.type === "fatwa" && data.title && data.answer;
+                    const isLinkItem = data && data.title && data.url && data.type;
+
+                    if (isFatwa || isLinkItem) {
                         docsData.push({
                             id: doc.id,
                             lang: data.lang || "hi",
                             type: data.type,
                             title: data.title,
-                            url: data.url
+                            question: data.question || "",
+                            answer: data.answer || "",
+                            url: data.url || ""
                         });
                     }
                 });
