@@ -15,11 +15,23 @@
         input, select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
         .btn { background-color: #0b5e2e; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 5px; }
         .btn:hover { background-color: #084823; }
+        .btn:disabled { opacity: 0.65; cursor: not-allowed; }
         .file-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px; border-radius: 6px; margin-bottom: 8px; border: 1px solid #e2e8f0; gap: 10px; }
         .btn-delete { background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
+        .btn-copy-sm { background-color: #2563eb; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
         .back-link { display: inline-block; margin-bottom: 15px; color: #0b5e2e; text-decoration: none; font-weight: bold; font-size: 14px; }
         .section-box { background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
         #status { margin-top: 15px; font-weight: bold; text-align: center; font-size: 14px; }
+
+        .sawaal-summary-bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; flex-wrap: wrap; }
+        .sawaal-total-badge { font-weight: bold; color: #065f46; font-size: 14px; }
+        .sawaal-card { background: #ffffff; border: 1px solid #cbd5e1; border-left: 4px solid #0b5e2e; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+        .sawaal-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; font-size: 13px; }
+        .sawaal-num { background: #0b5e2e; color: #ffffff; padding: 2px 9px; border-radius: 999px; font-weight: bold; font-size: 12px; }
+        .sawaal-date { color: #475569; font-size: 12px; font-weight: bold; }
+        .sawaal-meta { font-size: 12.5px; color: #334155; margin-bottom: 8px; line-height: 1.5; }
+        .sawaal-body { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; font-size: 14px; color: #0f172a; white-space: pre-line; line-height: 1.6; }
+        .sawaal-actions { display: flex; gap: 8px; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -29,9 +41,9 @@
     <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Secret PIN Darj Karein</p>
     <div class="form-group">
         <label>PIN:</label>
-        <input type="password" id="admin-pass" placeholder="PIN daalein">
+        <input type="password" id="admin-pass" placeholder="PIN daalein" onkeydown="if(event.key==='Enter') checkPassword()">
     </div>
-    <button class="btn" onclick="checkPassword()">Login Karein</button>
+    <button class="btn" id="btn-login" onclick="checkPassword()">Login Karein</button>
 </div>
 
 <div id="admin-panel" class="container">
@@ -66,13 +78,13 @@
             <input type="text" id="item-title" placeholder="Jaise: Namaz ka Tareeqa">
         </div>
 
-        <!-- Link Field (Default jaise pehle tha) -->
+        <!-- Link Field -->
         <div id="url-field" class="form-group">
             <label>Direct Link URL:</label>
             <input type="url" id="item-url-input" placeholder="https://... link yahan dalein">
         </div>
 
-        <!-- Direct Fatwa Text Fields (Sirf 'fatwa' select karne par dikhenge) -->
+        <!-- Direct Fatwa Text Fields -->
         <div id="fatwa-fields" style="display: none;">
             <div class="form-group">
                 <label>Sawal (Direct Text):</label>
@@ -84,7 +96,7 @@
             </div>
         </div>
 
-        <!-- Direct Mazmoon Text Field (Sirf 'mazmoon' select karne par dikhega) -->
+        <!-- Direct Mazmoon Text Field -->
         <div id="mazmoon-fields" style="display: none;">
             <div class="form-group">
                 <label>Mazmoon Text (Direct Text):</label>
@@ -111,6 +123,20 @@
     </div>
 
     <div id="status"></div>
+
+    <hr style="margin: 20px 0;">
+
+    <!-- 3. Saved Sawaalat Box (Sirf Admin Panel Mein) -->
+    <div class="section-box">
+        <h3>Saved Sawaalat (Archive)</h3>
+        <div class="sawaal-summary-bar">
+            <span class="sawaal-total-badge">Total Sawaal: <span id="admin-total-sawaal">0</span></span>
+            <button type="button" class="btn-copy-sm" onclick="refreshAdminSawaalatList()">Refresh</button>
+        </div>
+        <div id="admin-sawaalat-list">
+            <p style="color: #64748b; font-size: 13px;">Sawaalat load ho rahe hain...</p>
+        </div>
+    </div>
 
     <hr style="margin: 20px 0;">
 
@@ -167,20 +193,43 @@
         }
     }
 
-    function checkPassword() {
+    async function checkPassword() {
         const enteredPass = document.getElementById('admin-pass').value.trim();
-        if (enteredPass === SECRET_PIN) {
+        if (enteredPass !== SECRET_PIN) {
+            alert("Galat PIN!");
+            document.getElementById('admin-pass').value = "";
+            return;
+        }
+
+        const loginBtn = document.getElementById('btn-login');
+        if (loginBtn) loginBtn.disabled = true;
+
+        try {
+            if (typeof window.authenticateAdminSession === "function") {
+                await window.authenticateAdminSession();
+            }
+
             document.getElementById('login-screen').style.display = "none";
             document.getElementById('admin-panel').style.display = "block";
             toggleTypeFields();
-            if (typeof window.refreshAdminFirestoreList === "function") {
-                window.refreshAdminFirestoreList();
+
+            if (typeof window.onAdminUnlocked === "function") {
+                await window.onAdminUnlocked();
             } else {
-                loadAdminList(getLocalItems());
+                if (typeof window.refreshAdminFirestoreList === "function") {
+                    await window.refreshAdminFirestoreList();
+                } else {
+                    loadAdminList(getLocalItems());
+                }
+                if (typeof window.refreshAdminSawaalatList === "function") {
+                    await window.refreshAdminSawaalatList();
+                }
             }
-        } else {
-            alert("Galat PIN!");
-            document.getElementById('admin-pass').value = "";
+        } catch (err) {
+            console.error("Admin auth failed:", err);
+            alert("Firebase login nahi ho saka. Console check karein aur Anonymous Auth enable dekhein.");
+        } finally {
+            if (loginBtn) loginBtn.disabled = false;
         }
     }
 
@@ -253,6 +302,18 @@
         });
 
         updateExportBox(currentAdminItems);
+    }
+
+    async function copySingleSawaal(encodedText) {
+        const text = decodeURIComponent(encodedText || "");
+        try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(text);
+                alert("Sawal copy ho gaya!");
+                return;
+            }
+        } catch (_) {}
+        prompt("Is sawal ko copy karein:", text);
     }
 
     async function addNewItem() {
@@ -381,6 +442,9 @@
 <script type="module">
     import { db, auth } from "./firebase-config.js";
     import {
+        signInAnonymously
+    } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
+    import {
         collection,
         getDocs,
         addDoc,
@@ -390,6 +454,115 @@
     } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
 
     console.log("Firebase connected in Admin:", db, auth);
+
+    window.authenticateAdminSession = async function() {
+        if (!auth.currentUser) {
+            await signInAnonymously(auth);
+        }
+        return auth.currentUser;
+    };
+
+    function formatSawaalDate(data) {
+        if (data.createdAt && typeof data.createdAt.toDate === "function") {
+            return data.createdAt.toDate().toLocaleString("en-IN");
+        }
+        if (data.savedDateText) return data.savedDateText;
+        if (data.createdAtClient) {
+            const d = new Date(data.createdAtClient);
+            if (!isNaN(d.getTime())) return d.toLocaleString("en-IN");
+        }
+        return "-";
+    }
+
+    function getSortTime(data) {
+        if (data.createdAt && typeof data.createdAt.seconds === "number") {
+            return data.createdAt.seconds * 1000;
+        }
+        if (data.createdAtClient) {
+            const ms = Date.parse(data.createdAtClient);
+            if (!isNaN(ms)) return ms;
+        }
+        return 0;
+    }
+
+    window.refreshAdminSawaalatList = async function() {
+        const totalEl = document.getElementById("admin-total-sawaal");
+        const listEl = document.getElementById("admin-sawaalat-list");
+        if (!listEl) return;
+
+        listEl.innerHTML = `<p style="color:#475569; font-size:13px;">Sawaalat load ho rahe hain...</p>`;
+
+        try {
+            const snap = await getDocs(collection(db, "sawaalat"));
+            const rawRows = [];
+            snap.forEach(d => {
+                rawRows.push({ id: d.id, ...d.data() });
+            });
+
+            rawRows.sort((a, b) => {
+                const na = Number(a.sawaalNumber || 0);
+                const nb = Number(b.sawaalNumber || 0);
+                if (na > 0 && nb > 0 && na !== nb) return na - nb;
+                return getSortTime(a) - getSortTime(b);
+            });
+
+            const numberedRows = rawRows.map((r, i) => ({
+                ...r,
+                displayNumber: Number(r.sawaalNumber || (i + 1))
+            }));
+
+            const rowsToShow = numberedRows.slice().reverse();
+
+            if (totalEl) totalEl.innerText = String(rowsToShow.length);
+
+            if (rowsToShow.length === 0) {
+                listEl.innerHTML = `<p style="color:#64748b; font-size:13px;">Abhi koi sawal save nahi hai.</p>`;
+                return;
+            }
+
+            listEl.innerHTML = rowsToShow.map(r => {
+                const dt = formatSawaalDate(r);
+                const copyPayload = encodeURIComponent(
+                    `Sawal No. #${r.displayNumber}\nDate: ${dt}\nNaam: ${r.name || "-"}\nMobile: ${r.phone || "-"}\nAddress: ${r.address || "-"}\n\nSawal:\n${r.question || ""}`
+                );
+                return `
+                    <div class="sawaal-card">
+                        <div class="sawaal-top">
+                            <span class="sawaal-num">Sawal #${r.displayNumber}</span>
+                            <span class="sawaal-date">Date: ${escapeHTML(dt)}</span>
+                        </div>
+                        <div class="sawaal-meta">
+                            <strong>Naam:</strong> ${escapeHTML(r.name || "-")} |
+                            <strong>Mobile:</strong> ${escapeHTML(r.phone || "-")} |
+                            <strong>Address:</strong> ${escapeHTML(r.address || "-")}
+                        </div>
+                        <div class="sawaal-body">${escapeHTML(r.question || "")}</div>
+                        <div class="sawaal-actions">
+                            <button type="button" class="btn-copy-sm" onclick="copySingleSawaal('${copyPayload}')">Copy</button>
+                            <button type="button" class="btn-delete" onclick="deleteSavedSawaalDoc('${escapeHTML(r.id)}')">Delete</button>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        } catch (err) {
+            console.error("Sawaalat load error:", err);
+            if (listEl) {
+                listEl.innerHTML = `<p style="color:#dc2626; font-size:13px;">Sawaalat load nahi ho sake. Firebase rules check karein.</p>`;
+            }
+        }
+    };
+
+    window.deleteSavedSawaalDoc = async function(docId) {
+        if (!docId || !confirm("Kya aap is saved sawal ko delete karna chahte hain?")) return;
+        try {
+            await deleteDoc(doc(db, "sawaalat", docId));
+            await window.refreshAdminSawaalatList();
+            window.setStatus("Saved sawal delete ho gaya!", "#16a34a");
+        } catch (err) {
+            console.error("Sawaal delete error:", err);
+            window.setStatus("Saved sawal delete nahi ho saka. Rules check karein.", "#dc2626");
+        }
+    };
 
     async function fetchAndRenderAdminItems() {
         try {
@@ -422,6 +595,13 @@
     }
 
     window.refreshAdminFirestoreList = fetchAndRenderAdminItems;
+
+    window.onAdminUnlocked = async function() {
+        await Promise.all([
+            fetchAndRenderAdminItems(),
+            window.refreshAdminSawaalatList()
+        ]);
+    };
 
     window.firestoreAddItem = async function(item) {
         try {
