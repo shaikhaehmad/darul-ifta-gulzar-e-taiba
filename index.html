@@ -179,7 +179,7 @@
                 </div>
                 <p style="font-size: 11px; color: #64748b; margin-bottom: 12px; font-style: italic;">(Note: Agar koi photo/document hai, toh kripya email ke zariye bhej dein.)</p>
 
-                <button class="btn-submit" onclick="submitSawaal()">Sawaal Save Karein &amp; Gmail Kholein</button>
+                <button type="button" class="btn-submit" onclick="submitSawaal()">Sawaal Save Karein &amp; Gmail Kholein</button>
                 <div id="sawaal-status-msg" style="font-size: 13px; margin-top: 10px; font-weight: bold;"></div>
             </div>
         </div>
@@ -848,34 +848,30 @@
             listContainer.innerHTML = htmlOut;
         }
 
-        function sendGmailSawaal() {
-            const name = document.getElementById('s-name').value.trim();
-            const phone = document.getElementById('s-phone').value.trim();
-            const address = document.getElementById('s-address').value.trim();
-            const text = document.getElementById('s-text').value.trim();
-
-            if (!name || !text) {
-                alert("Kripya apna naam aur sawaal zaroor likhein!");
-                return;
-            }
-
+        function buildGmailSawaalUrl(name, phone, address, text) {
             const darulIftaEmail = "gulzaretaibah284@gmail.com";
             const subject = `Naya Sawaal / Masla - ${name}`;
             const body = `دارالافتاء گلزار طیبہ\n--- جدید سوال / مسئلہ ---\n\nNaam: ${name}\nMobile: ${phone}\nAddress: ${address}\n\nSawal / Masla:\n${text}`;
-            const mailtoUrl = `mailto:${darulIftaEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-            window.location.href = mailtoUrl;
+            return `mailto:${darulIftaEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         }
 
         async function submitSawaal() {
-            const name = document.getElementById('s-name').value.trim();
-            const phone = document.getElementById('s-phone').value.trim();
-            const address = document.getElementById('s-address').value.trim();
-            const text = document.getElementById('s-text').value.trim();
+            const nameEl = document.getElementById('s-name');
+            const phoneEl = document.getElementById('s-phone');
+            const addressEl = document.getElementById('s-address');
+            const textEl = document.getElementById('s-text');
             const statusEl = document.getElementById('sawaal-status-msg');
 
+            const name = nameEl.value.trim();
+            const phone = phoneEl.value.trim();
+            const address = addressEl.value.trim();
+            const text = textEl.value.trim();
+
             if (!name || !text) {
-                alert("Kripya apna naam aur sawaal zaroor likhein!");
+                if (statusEl) {
+                    statusEl.style.color = "#dc2626";
+                    statusEl.innerText = "Kripya apna naam aur sawaal zaroor likhein!";
+                }
                 return;
             }
 
@@ -889,29 +885,31 @@
                 savedDateText: now.toLocaleString("en-IN")
             };
 
+            let savedNo = null;
+
             if (typeof window.saveSawaalToFirestore === "function") {
                 try {
-                    const savedNo = await window.saveSawaalToFirestore(payload);
-                    if (statusEl) {
-                        statusEl.style.color = "#166534";
-                        statusEl.innerText = savedNo
-                            ? `✓ Aapka sawal save ho gaya hai (Sawaal No. #${savedNo}).`
-                            : "✓ Aapka sawal save ho gaya hai.";
-                    }
-                    document.getElementById('s-name').value = "";
-                    document.getElementById('s-phone').value = "";
-                    document.getElementById('s-address').value = "";
-                    document.getElementById('s-text').value = "";
+                    savedNo = await window.saveSawaalToFirestore(payload);
                 } catch (err) {
                     console.error("Sawaal save error:", err);
-                    if (statusEl) {
-                        statusEl.style.color = "#dc2626";
-                        statusEl.innerText = "Save nahi ho paya (Firestore rules check karein), Gmail khol rahe hain...";
-                    }
                 }
             }
 
-            sendGmailSawaal();
+            if (statusEl) {
+                statusEl.style.color = "#166534";
+                statusEl.innerText = savedNo
+                    ? `✓ Aapka sawal successfully bhej diya gaya hai (Sawaal No. #${savedNo}).`
+                    : "✓ Aapka sawal successfully bhej diya gaya hai.";
+            }
+
+            const mailtoUrl = buildGmailSawaalUrl(name, phone, address, text);
+
+            nameEl.value = "";
+            phoneEl.value = "";
+            addressEl.value = "";
+            textEl.value = "";
+
+            window.location.href = mailtoUrl;
         }
 
         window.addEventListener("hashchange", openFatwaFromHashIfPresent);
