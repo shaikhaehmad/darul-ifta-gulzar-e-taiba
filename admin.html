@@ -57,6 +57,7 @@
                 <option value="telegram">Telegram Channel / Kitab Link</option>
                 <option value="video">YouTube / Insta / FB Video Link</option>
                 <option value="fatwa">Fatwa (Direct Text — Bina PDF / Link)</option>
+                <option value="mazmoon">Mazmoon (Direct Text — Bina PDF / Link)</option>
             </select>
         </div>
 
@@ -80,6 +81,14 @@
             <div class="form-group">
                 <label>Jawab / Fatwa Text (Direct Text):</label>
                 <textarea id="item-answer" rows="6" placeholder="Fatwe ka poora text yahan likhein..."></textarea>
+            </div>
+        </div>
+
+        <!-- Direct Mazmoon Text Field (Sirf 'mazmoon' select karne par dikhega) -->
+        <div id="mazmoon-fields" style="display: none;">
+            <div class="form-group">
+                <label>Mazmoon Text (Direct Text):</label>
+                <textarea id="item-mazmoon" rows="6" placeholder="Mazmoon ka poora text yahan likhein..."></textarea>
             </div>
         </div>
 
@@ -141,13 +150,20 @@
         const type = document.getElementById('item-type').value;
         const urlField = document.getElementById('url-field');
         const fatwaFields = document.getElementById('fatwa-fields');
+        const mazmoonFields = document.getElementById('mazmoon-fields');
 
         if (type === 'fatwa') {
             urlField.style.display = 'none';
             fatwaFields.style.display = 'block';
+            mazmoonFields.style.display = 'none';
+        } else if (type === 'mazmoon') {
+            urlField.style.display = 'none';
+            fatwaFields.style.display = 'none';
+            mazmoonFields.style.display = 'block';
         } else {
             urlField.style.display = 'block';
             fatwaFields.style.display = 'none';
+            mazmoonFields.style.display = 'none';
         }
     }
 
@@ -193,6 +209,9 @@
                 const safeQ = (item.question || "").replace(/'/g, "\\'").replace(/\n/g, "\\n");
                 const safeA = (item.answer || "").replace(/'/g, "\\'").replace(/\n/g, "\\n");
                 codeStr += `    { lang: '${lang}', type: 'fatwa', title: '${safeTitle}', question: '${safeQ}', answer: '${safeA}' },\n`;
+            } else if (item.type === "mazmoon") {
+                const safeA = (item.answer || "").replace(/'/g, "\\'").replace(/\n/g, "\\n");
+                codeStr += `    { lang: '${lang}', type: 'mazmoon', title: '${safeTitle}', answer: '${safeA}' },\n`;
             } else {
                 const safeUrl = (item.url || "").replace(/'/g, "\\'");
                 codeStr += `    { lang: '${lang}', type: '${item.type}', title: '${safeTitle}', url: '${safeUrl}' },\n`;
@@ -243,6 +262,7 @@
         const url = document.getElementById('item-url-input').value.trim();
         const question = document.getElementById('item-question').value.trim();
         const answer = document.getElementById('item-answer').value.trim();
+        const mazmoonText = document.getElementById('item-mazmoon').value.trim();
 
         if (!title) {
             alert("Kripya Title zaroor likhein!");
@@ -256,6 +276,12 @@
                 return;
             }
             newItem = { lang, type, title, question, answer, url: "" };
+        } else if (type === "mazmoon") {
+            if (!mazmoonText) {
+                alert("Kripya Mazmoon ka Text zaroor likhein!");
+                return;
+            }
+            newItem = { lang, type, title, question: "", answer: mazmoonText, url: "" };
         } else {
             if (!url) {
                 alert("Kripya Title aur Link dono zaroor bharein!");
@@ -279,6 +305,7 @@
         document.getElementById('item-url-input').value = "";
         document.getElementById('item-question').value = "";
         document.getElementById('item-answer').value = "";
+        document.getElementById('item-mazmoon').value = "";
     }
 
     async function addBulkItems() {
@@ -371,9 +398,10 @@
             snap.forEach(d => {
                 const data = d.data();
                 const isFatwa = data && data.type === "fatwa" && data.title && data.answer;
+                const isMazmoon = data && data.type === "mazmoon" && data.title && data.answer;
                 const isLinkItem = data && data.title && data.url && data.type;
 
-                if (isFatwa || isLinkItem) {
+                if (isFatwa || isMazmoon || isLinkItem) {
                     list.push({
                         id: d.id,
                         lang: data.lang || "hi",
