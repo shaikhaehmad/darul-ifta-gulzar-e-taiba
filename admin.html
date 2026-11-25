@@ -16,7 +16,17 @@
         .btn { background-color: #0b5e2e; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 5px; }
         .btn:hover { background-color: #084823; }
         .btn:disabled { opacity: 0.65; cursor: not-allowed; }
+        .btn-row-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 8px; }
+        .btn-sm-sec { border: none; padding: 9px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12.5px; color: #ffffff; }
+        .btn-remove-soft { background-color: #dc2626; }
+        .btn-toggle-soft { background-color: #475569; }
+        .logo-preview-box { display: flex; align-items: center; gap: 12px; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 10px; margin-top: 8px; }
+        .logo-preview-img { width: 52px; height: 52px; object-fit: cover; border-radius: 50%; border: 1px solid #cbd5e1; display: none; background: #f8fafc; }
+        .logo-preview-img.show { display: block; }
         .file-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px; border-radius: 6px; margin-bottom: 8px; border: 1px solid #e2e8f0; gap: 10px; }
+        .item-left { display: flex; align-items: center; gap: 10px; }
+        .item-series-num { background: #0b5e2e; color: #ffffff; font-weight: bold; font-size: 12.5px; min-width: 28px; height: 28px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; padding: 0 7px; flex-shrink: 0; }
+        .list-total-bar { display: flex; justify-content: space-between; align-items: center; background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; padding: 10px 14px; border-radius: 8px; font-weight: bold; font-size: 14px; margin-top: 10px; margin-bottom: 12px; }
         .btn-delete { background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
         .btn-copy-sm { background-color: #2563eb; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
         .back-link { display: inline-block; margin-bottom: 15px; color: #0b5e2e; text-decoration: none; font-weight: bold; font-size: 14px; }
@@ -32,6 +42,10 @@
         .sawaal-meta { font-size: 12.5px; color: #334155; margin-bottom: 8px; line-height: 1.5; }
         .sawaal-body { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; font-size: 14px; color: #0f172a; white-space: pre-line; line-height: 1.6; }
         .sawaal-actions { display: flex; gap: 8px; margin-top: 10px; }
+
+        @media (max-width: 520px) {
+            .btn-row-2 { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -49,6 +63,36 @@
 <div id="admin-panel" class="container">
     <a href="index.html" class="back-link">Website par Wapas Jayein</a>
     <h2>Darul Ifta Admin Panel</h2>
+
+    <!-- 0. Logo & Introduction Settings Box -->
+    <div class="section-box" style="background-color: #eff6ff; border-color: #bfdbfe;">
+        <h3 style="color: #1e3a8a;">Logo &amp; Introduction (Badlein / Hatayein)</h3>
+
+        <div class="form-group">
+            <label>Logo Image URL ya File Upload:</label>
+            <input type="text" id="cfg-logo-url" placeholder="https://... logo link ya neeche se image chunein" oninput="updateLogoPreviewFromInput()">
+            <input type="file" id="cfg-logo-file" accept="image/*" style="margin-top: 8px; background: #ffffff;" onchange="handleLogoFileUpload(event)">
+            <div class="logo-preview-box">
+                <img id="cfg-logo-preview" src="" alt="Logo Preview" class="logo-preview-img">
+                <span id="cfg-logo-status" style="font-size: 12.5px; color: #475569;">Logo abhi set nahi hai / hata hua hai.</span>
+            </div>
+            <div class="btn-row-2">
+                <button type="button" class="btn-sm-sec btn-toggle-soft" onclick="toggleLogoVisibility()">Logo Hide / Show</button>
+                <button type="button" class="btn-sm-sec btn-remove-soft" onclick="removeLogoSetting()">Logo Hatayein</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Introduction Text (Header Intro):</label>
+            <textarea id="cfg-intro-text" rows="3" placeholder="Website ke header mein dikhane ke liye intro likhein..."></textarea>
+            <div class="btn-row-2">
+                <button type="button" class="btn-sm-sec btn-toggle-soft" onclick="toggleIntroVisibility()">Intro Hide / Show</button>
+                <button type="button" class="btn-sm-sec btn-remove-soft" onclick="removeIntroSetting()">Intro Hatayein</button>
+            </div>
+        </div>
+
+        <button type="button" class="btn" id="btn-save-site-config" style="background-color: #1d4ed8;" onclick="saveSiteConfigAction()">Logo &amp; Intro Save Karein</button>
+    </div>
 
     <!-- 1. Single Item Add Box -->
     <div class="section-box">
@@ -78,13 +122,11 @@
             <input type="text" id="item-title" placeholder="Jaise: Namaz ka Tareeqa">
         </div>
 
-        <!-- Link Field -->
         <div id="url-field" class="form-group">
             <label>Direct Link URL:</label>
             <input type="url" id="item-url-input" placeholder="https://... link yahan dalein">
         </div>
 
-        <!-- Direct Fatwa Text Fields -->
         <div id="fatwa-fields" style="display: none;">
             <div class="form-group">
                 <label>Sawal (Direct Text):</label>
@@ -96,7 +138,6 @@
             </div>
         </div>
 
-        <!-- Direct Mazmoon Text Field -->
         <div id="mazmoon-fields" style="display: none;">
             <div class="form-group">
                 <label>Mazmoon Text (Direct Text):</label>
@@ -107,26 +148,11 @@
         <button class="btn" id="btn-add-single" onclick="addNewItem()">Item Jodein</button>
     </div>
 
-    <!-- 2. Bulk Add Box -->
-    <div class="section-box" style="background-color: #f0fdf4; border-color: #bbf7d0;">
-        <h3 style="color: #166534;">Bulk Add (Ek Saath Kai Saare Jodein)</h3>
-        <p style="font-size: 12px; color: #555; margin-bottom: 10px;">
-            Har line mein likhein: <b>lang, type, title, url</b><br>
-            Misal: <code>gu, pdf, ગુજરાતી કિતાબ, https://drive.google.com/...</code><br>
-            Misal: <code>ur, telegram, اردو کتاب, https://t.me/...</code>
-        </p>
-
-        <div class="form-group">
-            <textarea id="bulk-textarea" rows="4" placeholder="gu, pdf, Kitab Name, https://..."></textarea>
-        </div>
-        <button class="btn" id="btn-add-bulk" style="background-color: #16a34a;" onclick="addBulkItems()">Sabhi Ek Saath Jodein</button>
-    </div>
-
     <div id="status"></div>
 
     <hr style="margin: 20px 0;">
 
-    <!-- 3. Saved Sawaalat Box (Sirf Admin Panel Mein) -->
+    <!-- 2. Saved Sawaalat Box -->
     <div class="section-box">
         <h3>Saved Sawaalat (Archive)</h3>
         <div class="sawaal-summary-bar">
@@ -149,13 +175,25 @@
     <hr style="margin: 20px 0;">
 
     <h3>Maujuda List (Yahan se hatayein / Delete karein)</h3>
-    <div id="admin-item-list" style="margin-top: 15px;"></div>
+    <div class="list-total-bar">
+        <span>Total Items / Kitabein: <span id="admin-total-items">0</span></span>
+        <span style="font-size: 12px; font-weight: normal;">Naya upar | Number niche se (1, 2, 3...)</span>
+    </div>
+    <div id="admin-item-list" style="margin-top: 10px;"></div>
 </div>
 
 <script>
     const SECRET_PIN = "2013";
     const STORAGE_KEY = "darul_ifta_permanent_data";
+    const SITE_CONFIG_STORAGE_KEY = "darul_ifta_site_config";
+
     let currentAdminItems = [];
+    let currentSiteConfig = {
+        logoUrl: "",
+        logoEnabled: false,
+        introText: "",
+        introEnabled: false
+    };
 
     function escapeHTML(str) {
         return (str || "")
@@ -170,6 +208,165 @@
         const statusEl = document.getElementById('status');
         statusEl.style.color = color;
         statusEl.innerText = msg;
+    }
+
+    function syncSiteConfigForm(cfg) {
+        currentSiteConfig = {
+            logoUrl: (cfg && cfg.logoUrl) ? String(cfg.logoUrl) : "",
+            logoEnabled: Boolean(cfg && cfg.logoEnabled),
+            introText: (cfg && cfg.introText) ? String(cfg.introText) : "",
+            introEnabled: Boolean(cfg && cfg.introEnabled)
+        };
+
+        try {
+            localStorage.setItem(SITE_CONFIG_STORAGE_KEY, JSON.stringify(currentSiteConfig));
+        } catch (_) {}
+
+        const urlInput = document.getElementById("cfg-logo-url");
+        const introInput = document.getElementById("cfg-intro-text");
+        if (urlInput) urlInput.value = currentSiteConfig.logoUrl;
+        if (introInput) introInput.value = currentSiteConfig.introText;
+
+        renderLogoPreview();
+    }
+
+    function renderLogoPreview() {
+        const previewImg = document.getElementById("cfg-logo-preview");
+        const statusSpan = document.getElementById("cfg-logo-status");
+        const val = (document.getElementById("cfg-logo-url")?.value || "").trim();
+
+        if (!previewImg || !statusSpan) return;
+
+        if (val) {
+            previewImg.src = val;
+            previewImg.classList.add("show");
+            statusSpan.innerText = currentSiteConfig.logoEnabled
+                ? "Logo Active (Website par dikhega)"
+                : "Logo Hidden (Save karne par website se chhupa rahega)";
+        } else {
+            previewImg.removeAttribute("src");
+            previewImg.classList.remove("show");
+            statusSpan.innerText = "Logo hata hua / khali hai.";
+        }
+    }
+
+    function updateLogoPreviewFromInput() {
+        const val = (document.getElementById("cfg-logo-url")?.value || "").trim();
+        currentSiteConfig.logoUrl = val;
+        if (val) currentSiteConfig.logoEnabled = true;
+        renderLogoPreview();
+    }
+
+    function handleLogoFileUpload(event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement("canvas");
+                const maxSize = 220;
+                let w = img.width;
+                let h = img.height;
+                if (w > h && w > maxSize) {
+                    h = Math.round((h * maxSize) / w);
+                    w = maxSize;
+                } else if (h >= w && h > maxSize) {
+                    w = Math.round((w * maxSize) / h);
+                    h = maxSize;
+                }
+                canvas.width = w;
+                canvas.height = h;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, w, h);
+                const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.82);
+
+                document.getElementById("cfg-logo-url").value = compressedDataUrl;
+                currentSiteConfig.logoUrl = compressedDataUrl;
+                currentSiteConfig.logoEnabled = true;
+                renderLogoPreview();
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    async function persistSiteConfig(nextCfg, successMsg) {
+        const normalized = {
+            logoUrl: (nextCfg.logoUrl || "").trim(),
+            logoEnabled: Boolean(nextCfg.logoEnabled && (nextCfg.logoUrl || "").trim()),
+            introText: (nextCfg.introText || "").trim(),
+            introEnabled: Boolean(nextCfg.introEnabled && (nextCfg.introText || "").trim())
+        };
+
+        if (typeof window.firestoreSaveSiteConfig === "function") {
+            setStatus("Logo / Intro setting save ho rahi hai...", "#0284c7");
+            const ok = await window.firestoreSaveSiteConfig(normalized);
+            if (!ok) return;
+        }
+
+        syncSiteConfigForm(normalized);
+        setStatus(successMsg || "Logo & Intro update ho gaya!", "#16a34a");
+    }
+
+    async function saveSiteConfigAction() {
+        const logoUrl = (document.getElementById("cfg-logo-url")?.value || "").trim();
+        const introText = (document.getElementById("cfg-intro-text")?.value || "").trim();
+        await persistSiteConfig({
+            logoUrl: logoUrl,
+            logoEnabled: Boolean(logoUrl),
+            introText: introText,
+            introEnabled: Boolean(introText)
+        }, "✓ Logo aur Introduction save ho gaye!");
+    }
+
+    async function toggleLogoVisibility() {
+        const logoUrl = (document.getElementById("cfg-logo-url")?.value || "").trim();
+        const introText = (document.getElementById("cfg-intro-text")?.value || "").trim();
+        const nextEnabled = !currentSiteConfig.logoEnabled;
+        await persistSiteConfig({
+            logoUrl: logoUrl,
+            logoEnabled: nextEnabled && Boolean(logoUrl),
+            introText: introText,
+            introEnabled: currentSiteConfig.introEnabled && Boolean(introText)
+        }, nextEnabled ? "✓ Logo show mode mein save ho gaya." : "✓ Logo hide mode mein save ho gaya.");
+    }
+
+    async function removeLogoSetting() {
+        if (!confirm("Kya aap website se Logo hatana chahte hain?")) return;
+        const introText = (document.getElementById("cfg-intro-text")?.value || "").trim();
+        const fileInput = document.getElementById("cfg-logo-file");
+        if (fileInput) fileInput.value = "";
+        await persistSiteConfig({
+            logoUrl: "",
+            logoEnabled: false,
+            introText: introText,
+            introEnabled: currentSiteConfig.introEnabled && Boolean(introText)
+        }, "✓ Logo hata diya gaya hai!");
+    }
+
+    async function toggleIntroVisibility() {
+        const logoUrl = (document.getElementById("cfg-logo-url")?.value || "").trim();
+        const introText = (document.getElementById("cfg-intro-text")?.value || "").trim();
+        const nextEnabled = !currentSiteConfig.introEnabled;
+        await persistSiteConfig({
+            logoUrl: logoUrl,
+            logoEnabled: currentSiteConfig.logoEnabled && Boolean(logoUrl),
+            introText: introText,
+            introEnabled: nextEnabled && Boolean(introText)
+        }, nextEnabled ? "✓ Intro show mode mein save ho gaya." : "✓ Intro hide mode mein save ho gaya.");
+    }
+
+    async function removeIntroSetting() {
+        if (!confirm("Kya aap website se Introduction hatana chahte hain?")) return;
+        const logoUrl = (document.getElementById("cfg-logo-url")?.value || "").trim();
+        await persistSiteConfig({
+            logoUrl: logoUrl,
+            logoEnabled: currentSiteConfig.logoEnabled && Boolean(logoUrl),
+            introText: "",
+            introEnabled: false
+        }, "✓ Introduction hata diya gaya hai!");
     }
 
     function toggleTypeFields() {
@@ -271,20 +468,29 @@
     }
 
     function loadAdminList(items) {
+        // items: purani (0) -> nayi (n-1)
         currentAdminItems = Array.isArray(items) ? items : [];
         saveLocalItems(currentAdminItems);
+
+        const totalCount = currentAdminItems.length;
+        const totalEl = document.getElementById('admin-total-items');
+        if (totalEl) totalEl.innerText = String(totalCount);
 
         const adminList = document.getElementById('admin-item-list');
         adminList.innerHTML = "";
 
-        if (currentAdminItems.length === 0) {
+        if (totalCount === 0) {
             adminList.innerHTML = "<p style='color: #64748b; font-size: 14px;'>Abhi koi item mojood nahi hai.</p>";
             updateExportBox(currentAdminItems);
             return;
         }
 
-        currentAdminItems.slice().reverse().forEach((item, revIndex) => {
-            const realIndex = currentAdminItems.length - 1 - revIndex;
+        // Sabse purani sabse niche, nayi sabse upar; number niche se 1, 2, 3... upar ki taraf
+        const reversedItems = currentAdminItems.slice().reverse();
+
+        reversedItems.forEach((item, idx) => {
+            const realIndex = totalCount - 1 - idx;
+            const seriesNo = totalCount - idx; // sabse niche wala = 1, uske upar = 2, sabse upar wala = totalCount
             const langCode = escapeHTML((item.lang || "hi").toUpperCase());
             const safeType = escapeHTML(item.type || "");
             const safeTitle = escapeHTML(item.title || "");
@@ -292,9 +498,12 @@
 
             adminList.innerHTML += `
                 <div class="file-item">
-                    <div>
-                        <strong>${safeTitle}</strong><br>
-                        <small style="color:#666;">[${langCode}] [${safeType}]</small>
+                    <div class="item-left">
+                        <span class="item-series-num">${seriesNo}</span>
+                        <div>
+                            <strong>${safeTitle}</strong><br>
+                            <small style="color:#666;">[${langCode}] [${safeType}]</small>
+                        </div>
                     </div>
                     <button class="btn-delete" onclick="deleteItem(${realIndex}, '${safeId}')">Hatayein</button>
                 </div>
@@ -361,55 +570,12 @@
             loadAdminList(items);
         }
 
-        setStatus("Item Firebase mein jud gaya! Website live update ho gayi hai.", "#16a34a");
+        setStatus("Item Firebase mein jud gaya! Sabse upar set ho gaya hai.", "#16a34a");
         document.getElementById('item-title').value = "";
         document.getElementById('item-url-input').value = "";
         document.getElementById('item-question').value = "";
         document.getElementById('item-answer').value = "";
         document.getElementById('item-mazmoon').value = "";
-    }
-
-    async function addBulkItems() {
-        const bulkText = document.getElementById('bulk-textarea').value.trim();
-
-        if (!bulkText) {
-            alert("Kripya bulk box mein data paste karein!");
-            return;
-        }
-
-        const lines = bulkText.split('\n');
-        const parsedItems = [];
-
-        lines.forEach(line => {
-            const parts = line.split(',');
-            if (parts.length >= 4) {
-                const lang = parts[0].trim().toLowerCase();
-                const type = parts[1].trim().toLowerCase();
-                const title = parts[2].trim();
-                const url = parts.slice(3).join(',').trim();
-
-                if (['gu', 'hi', 'ur'].includes(lang) && ['pdf', 'telegram', 'video'].includes(type) && title && url) {
-                    parsedItems.push({ lang, type, title, question: "", answer: "", url });
-                }
-            }
-        });
-
-        if (parsedItems.length === 0) {
-            alert("Format check karein: lang, type, title, url (jaise gu, pdf, Kitab, https://...)");
-            return;
-        }
-
-        if (typeof window.firestoreAddBulkItems === "function") {
-            setStatus(`${parsedItems.length} items Firebase mein save ho rahe hain...`, "#0284c7");
-            const ok = await window.firestoreAddBulkItems(parsedItems);
-            if (!ok) return;
-        } else {
-            const items = getLocalItems().concat(parsedItems);
-            loadAdminList(items);
-        }
-
-        setStatus(`${parsedItems.length} items Firebase mein jud gaye!`, "#16a34a");
-        document.getElementById('bulk-textarea').value = "";
     }
 
     async function deleteItem(index, docId) {
@@ -437,6 +603,13 @@
         navigator.clipboard.writeText(copyText.value);
         alert("Backup code copy ho gaya!");
     }
+
+    window.addEventListener("DOMContentLoaded", function() {
+        try {
+            const cached = JSON.parse(localStorage.getItem(SITE_CONFIG_STORAGE_KEY) || "{}");
+            syncSiteConfigForm(cached);
+        } catch (_) {}
+    });
 </script>
 
 <script type="module">
@@ -450,6 +623,8 @@
         addDoc,
         deleteDoc,
         doc,
+        getDoc,
+        setDoc,
         serverTimestamp
     } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
 
@@ -460,6 +635,34 @@
             await signInAnonymously(auth);
         }
         return auth.currentUser;
+    };
+
+    window.refreshAdminSiteConfig = async function() {
+        try {
+            const snap = await getDoc(doc(db, "settings", "siteConfig"));
+            if (snap.exists() && typeof window.syncSiteConfigForm === "function") {
+                window.syncSiteConfigForm(snap.data());
+            }
+        } catch (err) {
+            console.warn("Admin site config load error:", err);
+        }
+    };
+
+    window.firestoreSaveSiteConfig = async function(cfg) {
+        try {
+            await setDoc(doc(db, "settings", "siteConfig"), {
+                logoUrl: cfg.logoUrl || "",
+                logoEnabled: Boolean(cfg.logoEnabled),
+                introText: cfg.introText || "",
+                introEnabled: Boolean(cfg.introEnabled),
+                updatedAt: serverTimestamp()
+            }, { merge: true });
+            return true;
+        } catch (err) {
+            console.error("Site config save error:", err);
+            window.setStatus("Logo/Intro save nahi ho paya. Firestore rules check karein.", "#dc2626");
+            return false;
+        }
     };
 
     function formatSawaalDate(data) {
@@ -567,7 +770,7 @@
     async function fetchAndRenderAdminItems() {
         try {
             const snap = await getDocs(collection(db, "items"));
-            const list = [];
+            const rawList = [];
             snap.forEach(d => {
                 const data = d.data();
                 const isFatwa = data && data.type === "fatwa" && data.title && data.answer;
@@ -575,17 +778,21 @@
                 const isLinkItem = data && data.title && data.url && data.type;
 
                 if (isFatwa || isMazmoon || isLinkItem) {
-                    list.push({
+                    rawList.push({
                         id: d.id,
                         lang: data.lang || "hi",
                         type: data.type,
                         title: data.title,
                         question: data.question || "",
                         answer: data.answer || "",
-                        url: data.url || ""
+                        url: data.url || "",
+                        _sortTime: getSortTime(data)
                     });
                 }
             });
+
+            rawList.sort((a, b) => a._sortTime - b._sortTime);
+            const list = rawList.map(({ _sortTime, ...rest }) => rest);
             window.loadAdminList(list);
         } catch (err) {
             console.error("Firestore admin list error:", err);
@@ -598,6 +805,7 @@
 
     window.onAdminUnlocked = async function() {
         await Promise.all([
+            window.refreshAdminSiteConfig(),
             fetchAndRenderAdminItems(),
             window.refreshAdminSawaalatList()
         ]);
@@ -619,28 +827,6 @@
         } catch (err) {
             console.error("Add item error:", err);
             window.setStatus("Firestore mein item save nahi ho paya. Security rules check karein.", "#dc2626");
-            return false;
-        }
-    };
-
-    window.firestoreAddBulkItems = async function(itemsArr) {
-        try {
-            for (const item of itemsArr) {
-                await addDoc(collection(db, "items"), {
-                    lang: item.lang,
-                    type: item.type,
-                    title: item.title,
-                    question: item.question || "",
-                    answer: item.answer || "",
-                    url: item.url || "",
-                    createdAt: serverTimestamp()
-                });
-            }
-            await fetchAndRenderAdminItems();
-            return true;
-        } catch (err) {
-            console.error("Bulk add error:", err);
-            window.setStatus("Bulk items save karne mein dikkat aayi. Security rules check karein.", "#dc2626");
             return false;
         }
     };
