@@ -179,7 +179,8 @@
                 </div>
                 <p style="font-size: 11px; color: #64748b; margin-bottom: 12px; font-style: italic;">(Note: Agar koi photo/document hai, toh kripya email ke zariye bhej dein.)</p>
 
-                <button class="btn-submit" onclick="sendGmailSawaal()">Gmail par Sawaal Bhejein</button>
+                <button class="btn-submit" onclick="submitSawaal()">Sawaal Save Karein &amp; Gmail Kholein</button>
+                <div id="sawaal-status-msg" style="font-size: 13px; margin-top: 10px; font-weight: bold;"></div>
             </div>
         </div>
     </div>
@@ -866,6 +867,53 @@
             window.location.href = mailtoUrl;
         }
 
+        async function submitSawaal() {
+            const name = document.getElementById('s-name').value.trim();
+            const phone = document.getElementById('s-phone').value.trim();
+            const address = document.getElementById('s-address').value.trim();
+            const text = document.getElementById('s-text').value.trim();
+            const statusEl = document.getElementById('sawaal-status-msg');
+
+            if (!name || !text) {
+                alert("Kripya apna naam aur sawaal zaroor likhein!");
+                return;
+            }
+
+            const now = new Date();
+            const payload = {
+                name: name,
+                phone: phone,
+                address: address,
+                question: text,
+                createdAt: now.toISOString(),
+                savedDateText: now.toLocaleString("en-IN")
+            };
+
+            if (typeof window.saveSawaalToFirestore === "function") {
+                try {
+                    const savedNo = await window.saveSawaalToFirestore(payload);
+                    if (statusEl) {
+                        statusEl.style.color = "#166534";
+                        statusEl.innerText = savedNo
+                            ? `✓ Aapka sawal save ho gaya hai (Sawaal No. #${savedNo}).`
+                            : "✓ Aapka sawal save ho gaya hai.";
+                    }
+                    document.getElementById('s-name').value = "";
+                    document.getElementById('s-phone').value = "";
+                    document.getElementById('s-address').value = "";
+                    document.getElementById('s-text').value = "";
+                } catch (err) {
+                    console.error("Sawaal save error:", err);
+                    if (statusEl) {
+                        statusEl.style.color = "#dc2626";
+                        statusEl.innerText = "Save nahi ho paya (Firestore rules check karein), Gmail khol rahe hain...";
+                    }
+                }
+            }
+
+            sendGmailSawaal();
+        }
+
         window.addEventListener("hashchange", openFatwaFromHashIfPresent);
 
         window.onload = function() {
@@ -878,9 +926,37 @@
 
     <script type="module">
         import { db, auth } from "./firebase-config.js";
-        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+        import { collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
 
         console.log("Firebase connected:", db, auth);
+
+        window.saveSawaalToFirestore = async function(payload) {
+            const colRef = collection(db, "sawaalat");
+            let maxNum = 0;
+
+            try {
+                const snap = await getDocs(colRef);
+                snap.forEach(d => {
+                    const n = Number(d.data()?.sawaalNumber || 0);
+                    if (n > maxNum) maxNum = n;
+                });
+            } catch (_) {}
+
+            const nextNumber = maxNum + 1;
+
+            await addDoc(colRef, {
+                sawaalNumber: nextNumber,
+                name: payload.name,
+                phone: payload.phone,
+                address: payload.address,
+                question: payload.question,
+                savedDateText: payload.savedDateText,
+                createdAtClient: payload.createdAt,
+                createdAt: serverTimestamp()
+            });
+
+            return nextNumber;
+        };
 
         async function loadItemsFromFirestore() {
             try {
