@@ -64,7 +64,7 @@
         .btn-view { background: linear-gradient(135deg, #0f5132, #157347); color: #ffffff; text-decoration: none; border: none; cursor: pointer; padding: 9px 14px; border-radius: 8px; font-size: 13px; font-weight: bold; text-align: center; white-space: nowrap; box-shadow: 0 2px 4px rgba(15,81,50,0.2); transition: transform 0.12s ease, opacity 0.15s ease; }
         .btn-view:hover { opacity: 0.94; transform: translateY(-1px); }
 
-        /* Improved 3-Option Fatwa / Mazmoon Buttons (Copy, Share, Download) */
+        /* 3-Option Fatwa / Mazmoon Buttons (Copy, Share, Download) */
         .fatwa-3btn-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .f-btn { border: 1px solid transparent; cursor: pointer; padding: 7px 6px; border-radius: 8px; font-size: 11.5px; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; gap: 3px; white-space: nowrap; box-shadow: 0 1px 2px rgba(15,23,42,0.06); transition: transform 0.12s ease, filter 0.15s ease; }
         .f-btn:hover { filter: brightness(0.97); transform: translateY(-1px); }
@@ -73,14 +73,8 @@
         .f-btn-share { background-color: #eff6ff; color: #1e40af; border-color: #bfdbfe; }
         .f-btn-dl { background-color: #fffbeb; color: #92400e; border-color: #fde68a; }
 
-        /* Script Likhawat Buttons (Hindi / Gujarati) */
-        .translate-2btn-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
-        .t-btn { border: 1px solid #cbd5e1; background-color: #f8fafc; color: #1e293b; cursor: pointer; padding: 6px 6px; border-radius: 8px; font-size: 11px; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; gap: 3px; white-space: nowrap; transition: transform 0.12s ease, background-color 0.15s ease; }
-        .t-btn:hover { background-color: #e2e8f0; transform: translateY(-1px); }
-        .t-btn.active-lang { background-color: #0f5132; color: #ffffff; border-color: #0f5132; }
-
         .modal-fatwa-toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0; align-items: center; }
-        .modal-fatwa-toolbar .f-btn, .modal-fatwa-toolbar .t-btn { padding: 8px 12px; font-size: 12px; }
+        .modal-fatwa-toolbar .f-btn { padding: 8px 12px; font-size: 12px; }
 
         /* Direct App Share Popover / Modal */
         .share-backdrop { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); z-index: 1200; padding: 16px; align-items: center; justify-content: center; }
@@ -236,58 +230,59 @@
 
         // Fallback data agar Firestore mein abhi data na ho ya offline ho
         const FALLBACK_DATA = [
-    { lang: 'hi', type: 'telegram', title: 'नसब सफाअत और नफाए मुस्तफा', url: 'https://t.me/daruliftagulzaretaiba/17' },
-    { lang: 'gu', type: 'video', title: 'મફત ના મજુર', url: 'https://www.instagram.com/reel/DbLvYn4vRWf/?avpt=YjlyaDVmcWxodjN6' },
-    { lang: 'ur', type: 'pdf', title: 'ہندوستان کی بینکوں سے ملن  ے والاسود_کا', url: 'https://drive.google.com/file/d/1FNtHnpkaHj0pOM8Xp3QMCpIWdKXwnHvf/view?usp=drivesdk' },
-    { lang: 'hi', type: 'telegram', title: 'फतवा-ए-सरइ', url: 'https://t.me/daruliftagulzaretaiba/49' },
-    { lang: 'hi', type: 'telegram', title: 'कान कटे हुए जानवर की क़ुरबानी', url: 'https://t.me/daruliftagulzaretaiba/16' },
-    { lang: 'ur', type: 'telegram', title: 'حرام اشیاء سے علاج؟', url: 'https://t.me/daruliftagulzaretaiba/35' },
-    { lang: 'ur', type: 'telegram', title: 'محبت رسول', url: 'https://t.me/daruliftagulzaretaiba/7' },
-    { lang: 'ur', type: 'telegram', title: 'قسطو پر مکان', url: 'https://t.me/daruliftagulzaretaiba/30' },
-    { lang: 'hi', type: 'telegram', title: 'नापाकी की हालत में ओरत के  हज का किया हुकम', url: 'https://t.me/daruliftagulzaretaiba/14' },
-    { lang: 'gu', type: 'telegram', title: 'અફ્જલીયત-એ-સિદ્દીકે અકબર', url: 'https://t.me/daruliftagulzaretaiba/52' },
-    { lang: 'hi', type: 'telegram', title: 'शमशिरे दिफाए माविया', url: 'https://t.me/daruliftagulzaretaiba/45' },
-    { lang: 'ur', type: 'telegram', title: 'امام حسن کو ذہر کس نے دیا تھا؟', url: 'https://t.me/daruliftagulzaretaiba/29' },
-    { lang: 'hi', type: 'pdf', title: 'मस्जिद ओर कबुर', url: 'https://drive.google.com/file/d/1vuUGkLbSukJAKiBj2no0X4SqEN2p7gIZ/view?usp=drivesdk' },
-    { lang: 'gu', type: 'telegram', title: 'उमराह करनेका तरीका', url: 'https://t.me/daruliftagulzaretaiba/40' },
-    { lang: 'gu', type: 'telegram', title: 'ઉમરાહ કરવાનો તરીકો', url: 'https://t.me/daruliftagulzaretaiba/39' },
-    { lang: 'hi', type: 'telegram', title: 'क्या सवाब के नाम पर लकी ड्रॉ जायज़ हो जाता है', url: 'https://t.me/daruliftagulzaretaiba/24' },
-    { lang: 'ur', type: 'telegram', title: 'نسبندی کا شرعی موقف - اضطراری حالات میں فقهی احکام', url: 'https://t.me/daruliftagulzaretaiba/59' },
-    { lang: 'gu', type: 'telegram', title: 'બાળકોના(200) ઇસ્લામી નામ', url: 'https://t.me/daruliftagulzaretaiba/53' },
-    { lang: 'gu', type: 'telegram', title: 'ઓલીયા-એ-કિરામ થી મદદ માંગવાનો સરઈ હુકમ', url: 'https://t.me/daruliftagulzaretaiba/34' },
-    { lang: 'gu', type: 'telegram', title: 'मंगेतर से फ़ोन पे बात करना', url: 'https://t.me/daruliftagulzaretaiba/36' },
-    { lang: 'hi', type: 'telegram', title: 'सहाबामे सबसे बड़े आलिम कोन ?', url: 'https://t.me/daruliftagulzaretaiba/19' },
-    { lang: 'gu', type: 'telegram', title: 'નસબ અને સફાઅતે મુસ્તફા', url: 'https://t.me/daruliftagulzaretaiba/48' },
-    { lang: 'hi', type: 'pdf', title: 'मोहब्बते रसूल', url: 'https://drive.google.com/file/d/1Tj7B4CATDBEVAOi0cROV2KjBJqMDZh7F/view?usp=drivesdk' },
-    { lang: 'hi', type: 'telegram', title: 'नमाजे इद का वक्त फिक्स हे', url: 'https://t.me/daruliftagulzaretaiba/13' },
-    { id: 'fallback-fatwa-1', lang: 'gu', type: 'fatwa', title: 'Fatva no. 1', question: 'السلام علیکم حضرت صاحب\nقرآن و حدیث شریف میں گناہ سے بچنے کی دعا ہو تو بتا دیجئے؟\nابراھیم خان راجستھان', answer: 'وعلیکم السلام ورحمۃ اللہ وبرکاتہ\n\nگناہوں سے بچنے اور تقویٰ اختیار کرنے کی چند قرآنی و نبوی دعائیں:\n\n1۔ قرآن مجید کی دعا\n\nرَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا وَهَبْ لَنَا مِنْ لَدُنْكَ رَحْمَةً إِنَّكَ أَنْتَ الْوَهَّابُ۔\n\nترجمہ: اے ہمارے رب! ہمیں ہدایت دینے کے بعد ہمارے دلوں کو ٹیڑھا نہ کر اور ہمیں اپنے پاس سے رحمت عطا فرما، بے شک تو ہی بہت عطا فرمانے والا ہے۔\n\n(سورۂ آل عمران: 8)\n\n2۔ گناہوں سے حفاظت کی نبوی دعا\n\nاللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى۔\n\nترجمہ: اے اللہ! میں تجھ سے ہدایت، تقویٰ، پاک دامنی اور بے نیازی کا سوال کرتا ہوں۔\n\n(صحیح مسلم: 2721)\n\n3۔ نفس کی برائی سے حفاظت کی دعا\n\nاللَّهُمَّ آتِ نَفْسِي تَقْوَاهَا، وَزَكِّهَا أَنْتَ خَيْرُ مَنْ زَكَّاهَا، أَنْتَ وَلِيُّهَا وَمَوْلَاهَا۔\n\nترجمہ: اے اللہ! میرے نفس کو اس کا تقویٰ عطا فرما اور اسے پاک فرما، تو ہی اسے سب سے بہتر پاک کرنے والا ہے، تو ہی اس کا کارساز اور مالک ہے۔\n\n(صحیح مسلم: 2722)\n\n4۔ گناہوں اور نافرمانی سے بچنے کی دعا\n\nاللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ۔\n\nترجمہ: اے اللہ! اپنے ذکر، اپنے شکر اور اچھی طرح اپنی عبادت کرنے میں میری مدد فرما۔\n\n(سنن ابی داؤد: 1522)\n\nعمل کی نصیحت:\n\nابراہیم خان صاحب! ان دعاؤں کو روزانہ خصوصاً نمازوں کے بعد اور صبح و شام پڑھنے کا معمول بنائیں۔ گناہوں سے بچنے کے لیے بری صحبت، گناہ کے اسباب اور تنہائی میں ہونے والی نافرمانیوں سے بھی بچیں۔ اگر کبھی گناہ ہو جائے تو مایوس نہ ہوں، فوراً سچی توبہ کریں۔\n\nاللہ تعالیٰ ہم سب کو گناہوں سے محفوظ رکھے اور تقویٰ و پرہیزگاری والی زندگی عطا فرمائے۔ آمین۔\n\nمفتی ابو احمد محمد رضا نوری قادری حنفی (مشہور بہ نام ایم. جے. اکبری)\n\nدارالافتاء گلزار طیبہ تحقیق سینٹر' },
-    { lang: 'ur', type: 'telegram', title: 'زکوۃ کی اہمیت', url: 'https://t.me/daruliftagulzaretaiba/9' },
-    { lang: 'hi', type: 'telegram', title: 'अकाइदे एहले सुन्नत', url: 'https://t.me/daruliftagulzaretaiba/46' },
-    { lang: 'ur', type: 'telegram', title: 'نجس شے سے سورہ فاتحہ لکھنے کا؟', url: 'https://t.me/daruliftagulzaretaiba/11?single' },
-    { lang: 'ur', type: 'telegram', title: 'فقتی محقق بننے کے اصول', url: 'https://t.me/daruliftagulzaretaiba/38' },
-    { lang: 'hi', type: 'telegram', title: 'कुरान ओर हदीस के मुकाबले में अपने दीन', url: 'https://t.me/daruliftagulzaretaiba/20' },
-    { lang: 'ur', type: 'telegram', title: 'تحقیقات گلزار طیبہ', url: 'https://t.me/daruliftagulzaretaiba/27' },
-    { lang: 'ur', type: 'pdf', title: 'عصمت انبیاء علیہم السلام', url: 'https://drive.google.com/file/d/18UcHrle2KMj1Gj-JDT8dlAgtr-D575gG/view?usp=drivesdk' },
-    { lang: 'ur', type: 'telegram', title: 'ہندوستان کی بینکوں_سے_ملنے والا سود کاحکم', url: 'https://t.me/daruliftagulzaretaiba/28' },
-    { lang: 'ur', type: 'telegram', title: 'اصول رد باطل', url: 'https://t.me/daruliftagulzaretaiba/31' },
-    { lang: 'ur', type: 'pdf', title: 'محبت رسول', url: 'https://drive.google.com/file/d/1VJJ8eF_ubul2JLSpo21GPLRvWPLKuXHx/view?usp=drivesdk' },
-    { lang: 'hi', type: 'pdf', title: 'जर्बे मुर्तजा', url: 'https://drive.google.com/file/d/14Pr2sfVjq0uu9b5PbTbuT9Jspf290y56/view?usp=drivesdk' },
-    { lang: 'hi', type: 'telegram', title: 'कान कटे हुए जानवर की क़ुरबानी', url: 'https://t.me/daruliftagulzaretaiba/16' },
-    { lang: 'hi', type: 'pdf', title: 'अनवार-ए-अहले बैत', url: 'https://drive.google.com/file/d/1h29PxSGpErb53Sx1KHnOb3myUhlVARuS/view?usp=drivesdk' },
-    { lang: 'hi', type: 'telegram', title: 'ओलियाह अल्लाह से इस्तिआनत और सरइ रहनुमाई', url: 'https://t.me/daruliftagulzaretaiba/21' },
-    { lang: 'ur', type: 'telegram', title: 'سنت غير مؤكده_ترک کرنے والے کیاقتدا ؟', url: 'https://t.me/daruliftagulzaretaiba/22' },
-    { lang: 'gu', type: 'telegram', title: 'વાલીદેનના હકો', url: 'https://t.me/daruliftagulzaretaiba/43' },
-    { lang: 'gu', type: 'video', title: 'ખામોસી કે પીછેકી કહાની', url: 'https://www.instagram.com/reel/Df_M5SSPcOl/?utm_source=ig_web_copy_link&cnvx=NTc4MTIwNjQ2YQ==' },
-    { lang: 'ur', type: 'telegram', title: 'سجدہ میں تینوں انگلیوں ؟', url: 'https://t.me/daruliftagulzaretaiba/25' },
-    { lang: 'gu', type: 'pdf', title: 'મોહોબ્બતે રસુલ', url: 'https://drive.google.com/file/d/1iCPegplJiuZTKMdFaY18M0vMdlSROawT/view?usp=drivesdk' },
-    { lang: 'gu', type: 'telegram', title: 'મંગેતર થી ફોને પર વાત કરવી', url: 'https://t.me/daruliftagulzaretaiba/37' },
-    { lang: 'ur', type: 'telegram', title: 'مسجد اور قبور', url: 'https://t.me/daruliftagulzaretaiba/32' },
-    { lang: 'ur', type: 'telegram', title: 'کیا_ثواب_کی_نام_پر لکی ڈرا جائز ہو جا تا ہے', url: 'https://t.me/daruliftagulzaretaiba/23' },
-    { lang: 'ur', type: 'telegram', title: 'عورتوں بغیر محرم کے عمره؟', url: 'https://t.me/daruliftagulzaretaiba/26' },
-    { lang: 'hi', type: 'telegram', title: 'वलिदेन की अजमत', url: 'https://t.me/daruliftagulzaretaiba/8' },
-    { lang: 'ur', type: 'pdf', title: 'کفر پر مرنے والوں کی نماز', url: 'https://drive.google.com/file/d/1tPnOx91dM6y_mk_4wR69sbA4F5h07uLR/view?usp=drivesdk' },
-    { id: 'fallback-mazmoon-1', lang: 'hi', type: 'mazmoon', title: 'Mazmoon no. 1 - इल्म और अमल की अहमियत', answer: 'इल्म दीन की बुनियाद है और अमल उसकी रूह। जब इंसान इल्म हासिल करके उस पर अमल करता है, तो उसकी ज़िंदगी में बरकत और सुकून पैदा होता है।\n\nहमें चाहिए कि हम रोज़ाना कुछ वक़्त दीन की बातें सीखने और समझने में लगाएं, और जो सीखें उस पर अमल करने की पूरी कोशिश करें।\n\nदारुल इफ़्ता गुलज़ार-ए-तैबा तहक़ीक़ सेंटर' }
-];
+            { lang: 'hi', type: 'telegram', title: 'नसब सफाअत और नफाए मुस्तफा', url: 'https://t.me/daruliftagulzaretaiba/17' },
+            { lang: 'gu', type: 'video', title: 'મફત ના મજુર', url: 'https://www.instagram.com/reel/DbLvYn4vRWf/?avpt=YjlyaDVmcWxodjN6' },
+            { lang: 'ur', type: 'pdf', title: 'ہندوستان کی بینکوں سے ملن  ے والاسود_کا', url: 'https://drive.google.com/file/d/1FNtHnpkaHj0pOM8Xp3QMCpIWdKXwnHvf/view?usp=drivesdk' },
+            { lang: 'hi', type: 'telegram', title: 'फतवा-ए-सरइ', url: 'https://t.me/daruliftagulzaretaiba/49' },
+            { lang: 'hi', type: 'telegram', title: 'कान कटे हुए जानवर की क़ुरबानी', url: 'https://t.me/daruliftagulzaretaiba/16' },
+            { lang: 'ur', type: 'telegram', title: 'حرام اشیاء سے علاج؟', url: 'https://t.me/daruliftagulzaretaiba/35' },
+            { lang: 'ur', type: 'telegram', title: 'محبت رسول', url: 'https://t.me/daruliftagulzaretaiba/7' },
+            { lang: 'ur', type: 'telegram', title: 'قسطو پر مکان', url: 'https://t.me/daruliftagulzaretaiba/30' },
+            { lang: 'hi', type: 'telegram', title: 'नापाकी की हालत में ओरत के  हज का किया हुकम', url: 'https://t.me/daruliftagulzaretaiba/14' },
+            { lang: 'gu', type: 'telegram', title: 'અફ્જલીયત-એ-સિદ્દીકે અકબર', url: 'https://t.me/daruliftagulzaretaiba/52' },
+            { lang: 'hi', type: 'telegram', title: 'शमशिरे दिफाए माविया', url: 'https://t.me/daruliftagulzaretaiba/45' },
+            { lang: 'ur', type: 'telegram', title: 'امام حسن کو ذہر کس نے دیا تھا؟', url: 'https://t.me/daruliftagulzaretaiba/29' },
+            { lang: 'hi', type: 'pdf', title: 'मस्जिद ओर कबुर', url: 'https://drive.google.com/file/d/1vuUGkLbSukJAKiBj2no0X4SqEN2p7gIZ/view?usp=drivesdk' },
+            { lang: 'gu', type: 'telegram', title: 'उमराह करनेका तरीका', url: 'https://t.me/daruliftagulzaretaiba/40' },
+            { lang: 'gu', type: 'telegram', title: 'ઉમરાહ કરવાનો તરીકો', url: 'https://t.me/daruliftagulzaretaiba/39' },
+            { lang: 'hi', type: 'telegram', title: 'क्या सवाब के नाम पर लकी ड्रॉ जायज़ हो जाता है', url: 'https://t.me/daruliftagulzaretaiba/24' },
+            { lang: 'ur', type: 'telegram', title: 'نسبندی کا شرعی موقف - اضطراری حالات میں فقهی احکام', url: 'https://t.me/daruliftagulzaretaiba/59' },
+            { lang: 'gu', type: 'telegram', title: 'બાળકોના(200) ઇસ્લામી નામ', url: 'https://t.me/daruliftagulzaretaiba/53' },
+            { lang: 'gu', type: 'telegram', title: 'ઓલીયા-એ-કિરામ થી મદદ માંગવાનો સરઈ હુકમ', url: 'https://t.me/daruliftagulzaretaiba/34' },
+            { lang: 'gu', type: 'telegram', title: 'मंगेतर से फ़ोन पे बात करना', url: 'https://t.me/daruliftagulzaretaiba/36' },
+            { lang: 'hi', type: 'telegram', title: 'सहाबामे सबसे बड़े आलिम कोन ?', url: 'https://t.me/daruliftagulzaretaiba/19' },
+            { lang: 'gu', type: 'telegram', title: 'નસબ અને સફાઅતે મુસ્તફા', url: 'https://t.me/daruliftagulzaretaiba/48' },
+            { lang: 'hi', type: 'pdf', title: 'मोहब्बते रसूल', url: 'https://drive.google.com/file/d/1Tj7B4CATDBEVAOi0cROV2KjBJqMDZh7F/view?usp=drivesdk' },
+            { lang: 'hi', type: 'telegram', title: 'नमाजे इद का वक्त फिक्स हे', url: 'https://t.me/daruliftagulzaretaiba/13' },
+            { id: 'fallback-fatwa-1', lang: 'gu', type: 'fatwa', title: 'Fatva no. 1', question: 'السلام علیکم حضرت صاحب\nقرآن و حدیث شریف میں گناہ سے بچنے کی دعا ہو تو بتا دیجئے؟\nابراھیم خان راجستھان', answer: 'وعلیکم السلام ورحمۃ اللہ وبرکاتہ\n\nگناہوں سے بچنے اور تقویٰ اختیار کرنے کی چند قرآنی و نبوی دعائیں:\n\n1۔ قرآن مجید کی دعا\n\nرَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا وَهَبْ لَنَا مِنْ لَدُنْكَ رَحْمَةً إِنَّكَ أَنْتَ الْوَهَّابُ۔\n\nترجمہ: اے ہمارے رب! ہمیں ہدایت دینے کے بعد ہمارے دلوں کو ٹیڑھا نہ کر اور ہمیں اپنے پاس سے رحمت عطا فرما، بے شک تو ہی بہت عطا فرمانے والا ہے۔\n\n(سورۂ آل عمران: 8)\n\n2۔ گناہوں سے حفاظت کی نبوی دعا\n\nاللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى۔\n\nترجمہ: اے اللہ! میں تجھ سے ہدایت، تقویٰ، پاک دامنی اور بے نیازی کا سوال کرتا ہوں۔\n\n(صحیح مسلم: 2721)\n\n3۔ نفس کی برائی سے حفاظت کی دعا\n\nاللَّهُمَّ آتِ نَفْسِي تَقْوَاهَا، وَزَكِّهَا أَنْتَ خَيْرُ مَنْ زَكَّاهَا، أَنْتَ وَلِيُّهَا وَمَوْلَاهَا۔\n\nترجمہ: اے اللہ! میرے نفس کو اس کا تقویٰ عطا فرما اور اسے پاک فرما، تو ہی اسے سب سے بہتر پاک کرنے والا ہے، تو ہی اس کا کارساز اور مالک ہے۔\n\n(صحیح مسلم: 2722)\n\n4۔ گناہوں اور نافرمانی سے بچنے کی دعا\n\nاللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ۔\n\nترجمہ: اے اللہ! اپنے ذکر، اپنے شکر اور اچھی طرح اپنی عبادت کرنے میں میری مدد فرما۔\n\n(سنن ابی داؤد: 1522)\n\nعمل کی نصیحت:\n\nابراہیم خان صاحب! ان دعاؤں کو روزانہ خصوصاً نمازوں کے بعد اور صبح و شام پڑھنے کا معمول بنائیں۔ گناہوں سے بچنے کے لیے بری صحبت، گناہ کے اسباب اور تنہائی میں ہونے والی نافرمانیوں سے بھی بچیں۔ اگر کبھی گناہ ہو جائے تو مایوس نہ ہوں، فوراً سچی توبہ کریں۔\n\nاللہ تعالیٰ ہم سب کو گناہوں سے محفوظ رکھے اور تقویٰ و پرہیزگاری والی زندگی عطا فرمائے۔ آمین۔\n\nمفتی ابو احمد محمد رضا نوری قادری حنفی (مشہور بہ نام ایم. جے. اکبری)\n\nدارالافتاء گلزار طیبہ تحقیق سینٹر' },
+            { lang: 'ur', type: 'telegram', title: 'زکوۃ کی اہمیت', url: 'https://t.me/daruliftagulzaretaiba/9' },
+            { lang: 'hi', type: 'telegram', title: 'अकाइदे एहले सुन्नत', url: 'https://t.me/daruliftagulzaretaiba/46' },
+            { lang: 'ur', type: 'telegram', title: 'نجس شے سے سورہ فاتحہ لکھنے کا؟', url: 'https://t.me/daruliftagulzaretaiba/11?single' },
+            { lang: 'ur', type: 'telegram', title: 'فقتی محقق بننے کے اصول', url: 'https://t.me/daruliftagulzaretaiba/38' },
+            { lang: 'hi', type: 'telegram', title: 'कुरान ओर हदीस के मुकाबले में अपने दीन', url: 'https://t.me/daruliftagulzaretaiba/20' },
+            { lang: 'ur', type: 'telegram', title: 'تحقیقات گلزار طیبہ', url: 'https://t.me/daruliftagulzaretaiba/27' },
+            { lang: 'ur', type: 'pdf', title: 'عصمت انبیاء علیہم السلام', url: 'https://drive.google.com/file/d/18UcHrle2KMj1Gj-JDT8dlAgtr-D575gG/view?usp=drivesdk' },
+            { lang: 'ur', type: 'telegram', title: 'ہندوستان کی بینکوں_سے_ملنے والا سود کاحکم', url: 'https://t.me/daruliftagulzaretaiba/28' },
+            { lang: 'ur', type: 'telegram', title: 'اصول رد باطل', url: 'https://t.me/daruliftagulzaretaiba/31' },
+            { lang: 'ur', type: 'pdf', title: 'محبت رسول', url: 'https://drive.google.com/file/d/1VJJ8eF_ubul2JLSpo21GPLRvWPLKuXHx/view?usp=drivesdk' },
+            { lang: 'hi', type: 'pdf', title: 'जर्बे मुर्तजा', url: 'https://drive.google.com/file/d/14Pr2sfVjq0uu9b5PbTbuT9Jspf290y56/view?usp=drivesdk' },
+            { lang: 'hi', type: 'telegram', title: 'कान कटे हुए जानवर की क़ुरबानी', url: 'https://t.me/daruliftagulzaretaiba/16' },
+            { lang: 'hi', type: 'pdf', title: 'अनवार-ए-अहले बैत', url: 'https://drive.google.com/file/d/1h29PxSGpErb53Sx1KHnOb3myUhlVARuS/view?usp=drivesdk' },
+            { lang: 'hi', type: 'telegram', title: 'ओलियाह अल्लाह से इस्तिआनत और सरइ रहनुमाई', url: 'https://t.me/daruliftagulzaretaiba/21' },
+            { lang: 'ur', type: 'telegram', title: 'سنت غير مؤكده_ترک کرنے والے کیاقتدا ؟', url: 'https://t.me/daruliftagulzaretaiba/22' },
+            { lang: 'gu', type: 'telegram', title: 'વાલીદેનના હકો', url: 'https://t.me/daruliftagulzaretaiba/43' },
+            { lang: 'gu', type: 'video', title: 'ખામોસી કે પીછેકી કહાની', url: 'https://www.instagram.com/reel/Df_M5SSPcOl/?utm_source=ig_web_copy_link&cnvx=NTc4MTIwNjQ2YQ==' },
+            { lang: 'ur', type: 'telegram', title: 'سجدہ میں تینوں انگلیوں ؟', url: 'https://t.me/daruliftagulzaretaiba/25' },
+            { lang: 'gu', type: 'pdf', title: 'મોહોબ્બતે રસુલ', url: 'https://drive.google.com/file/d/1iCPegplJiuZTKMdFaY18M0vMdlSROawT/view?usp=drivesdk' },
+            { lang: 'gu', type: 'telegram', title: 'મંગેતર થી ફોને પર વાત કરવી', url: 'https://t.me/daruliftagulzaretaiba/37' },
+            { lang: 'ur', type: 'telegram', title: 'مسجد اور قبور', url: 'https://t.me/daruliftagulzaretaiba/32' },
+            { lang: 'ur', type: 'telegram', title: 'کیا_ثواب_کی_نام_پر لکی ڈرا جائز ہو جا تا ہے', url: 'https://t.me/daruliftagulzaretaiba/23' },
+            { lang: 'ur', type: 'telegram', title: 'عورتوں بغیر محرم کے عمره؟', url: 'https://t.me/daruliftagulzaretaiba/26' },
+            { lang: 'hi', type: 'telegram', title: 'वलिदेन की अजमत', url: 'https://t.me/daruliftagulzaretaiba/8' },
+            { lang: 'ur', type: 'pdf', title: 'کفر پر مرنے والوں کی نماز', url: 'https://drive.google.com/file/d/1tPnOx91dM6y_mk_4wR69sbA4F5h07uLR/view?usp=drivesdk' },
+            { id: 'fallback-mazmoon-1', lang: 'hi', type: 'mazmoon', title: 'Mazmoon no. 1 - इल्म और अमल की अहमियत', answer: 'इल्म दीन की बुनियाद है और अमल उसकी रूह। जब इंसान इल्म हासिल करके उस पर अमल करता है, तो उसकी ज़िंदगी में बरकत और सुकून पैदा होता है।\n\nहमें चाहिए कि हम रोज़ाना कुछ वक़्त दीन की बातें सीखने और समझने में लगाएं, और जो सीखें उस पर अमल करने की पूरी कोशिश करें।\n\nदारुल इफ़्ता गुलज़ार-ए-तैबा तहक़ीक़ सेंटर' }
+        ];
+
         const LANG_TITLES = {
             gu: "ગુજરાતી Kitabein / Bayanat / Fatwe / Mazmoon",
             hi: "हिन्दी Kitabein / Bayanat / Fatwe / Mazmoon",
@@ -299,12 +294,6 @@
         let currentLang = "all";
         let searchQuery = "";
         let activeShareKey = null;
-        let activeModalItemKey = null;
-
-        // Script cache: key -> { hi: { title, question, answer }, gu: { title, question, answer } }
-        const scriptCache = {};
-        // Active script mode per item: key -> 'hi' | 'gu' | null
-        const itemScriptMode = {};
 
         function updateTotalsDisplay() {
             const totalFatwa = activeItems.filter(it => it && it.type === "fatwa").length;
@@ -315,7 +304,6 @@
             if (mEl) mEl.innerText = String(totalMazmoon);
         }
 
-        // Har fatwe (aur zaroorat par mazmoon) ko 1, 2, 3... number dene ka helper
         function getIndexedItems() {
             let fatwaCounter = 0;
             let mazmoonCounter = 0;
@@ -346,31 +334,6 @@
             });
         }
 
-        function getEffectiveItemView(item) {
-            const key = String(item._key);
-            const activeScript = itemScriptMode[key];
-            if (activeScript && scriptCache[key] && scriptCache[key][activeScript]) {
-                const sc = scriptCache[key][activeScript];
-                return {
-                    ...item,
-                    viewTitle: sc.title || item.displayTitle || item.title,
-                    viewQuestion: sc.question !== undefined ? sc.question : (item.question || ""),
-                    viewAnswer: sc.answer !== undefined ? sc.answer : (item.answer || ""),
-                    isScriptChanged: true,
-                    scriptLang: activeScript
-                };
-            }
-            return {
-                ...item,
-                viewTitle: item.displayTitle || item.title || "",
-                viewQuestion: item.question || "",
-                viewAnswer: item.answer || "",
-                isScriptChanged: false,
-                scriptLang: null
-            };
-        }
-
-        // Firestore se live items set karne ka helper
         window.setLiveWebsiteItems = function(items) {
             if (Array.isArray(items) && items.length > 0) {
                 activeItems = items;
@@ -468,307 +431,6 @@
             return escapeHTML(str);
         }
 
-        // --- Clean Script Converter (Sirf likhi hui Hindi / Gujarati script, lafz/andaaz wahi) ---
-        const WORD_SCRIPT_MAP = {
-            "السلام": { hi: "अस्सलाम", gu: "અસ્સલામ" },
-            "علیکم": { hi: "अलैकुम", gu: "અલૈકુમ" },
-            "وعلیکم": { hi: "वअलैकुम", gu: "વઅલૈકુમ" },
-            "حضرت": { hi: "हज़रत", gu: "હઝરત" },
-            "صاحب": { hi: "साहिब", gu: "સાહિબ" },
-            "قرآن": { hi: "क़ुरआन", gu: "કુરઆન" },
-            "حدیث": { hi: "हदीस", gu: "હદીસ" },
-            "شریف": { hi: "शरीफ़", gu: "શરીફ" },
-            "گناہ": { hi: "गुनाह", gu: "ગુનાહ" },
-            "گناہوں": { hi: "गुनाहों", gu: "ગુનાહોં" },
-            "بچنے": { hi: "बचने", gu: "બચને" },
-            "دعا": { hi: "दुआ", gu: "દુઆ" },
-            "دعائیں": { hi: "दुआएं", gu: "દુઆએં" },
-            "بتا": { hi: "बता", gu: "બતા" },
-            "دیجئے": { hi: "दीजिए", gu: "દીજીએ" },
-            "تقویٰ": { hi: "तक़वा", gu: "તકવા" },
-            "اختیار": { hi: "इख़्तियार", gu: "ઇખ્તિયાર" },
-            "کرنے": { hi: "करने", gu: "કરને" },
-            "چند": { hi: "चंद", gu: "ચંદ" },
-            "قرآنی": { hi: "क़ुरआनी", gu: "કુરઆની" },
-            "نبوی": { hi: "नबवी", gu: "નબવી" },
-            "مجید": { hi: "मजीद", gu: "મજીદ" },
-            "ترجمہ": { hi: "तर्जुमा", gu: "તર્જુમા" },
-            "رب": { hi: "रब", gu: "રબ" },
-            "ہدایت": { hi: "हिदायत", gu: "હિદાયત" },
-            "بعد": { hi: "बाद", gu: "બાદ" },
-            "دلوں": { hi: "दिलों", gu: "દિલોં" },
-            "ٹیڑھا": { hi: "टेढ़ा", gu: "ટેઢા" },
-            "رحمت": { hi: "रहमत", gu: "રહમત" },
-            "عطا": { hi: "अता", gu: "અતા" },
-            "فرما": { hi: "फ़रमा", gu: "ફરમા" },
-            "سورۂ": { hi: "सूरह", gu: "સૂરહ" },
-            "آل": { hi: "आल", gu: "આલ" },
-            "عمران": { hi: "इमरान", gu: "ઇમરાન" },
-            "حفاظت": { hi: "हिफ़ाज़त", gu: "હિફાઝત" },
-            "اللہ": { hi: "अल्लाह", gu: "અલ્લાહ" },
-            "پاک": { hi: "पाक", gu: "પાક" },
-            "سوال": { hi: "सवाल", gu: "સવાલ" },
-            "کرتا": { hi: "करता", gu: "કરતા" },
-            "ہوں": { hi: "हूँ", gu: "હૂં" },
-            "صحیح": { hi: "सहीह", gu: "સહીહ" },
-            "مسلم": { hi: "मुस्लिम", gu: "મુસ્લિમ" },
-            "نفس": { hi: "नफ़्स", gu: "નફ્સ" },
-            "برائی": { hi: "बुराई", gu: "બુરાઈ" },
-            "نافرمانی": { hi: "नाफ़रमानी", gu: "નાફરમાની" },
-            "نافرمانیوں": { hi: "नाफ़रमानियों", gu: "નાફરમાનિયોં" },
-            "ذکر": { hi: "ज़िक्र", gu: "ઝિક્ર" },
-            "شکر": { hi: "शुक्र", gu: "શુક્ર" },
-            "عبادت": { hi: "इबादत", gu: "ઇબાદત" },
-            "مدد": { hi: "मदद", gu: "મદદ" },
-            "سنن": { hi: "सुनन", gu: "સુનન" },
-            "ابی": { hi: "अबू", gu: "અબૂ" },
-            "داؤد": { hi: "दाऊद", gu: "દાઉદ" },
-            "عمل": { hi: "अमल", gu: "અમલ" },
-            "نصیحت": { hi: "नसीहत", gu: "નસીહત" },
-            "روزانہ": { hi: "रोज़ाना", gu: "રોઝાના" },
-            "خصوصاً": { hi: "ख़ुसूसन", gu: "ખુસૂસન" },
-            "نمازوں": { hi: "नमाज़ों", gu: "નમાઝોં" },
-            "صبح": { hi: "सुबह", gu: "સુબહ" },
-            "شام": { hi: "शाम", gu: "શામ" },
-            "پڑھنے": { hi: "पढ़ने", gu: "પઢને" },
-            "معمول": { hi: "मामूल", gu: "મામૂલ" },
-            "بنائیں": { hi: "बनाएं", gu: "બનાએં" },
-            "بری": { hi: "बुरी", gu: "બુરી" },
-            "صحبت": { hi: "सोहबत", gu: "સોહબત" },
-            "اسباب": { hi: "अस्बाब", gu: "અસ્બાબ" },
-            "تنہائی": { hi: "तन्हाई", gu: "તન્હાઈ" },
-            "بچیں": { hi: "बचें", gu: "બચેં" },
-            "مایوس": { hi: "मायूस", gu: "માયૂસ" },
-            "فوراً": { hi: "फ़ौरन", gu: "ફૌરન" },
-            "سچی": { hi: "सच्ची", gu: "સચ્ચી" },
-            "توبہ": { hi: "तौबा", gu: "તૌબા" },
-            "کریں": { hi: "करें", gu: "કરેં" },
-            "تعالیٰ": { hi: "तआला", gu: "તઆલા" },
-            "محفوظ": { hi: "महफ़ूज़", gu: "મહફૂઝ" },
-            "رکھے": { hi: "रखे", gu: "રખે" },
-            "پرہیزگاری": { hi: "परहेज़गारी", gu: "પરહેઝગારી" },
-            "زندگی": { hi: "ज़िंदगी", gu: "ઝિંદગી" },
-            "آمین": { hi: "आमीन", gu: "આમીન" },
-            "مفتی": { hi: "मुफ़्ती", gu: "મુફ્તી" },
-            "ابو": { hi: "अबू", gu: "અબૂ" },
-            "احمد": { hi: "अहमद", gu: "અહમદ" },
-            "محمد": { hi: "मुहम्मद", gu: "મુહમ્મદ" },
-            "رضا": { hi: "रज़ा", gu: "રઝા" },
-            "نوری": { hi: "नूरी", gu: "નૂરી" },
-            "قادری": { hi: "क़ादरी", gu: "કાદરી" },
-            "حنفی": { hi: "हनफ़ी", gu: "હનફી" },
-            "دارالافتاء": { hi: "दारुल इफ़्ता", gu: "દારુલ ઇફ્તા" },
-            "گلزار": { hi: "गुलज़ार", gu: "ગુલઝાર" },
-            "طیبہ": { hi: "तैबा", gu: "તૈબા" },
-            "تحقیق": { hi: "तहक़ीक़", gu: "તહકીક" },
-            "سینٹر": { hi: "सेंटर", gu: "સેન્ટર" },
-            "کو": { hi: "को", gu: "કો" },
-            "اس": { hi: "उस", gu: "ઉસ" },
-            "سے": { hi: "से", gu: "સે" },
-            "ہے": { hi: "है", gu: "હૈ" },
-            "کی": { hi: "की", gu: "કી" },
-            "کا": { hi: "का", gu: "કા" },
-            "کے": { hi: "के", gu: "કે" },
-            "والا": { hi: "वाला", gu: "વાલા" },
-            "اپنے": { hi: "अपने", gu: "અપને" },
-            "اپنی": { hi: "अपनी", gu: "અપની" },
-            "میرے": { hi: "मेरे", gu: "મેરે" },
-            "تیرے": { hi: "तेरे", gu: "તેરે" },
-            "بے": { hi: "बे", gu: "બે" },
-            "شک": { hi: "शक", gu: "શક" },
-            "بہت": { hi: "बहुत", gu: "બહુત" },
-            "فرمانے": { hi: "फ़रमाने", gu: "ફરમાને" },
-            "میں": { hi: "मैं", gu: "મૈં" },
-            "تجھ": { hi: "तुझ", gu: "તુઝ" },
-            "دامنی": { hi: "दामनी", gu: "દામની" },
-            "کارساز": { hi: "कारसाज़", gu: "કારસાઝ" },
-            "مالک": { hi: "मालिक", gu: "માલિક" },
-            "اچھی": { hi: "अच्छी", gu: "અચ્છી" },
-            "طرح": { hi: "तरह", gu: "તરહ" },
-            "ہونے": { hi: "होने", gu: "હોને" },
-            "والی": { hi: "वाली", gu: "વાલી" },
-            "کبھی": { hi: "कभी", gu: "કભી" },
-            "ہو": { hi: "हो", gu: "હો" },
-            "جائے": { hi: "जाए", gu: "જાએ" },
-            "تو": { hi: "तो", gu: "તો" },
-            "سب": { hi: "सब", gu: "સબ" }
-        };
-
-        const DEV_TO_GUJ = {
-            "ॐ": "ૐ",
-            "ं": "ં", "ः": "ઃ", "ँ": "ઁ", "़": "઼",
-            "अ": "અ", "आ": "આ", "इ": "ઇ", "ई": "ઈ", "उ": "ઉ", "ऊ": "ઊ",
-            "ऋ": "ઋ", "ए": "એ", "ऐ": "ઐ", "ओ": "ઓ", "औ": "ઔ",
-            "क": "ક", "ख": "ખ", "ग": "ગ", "घ": "ઘ", "ङ": "ઙ",
-            "च": "ચ", "छ": "છ", "ज": "જ", "झ": "ઝ", "ञ": "ઞ",
-            "ट": "ટ", "ठ": "ઠ", "ड": "ડ", "ढ": "ઢ", "ण": "ણ",
-            "त": "ત", "थ": "થ", "द": "દ", "ध": "ધ", "न": "ન",
-            "प": "પ", "फ": "ફ", "ब": "બ", "भ": "ભ", "म": "મ",
-            "य": "ય", "र": "ર", "ल": "લ", "व": "વ",
-            "श": "શ", "ष": "ષ", "स": "સ", "ह": "હ", "ळ": "ળ",
-            "ा": "ા", "ि": "િ", "ी": "ી", "ु": "ુ", "ू": "ૂ",
-            "ृ": "ૃ", "े": "ે", "ै": "ૈ", "ो": "ો", "ौ": "ૌ",
-            "्": "્",
-            "०": "૦", "१": "૧", "२": "૨", "३": "૩", "४": "૪",
-            "५": "૫", "६": "૬", "७": "૭", "८": "૮", "९": "૯",
-            "।": "।", "॥": "॥"
-        };
-
-        const GUJ_TO_DEV = Object.fromEntries(
-            Object.entries(DEV_TO_GUJ).map(([d, g]) => [g, d])
-        );
-
-        function devToGuj(text) {
-            let out = "";
-            for (const ch of text) {
-                out += DEV_TO_GUJ[ch] || ch;
-            }
-            return out;
-        }
-
-        function gujToDev(text) {
-            let out = "";
-            for (const ch of text) {
-                out += GUJ_TO_DEV[ch] || ch;
-            }
-            return out;
-        }
-
-        function urduWordToDev(rawWord) {
-            const stripped = rawWord
-                .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, "")
-                .replace(/\u0640/g, "");
-
-            if (WORD_SCRIPT_MAP[rawWord] && WORD_SCRIPT_MAP[rawWord].hi) {
-                return WORD_SCRIPT_MAP[rawWord].hi;
-            }
-            if (WORD_SCRIPT_MAP[stripped] && WORD_SCRIPT_MAP[stripped].hi) {
-                return WORD_SCRIPT_MAP[stripped].hi;
-            }
-
-            const baseMap = {
-                "ا": "अ", "آ": "आ", "أ": "अ", "إ": "इ", "ٱ": "अ",
-                "ب": "ब", "پ": "प", "ت": "त", "ٹ": "ट", "ث": "स",
-                "ج": "ज", "چ": "च", "ح": "ह", "خ": "ख़",
-                "د": "द", "ڈ": "ड", "ذ": "ज़", "ر": "र", "ڑ": "ड़",
-                "ز": "ज़", "ژ": "झ़", "س": "स", "ش": "श",
-                "ص": "स", "ض": "ज़", "ط": "त", "ظ": "ज़",
-                "ع": "अ", "غ": "ग़", "ف": "फ़", "ق": "क़",
-                "ک": "क", "ك": "क", "گ": "ग", "ل": "ल",
-                "م": "म", "ن": "न", "ں": "ं", "و": "व",
-                "ؤ": "उ", "ہ": "ह", "ھ": "ह", "ة": "त",
-                "ی": "य", "ي": "य", "ئ": "य", "ے": "े",
-                "؟": "?", "،": ",", "؛": ";", "۔": "।"
-            };
-
-            const vowelMatra = {
-                "ا": "ा", "آ": "ा",
-                "و": "ू",
-                "ی": "ी", "ي": "ी",
-                "ے": "े"
-            };
-
-            let out = "";
-            for (let i = 0; i < stripped.length; i++) {
-                const ch = stripped[i];
-                if (i > 0 && vowelMatra[ch]) {
-                    out += vowelMatra[ch];
-                } else {
-                    out += baseMap[ch] || ch;
-                }
-            }
-            return out;
-        }
-
-        function convertWordScript(word, targetScript) {
-            if (!word) return "";
-            if (WORD_SCRIPT_MAP[word] && WORD_SCRIPT_MAP[word][targetScript]) {
-                return WORD_SCRIPT_MAP[word][targetScript];
-            }
-
-            if (/[\u0600-\u06FF]/.test(word)) {
-                const dev = urduWordToDev(word);
-                if (WORD_SCRIPT_MAP[dev] && WORD_SCRIPT_MAP[dev][targetScript]) {
-                    return WORD_SCRIPT_MAP[dev][targetScript];
-                }
-                return targetScript === "gu" ? devToGuj(dev) : dev;
-            }
-
-            if (/[\u0A80-\u0AFF]/.test(word)) {
-                const dev = gujToDev(word);
-                return targetScript === "gu" ? devToGuj(dev) : dev;
-            }
-
-            if (/[\u0900-\u097F]/.test(word)) {
-                return targetScript === "gu" ? devToGuj(word) : word;
-            }
-
-            return word;
-        }
-
-        function isArabicHarakatHeavy(line) {
-            const harakatMatches = line.match(/[\u064B-\u065F\u0670]/g) || [];
-            return harakatMatches.length >= 4;
-        }
-
-        function convertTextScript(text, targetScript) {
-            if (!text) return "";
-            return text
-                .split("\n")
-                .map(line => {
-                    if (isArabicHarakatHeavy(line)) {
-                        return line;
-                    }
-                    return line.replace(/[\u0600-\u06FF\u0900-\u097F\u0A80-\u0AFF]+/g, token => {
-                        return convertWordScript(token, targetScript);
-                    });
-                })
-                .join("\n");
-        }
-
-        function toggleScriptById(itemKey, targetScript) {
-            const key = String(itemKey);
-            const item = getTextItemByKey(key);
-            if (!item) return;
-
-            if (itemScriptMode[key] === targetScript) {
-                itemScriptMode[key] = null;
-                if (currentTab !== "sawaal") loadFilteredContent();
-                if (activeModalItemKey === key) openFatwaModalById(key);
-                return;
-            }
-
-            if (!scriptCache[key]) scriptCache[key] = {};
-            if (!scriptCache[key][targetScript]) {
-                scriptCache[key][targetScript] = {
-                    title: convertTextScript(item.displayTitle || item.title || "", targetScript),
-                    question: convertTextScript(item.question || "", targetScript),
-                    answer: convertTextScript(item.answer || "", targetScript)
-                };
-            }
-
-            itemScriptMode[key] = targetScript;
-            if (currentTab !== "sawaal") loadFilteredContent();
-            if (activeModalItemKey === key) openFatwaModalById(key);
-        }
-
-        function buildTranslateButtonsHTML(itemKey) {
-            const key = String(itemKey);
-            const k = escapeAttr(key);
-            const activeScript = itemScriptMode[key] || null;
-            const hiActive = activeScript === "hi" ? " active-lang" : "";
-            const guActive = activeScript === "gu" ? " active-lang" : "";
-            const hiLabel = activeScript === "hi" ? "↺ Original" : "✍️ हिन्दी लिपि";
-            const guLabel = activeScript === "gu" ? "↺ Original" : "✍️ ગુજરાતી લિપિ";
-
-            return `
-                <div class="translate-2btn-row">
-                    <button type="button" class="t-btn${hiActive}" onclick="toggleScriptById('${k}', 'hi')">${hiLabel}</button>
-                    <button type="button" class="t-btn${guActive}" onclick="toggleScriptById('${k}', 'gu')">${guLabel}</button>
-                </div>
-            `;
-        }
-
         // --- Fatwa & Mazmoon Copy, Direct App Share & PDF/Download Helpers ---
         function getTextItemByKey(itemKey) {
             const indexed = getIndexedItems();
@@ -782,17 +444,16 @@
         }
 
         function formatFatwaPlainText(item, itemKey) {
-            const view = getEffectiveItemView(item);
             const isMazmoon = item.type === 'mazmoon';
-            const titleToUse = view.viewTitle || (isMazmoon ? "Mazmoon" : "Fatwa");
+            const titleToUse = item.displayTitle || item.title || (isMazmoon ? "Mazmoon" : "Fatwa");
             const parts = [];
             parts.push("دارالافتاء گلزار طیبہ");
             if (titleToUse) parts.push(`عنوان: ${titleToUse}`);
-            if (!isMazmoon && view.viewQuestion) {
-                parts.push(`\n--- سوال / مسئلہ ---\n${view.viewQuestion}`);
+            if (!isMazmoon && item.question) {
+                parts.push(`\n--- سوال / مسئلہ ---\n${item.question}`);
             }
-            if (view.viewAnswer) {
-                parts.push(isMazmoon ? `\n--- مضمون ---\n${view.viewAnswer}` : `\n--- جواب / فتویٰ ---\n${view.viewAnswer}`);
+            if (item.answer) {
+                parts.push(isMazmoon ? `\n--- مضمون ---\n${item.answer}` : `\n--- جواب / فتویٰ ---\n${item.answer}`);
             }
             if (itemKey) {
                 parts.push(`\nلنک: ${getFatwaShareUrl(itemKey, item.type)}`);
@@ -851,8 +512,7 @@
             if (!item) return;
             activeShareKey = String(item._key);
 
-            const view = getEffectiveItemView(item);
-            const titleToUse = view.viewTitle || (item.type === 'mazmoon' ? "Mazmoon" : "Fatwa");
+            const titleToUse = item.displayTitle || item.title || (item.type === 'mazmoon' ? "Mazmoon" : "Fatwa");
             const shareUrl = getFatwaShareUrl(activeShareKey, item.type);
             const shareText = formatFatwaPlainText(item, activeShareKey);
             const waUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
@@ -906,8 +566,7 @@
             if (!activeShareKey || !navigator.share) return;
             const item = getTextItemByKey(activeShareKey);
             if (!item) return;
-            const view = getEffectiveItemView(item);
-            const titleToUse = view.viewTitle || (item.type === 'mazmoon' ? "Mazmoon" : "Fatwa");
+            const titleToUse = item.displayTitle || item.title || (item.type === 'mazmoon' ? "Mazmoon" : "Fatwa");
             const shareUrl = getFatwaShareUrl(activeShareKey, item.type);
             try {
                 await navigator.share({
@@ -922,8 +581,7 @@
             if (!activeShareKey) return;
             const item = getTextItemByKey(activeShareKey);
             if (!item) return;
-            const view = getEffectiveItemView(item);
-            const titleToUse = view.viewTitle || (item.type === 'mazmoon' ? "mazmoon" : "fatwa");
+            const titleToUse = item.displayTitle || item.title || (item.type === 'mazmoon' ? "mazmoon" : "fatwa");
             const content = formatFatwaPlainText(item, activeShareKey);
             const safeSlug = titleToUse
                 .replace(/[\\/:*?"<>|]+/g, "_")
@@ -942,17 +600,15 @@
             flashButtonText(btnEl, "✓ TXT Downloaded");
         }
 
-        // PDF / Print View Download for Fatwa / Mazmoon
         function downloadFatwaById(itemKey, btnEl) {
             const item = getTextItemByKey(itemKey);
             if (!item) return;
 
-            const view = getEffectiveItemView(item);
             const isMazmoon = item.type === 'mazmoon';
-            const titleToUse = view.viewTitle || (isMazmoon ? "Mazmoon" : "Fatwa");
-            const combinedText = (view.viewAnswer || "") + (view.viewQuestion || "");
+            const titleToUse = item.displayTitle || item.title || (isMazmoon ? "Mazmoon" : "Fatwa");
+            const combinedText = (item.answer || "") + (item.question || "");
             const hasUrduScript = /[\u0600-\u06FF]/.test(combinedText);
-            const dir = (!view.isScriptChanged && (item.lang === "ur" || hasUrduScript)) ? "rtl" : "ltr";
+            const dir = (item.lang === "ur" || hasUrduScript) ? "rtl" : "ltr";
             const align = dir === "rtl" ? "right" : "left";
             const shareUrl = getFatwaShareUrl(item._key, item.type);
 
@@ -963,8 +619,8 @@
             }
 
             const safeTitle = escapeHTML(titleToUse);
-            const safeQ = escapeHTML(view.viewQuestion || titleToUse);
-            const safeA = escapeHTML(view.viewAnswer || "");
+            const safeQ = escapeHTML(item.question || titleToUse);
+            const safeA = escapeHTML(item.answer || "");
             const safeUrl = escapeHTML(shareUrl);
             const docSub = isMazmoon ? "Official Mazmoon Document" : "Official Fatwa Document";
             const ansLabel = isMazmoon ? "Mazmoon / Tafseel" : "Jawab / Fatwa";
@@ -1036,7 +692,6 @@
                     <button type="button" class="f-btn f-btn-share" onclick="openShareMenuById('${k}')">📤 Share</button>
                     <button type="button" class="f-btn f-btn-dl" onclick="downloadFatwaById('${k}', this)">⬇️ PDF</button>
                 </div>
-                ${buildTranslateButtonsHTML(itemKey)}
             `;
         }
 
@@ -1044,17 +699,15 @@
             const item = getTextItemByKey(itemId);
             if (!item) return;
 
-            activeModalItemKey = String(item._key);
-            const view = getEffectiveItemView(item);
             const isMazmoon = item.type === 'mazmoon';
             const modal = document.getElementById("fatwa-modal");
             const card = document.getElementById("fatwa-modal-card");
-            const hasUrduScript = /[\u0600-\u06FF]/.test((view.viewAnswer || "") + (view.viewQuestion || ""));
-            const isRtl = !view.isScriptChanged && (item.lang === "ur" || hasUrduScript);
+            const hasUrduScript = /[\u0600-\u06FF]/.test((item.answer || "") + (item.question || ""));
+            const isRtl = (item.lang === "ur" || hasUrduScript);
             card.style.direction = isRtl ? "rtl" : "ltr";
             card.style.textAlign = isRtl ? "right" : "left";
 
-            document.getElementById("modal-fatwa-title").innerText = view.viewTitle || (isMazmoon ? "Mazmoon" : "Fatwa");
+            document.getElementById("modal-fatwa-title").innerText = item.displayTitle || item.title || (isMazmoon ? "Mazmoon" : "Fatwa");
             document.getElementById("modal-fatwa-actions").innerHTML = buildFatwaActionButtonsHTML(item._key);
 
             const qWrap = document.getElementById("modal-question-wrap");
@@ -1064,16 +717,15 @@
             } else {
                 qWrap.style.display = "block";
                 document.getElementById("modal-answer-label").innerText = "Jawab / Fatwa";
-                document.getElementById("modal-fatwa-question").innerText = view.viewQuestion || view.viewTitle || "";
+                document.getElementById("modal-fatwa-question").innerText = item.question || item.displayTitle || item.title || "";
             }
-            document.getElementById("modal-fatwa-answer").innerText = view.viewAnswer || "";
+            document.getElementById("modal-fatwa-answer").innerText = item.answer || "";
             modal.style.display = "block";
         }
 
         function closeFatwaModal(event) {
             if (!event || event.target.id === "fatwa-modal") {
                 document.getElementById("fatwa-modal").style.display = "none";
-                activeModalItemKey = null;
             }
         }
 
@@ -1090,15 +742,14 @@
         }
 
         function buildCardHTML(item, fallbackKey) {
-            const view = getEffectiveItemView(item);
-            const hasUrduScript = /[\u0600-\u06FF]/.test((view.viewAnswer || "") + (view.viewQuestion || ""));
-            const isRtl = !view.isScriptChanged && (item.lang === 'ur' || hasUrduScript);
+            const hasUrduScript = /[\u0600-\u06FF]/.test((item.answer || "") + (item.question || ""));
+            const isRtl = (item.lang === 'ur' || hasUrduScript);
             const rtlClass = isRtl ? 'rtl-card' : '';
-            const safeTitle = escapeHTML(view.viewTitle || item.title);
+            const safeTitle = escapeHTML(item.displayTitle || item.title);
             const itemKey = item.id || fallbackKey;
 
             if (item.type === 'fatwa') {
-                const rawText = view.viewAnswer || view.viewQuestion || "";
+                const rawText = item.answer || item.question || "";
                 const snippet = escapeHTML(rawText.slice(0, 120));
                 const suffix = rawText.length > 120 ? "..." : "";
                 return `
@@ -1117,7 +768,7 @@
             }
 
             if (item.type === 'mazmoon') {
-                const rawText = view.viewAnswer || view.viewQuestion || "";
+                const rawText = item.answer || item.question || "";
                 const snippet = escapeHTML(rawText.slice(0, 120));
                 const suffix = rawText.length > 120 ? "..." : "";
                 return `
