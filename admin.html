@@ -26,12 +26,23 @@
         .file-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px 12px; border-radius: 6px; margin-bottom: 8px; border: 1px solid #e2e8f0; gap: 10px; }
         .item-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
         .item-series-num { background: #0b5e2e; color: #ffffff; font-weight: bold; font-size: 12.5px; min-width: 28px; height: 28px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; padding: 0 7px; flex-shrink: 0; }
+        .item-custom-num { display: inline-block; background: #fef3c7; color: #92400e; border: 1px solid #fde68a; border-radius: 4px; padding: 1px 6px; font-size: 11.5px; font-weight: bold; margin-left: 6px; }
+        .item-actions { display: flex; gap: 6px; flex-shrink: 0; flex-wrap: wrap; }
+        .btn-edit-num { background-color: #0284c7; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; flex-shrink: 0; }
+        .btn-edit-item { background-color: #0f766e; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; flex-shrink: 0; }
         .list-total-bar { display: flex; justify-content: space-between; align-items: center; background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; padding: 10px 14px; border-radius: 8px; font-weight: bold; font-size: 14px; margin-top: 10px; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
         .btn-delete { background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; flex-shrink: 0; }
         .btn-copy-sm { background-color: #2563eb; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; flex-shrink: 0; }
         .back-link { display: inline-block; margin-bottom: 15px; color: #0b5e2e; text-decoration: none; font-weight: bold; font-size: 14px; }
         .section-box { background: #f8fafc; padding: 18px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
         #status { margin-top: 15px; font-weight: bold; text-align: center; font-size: 14px; }
+
+        /* Edit Modal */
+        .edit-modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); z-index: 1500; padding: 16px; overflow-y: auto; }
+        .edit-modal-backdrop.open { display: block; }
+        .edit-modal-card { background: #ffffff; max-width: 680px; margin: 28px auto; border-radius: 12px; padding: 22px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25); }
+        .edit-modal-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 16px; }
+        .edit-modal-close { background: #ef4444; color: #ffffff; border: none; border-radius: 6px; padding: 6px 12px; font-weight: bold; cursor: pointer; font-size: 13px; }
 
         .sawaal-summary-bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; flex-wrap: wrap; }
         .sawaal-total-badge { font-weight: bold; color: #065f46; font-size: 14px; }
@@ -134,6 +145,11 @@
         </div>
 
         <div class="form-group">
+            <label>Number (Optional):</label>
+            <input type="number" id="item-num" min="1" step="1" placeholder="Jaise: 1, 2, 101 (khali chhod sakte hain)">
+        </div>
+
+        <div class="form-group">
             <label>Title:</label>
             <input type="text" id="item-title" placeholder="Jaise: Namaz ka Tareeqa">
         </div>
@@ -190,12 +206,58 @@
 
     <hr style="margin: 20px 0;">
 
-    <h3>Maujuda List (Yahan se hatayein / Delete karein)</h3>
+    <h3>Maujuda List (Yahan se Edit / Number / Delete karein)</h3>
     <div class="list-total-bar">
         <span>Total Items / Kitabein: <span id="admin-total-items">0</span></span>
         <span style="font-size: 12px; font-weight: normal;">Naya upar | Number niche se (1, 2, 3...)</span>
     </div>
     <div id="admin-item-list" style="margin-top: 10px;"></div>
+</div>
+
+<!-- Edit Item Modal -->
+<div id="edit-item-modal" class="edit-modal-backdrop" onclick="closeEditModal(event)">
+    <div class="edit-modal-card" onclick="event.stopPropagation()">
+        <div class="edit-modal-header">
+            <h3>Item Edit Karein</h3>
+            <button type="button" class="edit-modal-close" onclick="closeEditModal()">Band Karein</button>
+        </div>
+
+        <div class="form-group">
+            <label>Number (Optional):</label>
+            <input type="number" id="edit-item-num" min="1" step="1" placeholder="Jaise: 1, 2, 101">
+        </div>
+
+        <div class="form-group">
+            <label>Bhasha (Language):</label>
+            <select id="edit-item-lang">
+                <option value="gu">Gujarati (gu)</option>
+                <option value="hi">Hindi (hi)</option>
+                <option value="ur">Urdu (ur)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Title:</label>
+            <input type="text" id="edit-item-title" placeholder="Title likhein">
+        </div>
+
+        <div id="edit-url-field" class="form-group">
+            <label>Direct Link URL:</label>
+            <input type="url" id="edit-item-url" placeholder="https://...">
+        </div>
+
+        <div id="edit-question-field" class="form-group" style="display: none;">
+            <label>Sawal (Direct Text):</label>
+            <textarea id="edit-item-question" rows="3" placeholder="Sawal yahan likhein..."></textarea>
+        </div>
+
+        <div id="edit-answer-field" class="form-group" style="display: none;">
+            <label id="edit-answer-label">Jawab / Fatwa Text:</label>
+            <textarea id="edit-item-answer" rows="6" placeholder="Text yahan likhein..."></textarea>
+        </div>
+
+        <button type="button" class="btn" id="btn-save-edit" onclick="saveEditedItem()">Badlav Save Karein</button>
+    </div>
 </div>
 
 <script>
@@ -204,6 +266,8 @@
     const SITE_CONFIG_STORAGE_KEY = "darul_ifta_site_config";
 
     let currentAdminItems = [];
+    let editingItemIndex = null;
+    let editingItemDocId = null;
     let currentSiteConfig = {
         logoUrl: "",
         logoEnabled: false,
@@ -218,6 +282,12 @@
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#39;");
+    }
+
+    function parseOptionalNum(val) {
+        if (val === "" || val === null || val === undefined) return null;
+        const n = Number(val);
+        return Number.isFinite(n) ? n : null;
     }
 
     function setStatus(msg, color = "#334155") {
@@ -467,20 +537,155 @@
         items.forEach(item => {
             const lang = item.lang || "hi";
             const safeTitle = (item.title || "").replace(/'/g, "\\'");
+            const numPart = (item.num !== null && item.num !== undefined && item.num !== "") ? `num: ${Number(item.num)}, ` : "";
             if (item.type === "fatwa") {
                 const safeQ = (item.question || "").replace(/'/g, "\\'").replace(/\n/g, "\\n");
                 const safeA = (item.answer || "").replace(/'/g, "\\'").replace(/\n/g, "\\n");
-                codeStr += `    { lang: '${lang}', type: 'fatwa', title: '${safeTitle}', question: '${safeQ}', answer: '${safeA}' },\n`;
+                codeStr += `    { ${numPart}lang: '${lang}', type: 'fatwa', title: '${safeTitle}', question: '${safeQ}', answer: '${safeA}' },\n`;
             } else if (item.type === "mazmoon") {
                 const safeA = (item.answer || "").replace(/'/g, "\\'").replace(/\n/g, "\\n");
-                codeStr += `    { lang: '${lang}', type: 'mazmoon', title: '${safeTitle}', answer: '${safeA}' },\n`;
+                codeStr += `    { ${numPart}lang: '${lang}', type: 'mazmoon', title: '${safeTitle}', answer: '${safeA}' },\n`;
             } else {
                 const safeUrl = (item.url || "").replace(/'/g, "\\'");
-                codeStr += `    { lang: '${lang}', type: '${item.type}', title: '${safeTitle}', url: '${safeUrl}' },\n`;
+                codeStr += `    { ${numPart}lang: '${lang}', type: '${item.type}', title: '${safeTitle}', url: '${safeUrl}' },\n`;
             }
         });
         codeStr += "];";
         document.getElementById('export-code-box').value = codeStr;
+    }
+
+    function openEditItemModal(index, docId) {
+        const item = currentAdminItems[index];
+        if (!item) return;
+
+        editingItemIndex = index;
+        editingItemDocId = docId || item.id || "";
+
+        document.getElementById('edit-item-num').value =
+            (item.num !== null && item.num !== undefined && item.num !== "") ? String(item.num) : "";
+        document.getElementById('edit-item-lang').value = item.lang || "hi";
+        document.getElementById('edit-item-title').value = item.title || "";
+        document.getElementById('edit-item-url').value = item.url || "";
+        document.getElementById('edit-item-question').value = item.question || "";
+        document.getElementById('edit-item-answer').value = item.answer || "";
+
+        const urlField = document.getElementById('edit-url-field');
+        const qField = document.getElementById('edit-question-field');
+        const aField = document.getElementById('edit-answer-field');
+        const aLabel = document.getElementById('edit-answer-label');
+
+        if (item.type === "fatwa") {
+            urlField.style.display = "none";
+            qField.style.display = "block";
+            aField.style.display = "block";
+            aLabel.innerText = "Jawab / Fatwa Text:";
+        } else if (item.type === "mazmoon") {
+            urlField.style.display = "none";
+            qField.style.display = "none";
+            aField.style.display = "block";
+            aLabel.innerText = "Mazmoon Text:";
+        } else {
+            urlField.style.display = "block";
+            qField.style.display = "none";
+            aField.style.display = "none";
+        }
+
+        document.getElementById('edit-item-modal').classList.add('open');
+    }
+
+    function closeEditModal(event) {
+        if (!event || event.target.id === "edit-item-modal") {
+            document.getElementById('edit-item-modal').classList.remove('open');
+            editingItemIndex = null;
+            editingItemDocId = null;
+        }
+    }
+
+    async function saveEditedItem() {
+        if (editingItemIndex === null || !currentAdminItems[editingItemIndex]) return;
+
+        const existing = currentAdminItems[editingItemIndex];
+        const nextNum = parseOptionalNum(document.getElementById('edit-item-num').value);
+        const nextLang = document.getElementById('edit-item-lang').value;
+        const nextTitle = document.getElementById('edit-item-title').value.trim();
+        const nextUrl = document.getElementById('edit-item-url').value.trim();
+        const nextQuestion = document.getElementById('edit-item-question').value.trim();
+        const nextAnswer = document.getElementById('edit-item-answer').value.trim();
+
+        if (!nextTitle) {
+            alert("Kripya Title zaroor likhein!");
+            return;
+        }
+
+        if ((existing.type === "fatwa" || existing.type === "mazmoon") && !nextAnswer) {
+            alert("Kripya Text zaroor likhein!");
+            return;
+        }
+
+        if (existing.type !== "fatwa" && existing.type !== "mazmoon" && !nextUrl) {
+            alert("Kripya Link URL zaroor likhein!");
+            return;
+        }
+
+        const updatedPayload = {
+            num: nextNum,
+            lang: nextLang,
+            title: nextTitle,
+            url: (existing.type === "fatwa" || existing.type === "mazmoon") ? "" : nextUrl,
+            question: existing.type === "fatwa" ? nextQuestion : "",
+            answer: (existing.type === "fatwa" || existing.type === "mazmoon") ? nextAnswer : ""
+        };
+
+        if (editingItemDocId && typeof window.firestoreUpdateItem === "function") {
+            setStatus("Badlav save ho raha hai...", "#0284c7");
+            const ok = await window.firestoreUpdateItem(editingItemDocId, updatedPayload);
+            if (!ok) return;
+        } else {
+            const items = getLocalItems();
+            if (items[editingItemIndex]) {
+                items[editingItemIndex] = { ...items[editingItemIndex], ...updatedPayload };
+                loadAdminList(items);
+            }
+        }
+
+        closeEditModal();
+        setStatus("✓ Item ke badlav save ho gaye!", "#16a34a");
+    }
+
+    async function editItemNumber(index, docId) {
+        const item = currentAdminItems[index];
+        if (!item) return;
+
+        const currentVal = (item.num !== null && item.num !== undefined && item.num !== "") ? String(item.num) : "";
+        const entered = prompt(`"${item.title || "Item"}" ka Number daalein (khali chhod kar OK dabayein to number hat jayega):`, currentVal);
+        if (entered === null) return;
+
+        const trimmed = entered.trim();
+        let nextNum = null;
+        if (trimmed !== "") {
+            const parsed = Number(trimmed);
+            if (!Number.isFinite(parsed)) {
+                alert("Kripya sahi number daalein!");
+                return;
+            }
+            nextNum = parsed;
+        }
+
+        if (docId && typeof window.firestoreUpdateItemNum === "function") {
+            setStatus("Number update ho raha hai...", "#0284c7");
+            const ok = await window.firestoreUpdateItemNum(docId, nextNum);
+            if (ok) {
+                setStatus("✓ Item ka number update ho gaya!", "#16a34a");
+            }
+            return;
+        }
+
+        const items = getLocalItems();
+        if (items[index]) {
+            items[index].num = nextNum;
+            loadAdminList(items);
+            setStatus("✓ Item ka number update ho gaya!", "#16a34a");
+        }
     }
 
     function loadAdminList(items) {
@@ -509,17 +714,23 @@
             const safeType = escapeHTML(item.type || "");
             const safeTitle = escapeHTML(item.title || "");
             const safeId = escapeHTML(item.id || "");
+            const hasNum = item.num !== null && item.num !== undefined && item.num !== "";
+            const customNumBadge = hasNum ? `<span class="item-custom-num">No. ${escapeHTML(String(item.num))}</span>` : "";
 
             adminList.innerHTML += `
                 <div class="file-item">
                     <div class="item-left">
                         <span class="item-series-num">${seriesNo}</span>
                         <div>
-                            <strong>${safeTitle}</strong><br>
+                            <strong>${safeTitle}</strong>${customNumBadge}<br>
                             <small style="color:#666;">[${langCode}] [${safeType}]</small>
                         </div>
                     </div>
-                    <button class="btn-delete" onclick="deleteItem(${realIndex}, '${safeId}')">Hatayein</button>
+                    <div class="item-actions">
+                        <button type="button" class="btn-edit-item" onclick="openEditItemModal(${realIndex}, '${safeId}')">Edit</button>
+                        <button type="button" class="btn-edit-num" onclick="editItemNumber(${realIndex}, '${safeId}')">Number</button>
+                        <button class="btn-delete" onclick="deleteItem(${realIndex}, '${safeId}')">Hatayein</button>
+                    </div>
                 </div>
             `;
         });
@@ -542,6 +753,7 @@
     async function addNewItem() {
         const lang = document.getElementById('item-lang').value;
         const type = document.getElementById('item-type').value;
+        const num = parseOptionalNum(document.getElementById('item-num')?.value);
         const title = document.getElementById('item-title').value.trim();
         const url = document.getElementById('item-url-input').value.trim();
         const question = document.getElementById('item-question').value.trim();
@@ -559,19 +771,19 @@
                 alert("Kripya Fatwe ka Jawab / Text zaroor likhein!");
                 return;
             }
-            newItem = { lang, type, title, question, answer, url: "" };
+            newItem = { num, lang, type, title, question, answer, url: "" };
         } else if (type === "mazmoon") {
             if (!mazmoonText) {
                 alert("Kripya Mazmoon ka Text zaroor likhein!");
                 return;
             }
-            newItem = { lang, type, title, question: "", answer: mazmoonText, url: "" };
+            newItem = { num, lang, type, title, question: "", answer: mazmoonText, url: "" };
         } else {
             if (!url) {
                 alert("Kripya Title aur Link dono zaroor bharein!");
                 return;
             }
-            newItem = { lang, type, title, question: "", answer: "", url };
+            newItem = { num, lang, type, title, question: "", answer: "", url };
         }
 
         if (typeof window.firestoreAddItem === "function") {
@@ -585,6 +797,7 @@
         }
 
         setStatus("Item Firebase mein jud gaya! Sabse upar set ho gaya hai.", "#16a34a");
+        document.getElementById('item-num').value = "";
         document.getElementById('item-title').value = "";
         document.getElementById('item-url-input').value = "";
         document.getElementById('item-question').value = "";
@@ -636,6 +849,7 @@
         getDocs,
         addDoc,
         deleteDoc,
+        updateDoc,
         doc,
         getDoc,
         setDoc,
@@ -794,6 +1008,7 @@
                 if (isFatwa || isMazmoon || isLinkItem) {
                     rawList.push({
                         id: d.id,
+                        num: (data.num !== undefined && data.num !== null) ? data.num : ((data.number !== undefined && data.number !== null) ? data.number : null),
                         lang: data.lang || "hi",
                         type: data.type,
                         title: data.title,
@@ -825,9 +1040,43 @@
         ]);
     };
 
+    window.firestoreUpdateItem = async function(docId, payload) {
+        try {
+            await updateDoc(doc(db, "items", docId), {
+                num: (payload.num !== undefined && payload.num !== null) ? payload.num : null,
+                lang: payload.lang,
+                title: payload.title,
+                url: payload.url || "",
+                question: payload.question || "",
+                answer: payload.answer || ""
+            });
+            await fetchAndRenderAdminItems();
+            return true;
+        } catch (err) {
+            console.error("Update item error:", err);
+            window.setStatus("Badlav save nahi ho paya. Security rules check karein.", "#dc2626");
+            return false;
+        }
+    };
+
+    window.firestoreUpdateItemNum = async function(docId, nextNum) {
+        try {
+            await updateDoc(doc(db, "items", docId), {
+                num: nextNum
+            });
+            await fetchAndRenderAdminItems();
+            return true;
+        } catch (err) {
+            console.error("Update item num error:", err);
+            window.setStatus("Number update nahi ho paya. Security rules check karein.", "#dc2626");
+            return false;
+        }
+    };
+
     window.firestoreAddItem = async function(item) {
         try {
             await addDoc(collection(db, "items"), {
+                num: (item.num !== undefined && item.num !== null) ? item.num : null,
                 lang: item.lang,
                 type: item.type,
                 title: item.title,
