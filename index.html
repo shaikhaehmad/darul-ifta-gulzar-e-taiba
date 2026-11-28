@@ -41,14 +41,10 @@
         .nav-tab { flex: 1; padding: 10px 8px; text-align: center; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; white-space: nowrap; transition: 0.2s; }
         .nav-tab.active { background-color: #0f5132; color: #ffffff; box-shadow: 0 2px 6px rgba(15,81,50,0.25); }
         .nav-tab.inactive { background-color: #e2e8f0; color: #334155; }
+        .tab-count { display: inline-block; margin-left: 5px; padding: 1px 7px; border-radius: 999px; font-size: 11.5px; background-color: rgba(255, 255, 255, 0.22); }
+        .nav-tab.inactive .tab-count { background-color: #cbd5e1; color: #0f172a; }
 
         .container { max-width: 760px; margin: 0 auto; padding: 8px 15px 20px; }
-
-        .stats-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
-        .stat-pill { flex: 1; min-width: 150px; background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0f5132; border-radius: 8px; padding: 9px 13px; font-size: 13px; font-weight: bold; color: #0f172a; box-shadow: 0 1px 4px rgba(15,23,42,0.04); display: flex; justify-content: space-between; align-items: center; }
-        .stat-pill span { background-color: #dcfce7; color: #166534; padding: 2px 9px; border-radius: 999px; font-size: 13px; }
-        .stat-pill.mazmoon-pill { border-left-color: #5b21b6; }
-        .stat-pill.mazmoon-pill span { background-color: #ede9fe; color: #5b21b6; }
 
         .filter-box { background-color: #ffffff; padding: 13px; border-radius: 10px; box-shadow: 0 2px 6px rgba(15,23,42,0.06); border: 1px solid #e2e8f0; margin-bottom: 16px; }
         #search-input { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 7px; font-size: 14px; margin-bottom: 10px; background-color: #f8fafc; color: #0f172a; }
@@ -147,21 +143,15 @@
 
     <!-- Navigation Tabs -->
     <div class="nav-container">
-        <div id="tab-pdf" class="nav-tab active" onclick="switchSection('pdf')">PDF Kitabein</div>
-        <div id="tab-telegram" class="nav-tab inactive" onclick="switchSection('telegram')">Telegram</div>
-        <div id="tab-video" class="nav-tab inactive" onclick="switchSection('video')">Video Bayan</div>
-        <div id="tab-fatwa" class="nav-tab inactive" onclick="switchSection('fatwa')">Fatwe</div>
-        <div id="tab-mazmoon" class="nav-tab inactive" onclick="switchSection('mazmoon')">Mazmoon</div>
+        <div id="tab-pdf" class="nav-tab active" onclick="switchSection('pdf')">PDF Kitabein <span id="tab-count-pdf" class="tab-count">0</span></div>
+        <div id="tab-telegram" class="nav-tab inactive" onclick="switchSection('telegram')">Telegram <span id="tab-count-telegram" class="tab-count">0</span></div>
+        <div id="tab-video" class="nav-tab inactive" onclick="switchSection('video')">Video Bayan <span id="tab-count-video" class="tab-count">0</span></div>
+        <div id="tab-fatwa" class="nav-tab inactive" onclick="switchSection('fatwa')">Fatwe <span id="tab-count-fatwa" class="tab-count">0</span></div>
+        <div id="tab-mazmoon" class="nav-tab inactive" onclick="switchSection('mazmoon')">Mazmoon <span id="tab-count-mazmoon" class="tab-count">0</span></div>
         <div id="tab-sawaal" class="nav-tab inactive" onclick="switchSection('sawaal')">Fatwa / Sawaal</div>
     </div>
 
     <div class="container">
-        <!-- Total Fatwe & Mazmoon Counter -->
-        <div id="totals-bar" class="stats-bar">
-            <div class="stat-pill" onclick="switchSection('fatwa')" style="cursor:pointer;">Total Fatwe <span id="total-fatwa-count">0</span></div>
-            <div class="stat-pill mazmoon-pill" onclick="switchSection('mazmoon')" style="cursor:pointer;">Total Mazmoon <span id="total-mazmoon-count">0</span></div>
-        </div>
-
         <!-- Search & Language Filter -->
         <div id="filter-panel" class="filter-box">
             <input type="text" id="search-input" placeholder="Gujarati, Hindi, Urdu mein search karein..." oninput="handleSearch(this.value)">
@@ -251,6 +241,9 @@
             { label: "Blog 1", url: "https://mgakbar37.blogspot.com/2021/11/blog-post_133.html", cls: "s-blog", color: "#FF5722", hoverColor: "#E64A19" },
             { label: "Blog 2", url: "https://daruliftafaizanemadina.blogspot.com/2026/11/blog-post_08.html", cls: "s-blog", color: "#FF5722", hoverColor: "#E64A19" }
         ];
+
+
+
 
 
         // Fallback data agar Firestore mein abhi data na ho ya offline ho
@@ -347,7 +340,7 @@
     { lang: 'ur', type: 'pdf', title: 'کفر پر مرنے والوں کی نماز', url: 'https://drive.google.com/file/d/1tPnOx91dM6y_mk_4wR69sbA4F5h07uLR/view?usp=drivesdk' },
 ];
 
-                const LANG_TITLES = {
+                        const LANG_TITLES = {
             gu: "ગુજરાતી Kitabein / Bayanat / Fatwe / Mazmoon",
             hi: "हिन्दी Kitabein / Bayanat / Fatwe / Mazmoon",
             ur: "اردو Kitabein / Bayanat / Fatwe / Mazmoon"
@@ -355,7 +348,7 @@
 
         const SITE_CONFIG_STORAGE_KEY = "darul_ifta_site_config";
 
-        let activeItems = FALLBACK_DATA.slice();
+        let activeItems = (typeof FALLBACK_DATA !== "undefined" && Array.isArray(FALLBACK_DATA)) ? FALLBACK_DATA.slice() : [];
         let currentTab = "pdf";
         let currentLang = "all";
         let searchQuery = "";
@@ -378,7 +371,7 @@
             };
         }
 
-                let isIntroExpanded = false;
+        let isIntroExpanded = false;
 
         function toggleIntroReadMore() {
             const textEl = document.getElementById("before-lang-intro-text");
@@ -441,45 +434,57 @@
             }
         }
 
-
         window.setLiveSiteConfig = function(cfg) {
             applySiteBrandingToDOM(cfg);
         };
 
+        function getManualNum(item) {
+            const raw = item && (item.num !== undefined ? item.num : (item.number !== undefined ? item.number : item.serialNo));
+            if (raw === "" || raw === null || raw === undefined) return null;
+            const n = Number(raw);
+            return Number.isFinite(n) ? n : null;
+        }
+
         function updateTotalsDisplay() {
-            const totalFatwa = activeItems.filter(it => it && it.type === "fatwa").length;
-            const totalMazmoon = activeItems.filter(it => it && it.type === "mazmoon").length;
-            const fEl = document.getElementById("total-fatwa-count");
-            const mEl = document.getElementById("total-mazmoon-count");
-            if (fEl) fEl.innerText = String(totalFatwa);
-            if (mEl) mEl.innerText = String(totalMazmoon);
+            const types = ["pdf", "telegram", "video", "fatwa", "mazmoon"];
+            types.forEach(type => {
+                const total = activeItems.filter(it => it && it.type === type).length;
+                const el = document.getElementById("tab-count-" + type);
+                if (el) el.innerText = String(total);
+            });
         }
 
         function getIndexedItems() {
-            let fatwaCounter = 0;
-            let mazmoonCounter = 0;
+            const groupCounters = {};
 
             return activeItems.map((item, idx) => {
                 const key = item.id || `item-${idx}`;
+                const itemType = item.type || "item";
+                const itemLang = item.lang || "hi";
+                const groupKey = `${itemType}__${itemLang}`;
+                groupCounters[groupKey] = (groupCounters[groupKey] || 0) + 1;
+
+                const seriesNum = groupCounters[groupKey];
+                const manualNum = getManualNum(item);
                 let displayTitle = item.title || "";
 
-                if (item.type === "fatwa") {
-                    fatwaCounter += 1;
-                    const hasNumber = /(?:fatwa|fatva|فتوی|فتوا|no\.?|نمبر|\d+)/i.test(displayTitle);
-                    if (!hasNumber) {
-                        displayTitle = `Fatva no. ${fatwaCounter} - ${displayTitle}`;
-                    }
-                } else if (item.type === "mazmoon") {
-                    mazmoonCounter += 1;
-                    const hasNumber = /(?:mazmoon|mazmun|مضمون|no\.?|نمبر|\d+)/i.test(displayTitle);
-                    if (!hasNumber) {
-                        displayTitle = `Mazmoon no. ${mazmoonCounter} - ${displayTitle}`;
-                    }
-                }
+                const prefixMap = {
+                    fatwa: "Fatva no.",
+                    mazmoon: "Mazmoon no.",
+                    pdf: "Kitab no.",
+                    telegram: "Telegram no.",
+                    video: "Bayan no."
+                };
+                const prefix = prefixMap[item.type] || "No.";
+                const cleanTitle = displayTitle.trim().replace(new RegExp(`^(?:${prefix}|no\\.?|#)\\s*\\d+\\s*-\\s*`, "i"), "");
+                displayTitle = `${prefix} ${seriesNum} - ${cleanTitle || displayTitle.trim()}`;
 
                 return {
                     ...item,
                     _key: key,
+                    _manualNum: manualNum,
+                    _seriesNum: seriesNum,
+                    _origIdx: idx,
                     displayTitle: displayTitle
                 };
             });
@@ -488,8 +493,10 @@
         window.setLiveWebsiteItems = function(items) {
             if (Array.isArray(items) && items.length > 0) {
                 activeItems = items;
-            } else {
+            } else if (typeof FALLBACK_DATA !== "undefined" && Array.isArray(FALLBACK_DATA)) {
                 activeItems = FALLBACK_DATA.slice();
+            } else {
+                activeItems = [];
             }
             updateTotalsDisplay();
             if (currentTab !== "sawaal") {
@@ -517,23 +524,22 @@
             currentTab = sectionName;
             ['pdf', 'telegram', 'video', 'fatwa', 'mazmoon', 'sawaal'].forEach(sec => {
                 const tabEl = document.getElementById('tab-' + sec);
-                tabEl.className = (sec === sectionName) ? "nav-tab active" : "nav-tab inactive";
+                if (tabEl) {
+                    tabEl.className = (sec === sectionName) ? "nav-tab active" : "nav-tab inactive";
+                }
             });
 
             const contentList = document.getElementById('content-list');
             const sawaalSec = document.getElementById('section-sawaal');
             const filterPanel = document.getElementById('filter-panel');
-            const totalsBar = document.getElementById('totals-bar');
 
             if (sectionName === 'sawaal') {
                 contentList.style.display = 'none';
                 filterPanel.style.display = 'none';
-                totalsBar.style.display = 'none';
                 sawaalSec.style.display = 'block';
             } else {
                 sawaalSec.style.display = 'none';
                 filterPanel.style.display = 'block';
-                totalsBar.style.display = 'flex';
                 contentList.style.display = 'block';
                 loadFilteredContent();
             }
@@ -979,7 +985,7 @@
                 const items = byType
                     .filter(item => (item.lang || "hi") === langCode && matchesQuery(item))
                     .slice()
-                    .reverse();
+                    .sort((a, b) => b._seriesNum - a._seriesNum);
 
                 if (items.length === 0) return;
                 totalFound += items.length;
@@ -1136,6 +1142,7 @@
                     if (isFatwa || isMazmoon || isLinkItem) {
                         docsData.push({
                             id: doc.id,
+                            num: (data.num !== undefined && data.num !== null) ? data.num : ((data.number !== undefined && data.number !== null) ? data.number : null),
                             lang: data.lang || "hi",
                             type: data.type,
                             title: data.title,
@@ -1156,5 +1163,3 @@
         loadSiteConfigFromFirestore();
         loadItemsFromFirestore();
     </script>
-</body>
-</html>
